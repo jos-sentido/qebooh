@@ -5,9 +5,15 @@ type LogoProps = {
 };
 
 /**
- * Marca denominativa QEB. Es texto, no una imagen, para que escale limpio y
- * siga siendo legible por lectores de pantalla. Sustituir por el logotipo
- * oficial cuando esté disponible en SVG.
+ * Marca denominativa QEB.
+ *
+ * El nombre es QEB; "OOH" es un complemento descriptivo, por eso va en menor
+ * tamaño y peso. No es parte del nombre: en texto corrido se escribe QEB a
+ * secas (ver CLAUDE.md §6).
+ *
+ * Es texto, no una imagen, para que escale limpio y siga siendo legible por
+ * lectores de pantalla. Sustituir por el logotipo oficial cuando esté
+ * disponible en SVG.
  */
 export function Logo({ className }: LogoProps) {
   return (

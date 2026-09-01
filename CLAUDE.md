@@ -225,6 +225,18 @@ a "privado" en ningún texto que vaya al cliente.
 
 ## 6. Convenciones de entregables
 
+### Cómo se escribe el nombre
+
+**El nombre es QEB.** *OOH* es un complemento descriptivo — la categoría en la
+que opera —, no parte del nombre. En texto corrido se escribe **QEB** a secas:
+"QEB centraliza…", nunca "QEB OOH centraliza…". El complemento sólo aparece
+como descriptor junto al logotipo, en tamaño y peso menores (ver
+`packages/ui/src/logo.tsx`).
+
+El repo se llama `qebooh` y el scope de los paquetes es `@qebooh/*`: eso es un
+identificador técnico, no la marca. No usarlo como nombre en ningún texto que
+vea el cliente.
+
 ### Identidad visual QEB
 
 Definida en `packages/ui/src/styles.css`. Cambiar un valor ahí se propaga a todo
