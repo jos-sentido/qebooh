@@ -1,0 +1,7 @@
+@import "tailwindcss";
+@import "@qebooh/ui/styles.css";
+
+/* Tailwind ignora node_modules, y @qebooh/ui entra por ahí como symlink del
+   workspace. Sin esta línea, las clases usadas dentro del paquete de UI no
+   llegarían al CSS final. */
+@source "../../../packages/ui/src";

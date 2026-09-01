@@ -1,0 +1,40 @@
+# dependencias
+node_modules/
+.pnpm-store/
+
+# builds
+.next/
+out/
+dist/
+build/
+*.tsbuildinfo
+
+# lo regenera `next dev` / `next build` en cada arranque
+next-env.d.ts
+
+# caches
+.turbo/
+.cache/
+.eslintcache
+
+# entorno — nunca commitear credenciales
+.env
+.env.*
+!.env.example
+
+# despliegue
+.vercel/
+
+# sistema operativo
+.DS_Store
+Thumbs.db
+
+# editores
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# logs
+*.log
+npm-debug.log*
+pnpm-debug.log*

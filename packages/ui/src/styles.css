@@ -1,0 +1,72 @@
+/*
+ * Sistema de diseño QEB OOH.
+ *
+ * Se importa desde el globals.css de cada app, siempre DESPUÉS de
+ * `@import "tailwindcss"`, porque el bloque @theme extiende los tokens de
+ * Tailwind. Cambiar un valor aquí lo cambia en todas las landings y apps.
+ */
+
+@theme {
+  /* Paleta. `ink` y `paper` son la base; `signal` es el único acento fuerte:
+     usarlo con moderación para que siga funcionando como acento. */
+  --color-ink-950: #08080a;
+  --color-ink-900: #0f0f12;
+  --color-ink-800: #1c1c21;
+  --color-ink-700: #2e2e36;
+  --color-ink-500: #6b6b78;
+  --color-ink-300: #b3b3bd;
+  --color-ink-100: #e6e6ea;
+
+  --color-paper: #faf9f7;
+  --color-paper-dim: #f0eeea;
+
+  --color-signal-600: #d9430c;
+  --color-signal-500: #ff5a1f;
+  --color-signal-400: #ff7d4d;
+
+  /* Tipografía. Las variables --font-* las define el layout de cada app con
+     next/font; el fallback mantiene la página legible si la fuente no carga. */
+  --font-sans: var(--font-qeb-sans), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-qeb-mono), ui-monospace, SFMono-Regular, Menlo,
+    Consolas, monospace;
+
+  /* Escala display para los titulares de propuesta. */
+  --text-display: 4.5rem;
+  --text-display--line-height: 0.95;
+  --text-display--letter-spacing: -0.03em;
+  --text-display--font-weight: 700;
+
+  --radius-card: 1rem;
+}
+
+/* Superficies base. Cada app hereda esto desde su layout. */
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink-900);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Respetar la preferencia de quien reduce el movimiento: las propuestas se
+     presentan en pantallas ajenas y no controlamos la configuración. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
