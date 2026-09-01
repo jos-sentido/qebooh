@@ -1,9 +1,14 @@
+import type { Seccion } from "@/lib/secciones";
+
 /**
- * Modelo de una propuesta a cliente.
+ * Modelo de una publicación: una propuesta, un reporte o una herramienta.
  *
- * Una propuesta es contenido, no código: se declara como un objeto y la
- * plantilla de `/propuestas/[slug]` la renderiza. Añadir un cliente nuevo es
- * añadir un archivo en `content/propuestas/` y registrarlo en el índice.
+ * Una publicación es contenido, no código: se declara como objeto y la
+ * plantilla de `[seccion]/[slug]` la renderiza. Añadir algo es añadir un
+ * archivo en `content/publicaciones/` y registrarlo en el índice.
+ *
+ * Esto es la capa de personalización: cada archivo pertenece a un cliente o a
+ * un encargo concreto. Nada de esto sube a `packages/*`.
  */
 
 export type Cifra = {
@@ -45,27 +50,55 @@ export type Bloque =
       nota?: string;
     };
 
-export type Propuesta = {
+export type Cierre = {
+  titulo: string;
+  texto: string;
+  accion?: { etiqueta: string; href: string };
+};
+
+export type Contenido =
+  /** Página armada con los bloques de arriba. */
+  | { tipo: "bloques"; bloques: Bloque[]; cierre?: Cierre }
+  /**
+   * La publicación vive fuera de esta app — otra app del monorepo, un
+   * dashboard, un archivo. El slug redirige al destino, así que la URL corta
+   * de qeb.mx sigue siendo la que se comparte aunque el destino cambie.
+   */
+  | { tipo: "enlace"; href: string };
+
+/**
+ * Estado editorial. `borrador`, `enviada` y `aprobada` describen el ciclo de
+ * una propuesta; `vigente` y `retirada`, el de un reporte o una herramienta.
+ *
+ * No confundir con el estado administrable (archivada / eliminada), que se
+ * maneja desde el índice y vive en la base de datos, no aquí.
+ */
+export type EstadoEditorial =
+  | "borrador"
+  | "enviada"
+  | "aprobada"
+  | "vigente"
+  | "retirada";
+
+export type Publicacion = {
   /** Segmento de URL. Solo minúsculas, números y guiones. */
   slug: string;
-  cliente: string;
+  seccion: Seccion;
   titulo: string;
-  /** Una o dos frases; se usa en el índice y en el hero. */
+  /** Una o dos frases; se usa en el índice y en el encabezado. */
   resumen: string;
-  /** Fecha ISO (YYYY-MM-DD) de la versión que ve el cliente. */
+  /** Cliente al que pertenece. Se omite en lo que es puramente interno. */
+  cliente?: string;
+  /** Fecha ISO (YYYY-MM-DD) de la versión que se comparte. */
   fecha: string;
-  estado: "borrador" | "enviada" | "aprobada";
-  /** Periodo de la campaña, p. ej. "Marzo – Mayo 2026". */
+  estado: EstadoEditorial;
+  /** Para filtrar en el índice: plaza, tipo de entregable, lo que sirva. */
+  etiquetas?: string[];
+  /** Periodo que cubre, p. ej. "Marzo – Mayo 2026". */
   periodo?: string;
   contacto?: {
     nombre: string;
     email?: string;
   };
-  bloques: Bloque[];
-  /** Qué pasa al final de la propuesta: firmar, agendar, pedir ajustes. */
-  cierre?: {
-    titulo: string;
-    texto: string;
-    accion?: { etiqueta: string; href: string };
-  };
+  contenido: Contenido;
 };

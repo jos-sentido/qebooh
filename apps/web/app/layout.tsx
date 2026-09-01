@@ -42,17 +42,14 @@ export default function RootLayout({
             width="wide"
             className="flex h-16 items-center justify-between"
           >
+            {/*
+              La raíz significa cosas distintas según el host: en un subdominio
+              es el índice de esa sección, en el dominio principal es el hub.
+              Enlazar a "/" acierta en los dos sin saber dónde está.
+            */}
             <Link href="/" aria-label="QEB — inicio">
               <Logo />
             </Link>
-            <nav className="flex items-center gap-6 text-sm">
-              <Link
-                href="/propuestas"
-                className="text-texto-tenue transition-colors hover:text-texto"
-              >
-                Propuestas
-              </Link>
-            </nav>
           </Container>
         </header>
 

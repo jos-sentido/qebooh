@@ -1,66 +1,47 @@
-import Link from "next/link";
 import { Card, Container, Eyebrow, Section } from "@qebooh/ui";
-import { listarPropuestas } from "@/content/propuestas";
+import { CONFIG, SECCIONES } from "@/lib/secciones";
 
-export default function Home() {
-  const propuestas = listarPropuestas();
-
+/**
+ * Hub del dominio principal. En cada subdominio esta página no se ve: ahí la
+ * raíz es el índice de la sección, y el middleware la reescribe.
+ *
+ * Sirve sobre todo en local y en previews de Vercel, donde no hay subdominios
+ * y se navega por prefijo de ruta.
+ */
+export default function Hub() {
   return (
-    <>
-      <Section className="pt-24 md:pt-32">
-        <Container width="wide">
-          <Eyebrow>Publicidad exterior</Eyebrow>
-          <h1 className="mt-6 max-w-4xl text-5xl font-bold leading-[0.95] tracking-tight text-titulo md:text-display">
-            Inventario, campañas y datos en un solo lugar.
-          </h1>
-          <p className="mt-8 max-w-2xl text-lg text-texto-tenue">
-            Este es el espacio de trabajo de QEB: desde aquí publicamos las
-            propuestas que ven nuestros clientes y las herramientas que usamos
-            para armarlas.
-          </p>
-        </Container>
-      </Section>
+    <Section className="pt-24 md:pt-32">
+      <Container width="wide">
+        <Eyebrow>Publicidad exterior</Eyebrow>
+        <h1 className="mt-6 max-w-4xl text-5xl font-bold leading-[0.95] tracking-tight text-titulo md:text-display">
+          Espacio de trabajo de QEB.
+        </h1>
+        <p className="mt-8 max-w-2xl text-lg text-texto-tenue">
+          Cada sección se publica en su propio subdominio y tiene su índice
+          protegido con clave.
+        </p>
 
-      <Section tone="superficie">
-        <Container width="wide">
-          <div className="flex items-end justify-between gap-6">
-            <div>
-              <Eyebrow>Propuestas</Eyebrow>
-              <h2 className="mt-3 text-3xl font-bold tracking-tight text-titulo">
-                Trabajo en curso
-              </h2>
-            </div>
-            <Link
-              href="/propuestas"
-              className="shrink-0 text-sm font-medium text-texto-tenue underline-offset-4 hover:text-texto hover:underline"
-            >
-              Ver todas
-            </Link>
-          </div>
-
-          <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {propuestas.slice(0, 6).map((propuesta) => (
-              <Link
-                key={propuesta.slug}
-                href={`/propuestas/${propuesta.slug}`}
-                className="block"
-              >
-                <Card interactive className="h-full bg-fondo">
-                  <p className="font-mono text-xs uppercase tracking-[0.15em] text-texto-tenue">
-                    {propuesta.cliente}
+        <div className="mt-14 grid gap-4 md:grid-cols-3">
+          {SECCIONES.map((seccion) => {
+            const config = CONFIG[seccion];
+            return (
+              <a key={seccion} href={`/${seccion}`} className="block">
+                <Card interactive className="h-full">
+                  <p className="font-mono text-xs uppercase tracking-[0.15em] text-cian">
+                    {config.host}
                   </p>
-                  <h3 className="mt-3 text-xl font-semibold tracking-tight">
-                    {propuesta.titulo}
-                  </h3>
+                  <h2 className="mt-3 text-xl font-semibold tracking-tight">
+                    {config.nombre}
+                  </h2>
                   <p className="mt-3 text-sm leading-relaxed text-texto-tenue">
-                    {propuesta.resumen}
+                    {config.descripcion}
                   </p>
                 </Card>
-              </Link>
-            ))}
-          </div>
-        </Container>
-      </Section>
-    </>
+              </a>
+            );
+          })}
+        </div>
+      </Container>
+    </Section>
   );
 }

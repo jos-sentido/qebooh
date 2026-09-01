@@ -15,10 +15,10 @@ export function tonoAlterno(posicion: number): "fondo" | "superficie" {
 }
 
 /**
- * Renderiza un bloque de propuesta. El switch es exhaustivo: al añadir un tipo
+ * Renderiza un bloque de publicación. El switch es exhaustivo: al añadir un tipo
  * nuevo en `content/tipos.ts`, TypeScript falla aquí hasta que se maneje.
  */
-export function BloquePropuesta({
+export function BloquePublicacion({
   bloque,
   indice,
 }: {

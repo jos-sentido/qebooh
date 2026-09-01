@@ -60,7 +60,7 @@ cliente?_ Si es de un cliente, no entra al núcleo.
 | -------------------------------- | -------------------------------------------------------- |
 | `packages/*`                     | Núcleo. Sirve a cualquier cliente; nada específico entra. |
 | `apps/*`                         | Depende — una app puede ser general o de un cliente.      |
-| `apps/web/content/propuestas/*`  | Personalización: cada archivo es de un cliente concreto.  |
+| `apps/web/content/publicaciones/*` | Personalización: cada archivo es de un cliente o encargo concreto. |
 
 ### Flujo central del negocio (núcleo)
 
@@ -171,14 +171,33 @@ y **pnpm 10** (`corepack enable`).
 
 ```
 apps/
-  web/            Sitio principal + landings de propuesta
+  web/            Las tres secciones + sistema de publicaciones
 packages/
   ui/             Sistema de diseño: tokens y componentes compartidos
   config/         Configuraciones base de TypeScript
 ```
 
 `apps/web` es **Next.js 15 (App Router) + React 19 + TypeScript + Tailwind v4**,
-pensado para desplegar en Vercel con Root Directory `apps/web`.
+desplegado en Vercel con Root Directory `apps/web`.
+
+### Las tres secciones
+
+Un solo proyecto de Vercel sirve tres subdominios de `qeb.mx`; el middleware
+enruta por hostname.
+
+| Subdominio          | Sección      | Qué se publica                      |
+| ------------------- | ------------ | ----------------------------------- |
+| `propuestas.qeb.mx` | `propuestas` | Propuestas comerciales a cliente    |
+| `reportes.qeb.mx`   | `reportes`   | Reportes y entregables de avance    |
+| `tool.qeb.mx`       | `tool`       | Herramientas internas y comerciales |
+
+En cada subdominio la raíz es el índice administrable (buscador, filtros,
+archivar, eliminar, bitácora) y lo demás son slugs.
+
+**Cuidado con las dos formas de cada URL**: el router ve `/propuestas/algo`, el
+navegador ve `/algo`. Los enlaces y redirecciones se arman con la base que
+publica el middleware (`lib/base.ts`), nunca concatenando la sección a mano.
+Detalle en `docs/ARQUITECTURA.md`.
 
 > No confundir con el stack de la plataforma (React + Vite, Node + Prisma, MySQL
 > en DigitalOcean). Son proyectos distintos.
@@ -195,8 +214,13 @@ pnpm typecheck    # TypeScript en todos los paquetes
 pnpm lint         # ESLint
 ```
 
+Hace falta `apps/web/.env.local` (copiar de `.env.example`) con las claves de
+las secciones; sin ellas los índices quedan cerrados a propósito.
+
 No hay suite de pruebas todavía. `pnpm typecheck && pnpm lint && pnpm build` es
-la verificación mínima antes de dar por buena una tarea.
+la verificación mínima antes de dar por buena una tarea. Para lo que toca
+enrutamiento, acceso o el panel, eso no basta: hay que levantar la app y
+ejercitar el flujo, porque nada de eso lo detecta el typecheck.
 
 ### Reglas del repo
 
@@ -204,22 +228,37 @@ la verificación mínima antes de dar por buena una tarea.
    nomenclatura de IMU, ni colores de una campaña, ni reglas de negocio
    particulares. Si un componente necesita algo específico, se parametriza.
 2. **Al proponer una solución, indicar si va al núcleo o a la capa de cliente.**
-3. **Una propuesta es contenido, no una página a mano.** Se declara como objeto
-   del tipo `Propuesta` en `apps/web/content/propuestas/` y se registra en el
-   índice. El renderer usa un `switch` exhaustivo: un tipo de bloque nuevo rompe
-   el typecheck hasta que se implementa, a propósito.
+3. **Una publicación es contenido, no una página a mano.** Se declara como
+   objeto del tipo `Publicacion` en `apps/web/content/publicaciones/` y se
+   registra en el índice. El renderer usa un `switch` exhaustivo: un tipo de
+   bloque nuevo rompe el typecheck hasta que se implementa, a propósito.
 4. **Añadir un cliente no debe requerir tocar `packages/*`.** Si lo requiere, es
    señal de que falta un punto de configuración en el núcleo.
+5. **El contenido vive en el repo; el estado administrable, en base de datos.**
+   Archivar, eliminar y la bitácora se manejan desde el índice y se guardan en
+   Postgres. Eliminar es borrado suave: la publicación sale de circulación pero
+   el archivo sigue versionado. Borrar de verdad es borrar el archivo y que
+   quede en git.
 
-Detalle de arquitectura en [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md).
+Detalle de arquitectura en [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md);
+despliegue, dominios y variables en [`docs/DESPLIEGUE.md`](docs/DESPLIEGUE.md).
 
-### Privacidad de las propuestas
+### Privacidad y acceso
 
-Las páginas de propuesta llevan `noindex` y están bloqueadas en `robots.txt`.
-**Eso no es control de acceso**: cualquiera con el enlace las abre. Si una
-propuesta lleva tarifas, márgenes o datos que no pueden circular, hay que
-ponerle autenticación antes de compartirla. No asumir que "no indexado" equivale
-a "privado" en ningún texto que vaya al cliente.
+| Recurso                         | Acceso                                          |
+| ------------------------------- | ----------------------------------------------- |
+| Índice de una sección (la raíz) | Clave propia de esa sección (`QEB_CLAVE_*`)     |
+| Acciones de administración      | La misma clave, revalidada en el servidor       |
+| Una publicación por su enlace   | **Abierta**: cualquiera con el enlace la abre   |
+| Buscadores                      | Bloqueado (`noindex` + `robots.txt`)            |
+
+Los slugs quedan abiertos a propósito, para mandarle una propuesta a un cliente
+sin darle credenciales.
+
+**`noindex` no es control de acceso.** Si una publicación lleva tarifas,
+márgenes o datos que no pueden circular, hay que ponerle autenticación antes de
+compartirla. No asumir que "no indexado" equivale a "privado" en ningún texto
+que vaya al cliente.
 
 ---
 
