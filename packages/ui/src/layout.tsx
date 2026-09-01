@@ -32,20 +32,23 @@ export function Container({
 type SectionProps = {
   children: ReactNode;
   as?: ElementType;
-  /** Fondo oscuro para cortar el ritmo entre bloques claros. */
-  tone?: "paper" | "dim" | "ink";
+  /**
+   * `fondo` es la base; `superficie` marca una banda intermedia; `marca` es el
+   * bloque morado — uno o dos por página como mucho, si no deja de destacar.
+   */
+  tone?: "fondo" | "superficie" | "marca";
 } & Omit<ComponentPropsWithoutRef<"section">, "as">;
 
 const TONES = {
-  paper: "bg-paper text-ink-900",
-  dim: "bg-paper-dim text-ink-900",
-  ink: "bg-ink-950 text-paper",
+  fondo: "bg-fondo text-texto",
+  superficie: "bg-superficie text-texto",
+  marca: "bg-marca-700 text-white",
 } as const;
 
 export function Section({
   children,
   as: Tag = "section",
-  tone = "paper",
+  tone = "fondo",
   className,
   ...props
 }: SectionProps) {
@@ -65,7 +68,7 @@ export function Eyebrow({ children, className, ...props }: EyebrowProps) {
   return (
     <p
       className={cn(
-        "font-mono text-xs uppercase tracking-[0.2em] text-signal-500",
+        "font-mono text-xs uppercase tracking-[0.2em] text-cian",
         className,
       )}
       {...props}

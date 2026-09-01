@@ -17,8 +17,10 @@ export default function PropuestasPage() {
     <Section>
       <Container width="wide">
         <Eyebrow>Índice interno</Eyebrow>
-        <h1 className="mt-3 text-4xl font-bold tracking-tight">Propuestas</h1>
-        <p className="mt-4 max-w-2xl text-ink-700">
+        <h1 className="mt-3 text-4xl font-bold tracking-tight text-titulo">
+          Propuestas
+        </h1>
+        <p className="mt-4 max-w-2xl text-texto-tenue">
           Cada propuesta vive en su propia URL para compartirla directo con el
           cliente. Esta página no se indexa en buscadores.
         </p>
@@ -29,20 +31,20 @@ export default function PropuestasPage() {
               <Link href={`/propuestas/${propuesta.slug}`} className="block">
                 <Card interactive className="h-full">
                   <div className="flex items-center justify-between gap-4">
-                    <p className="font-mono text-xs uppercase tracking-[0.15em] text-ink-500">
+                    <p className="font-mono text-xs uppercase tracking-[0.15em] text-texto-tenue">
                       {propuesta.cliente}
                     </p>
-                    <span className="rounded-full border border-ink-900/15 px-2.5 py-0.5 text-xs text-ink-500">
+                    <span className="rounded-full border border-borde px-2.5 py-0.5 text-xs text-texto-tenue">
                       {ETIQUETA_ESTADO[propuesta.estado]}
                     </span>
                   </div>
                   <h2 className="mt-3 text-xl font-semibold tracking-tight">
                     {propuesta.titulo}
                   </h2>
-                  <p className="mt-3 text-sm leading-relaxed text-ink-700">
+                  <p className="mt-3 text-sm leading-relaxed text-texto-tenue">
                     {propuesta.resumen}
                   </p>
-                  <p className="mt-6 text-xs text-ink-500">
+                  <p className="mt-6 text-xs text-texto-tenue">
                     {formatearFecha(propuesta.fecha)}
                   </p>
                 </Card>

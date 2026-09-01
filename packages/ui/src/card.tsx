@@ -16,9 +16,9 @@ export function Card({
   return (
     <div
       className={cn(
-        "rounded-card border border-ink-900/10 bg-white/60 p-6",
+        "rounded-card border border-borde bg-superficie p-6",
         interactive &&
-          "transition-colors hover:border-ink-900/30 hover:bg-white",
+          "transition-colors hover:border-marca-500 hover:bg-superficie-alta",
         className,
       )}
       {...props}
@@ -36,7 +36,10 @@ type StatProps = {
   note?: string;
 };
 
-/** Cifra destacada para resultados de campaña o alcance de un circuito. */
+/**
+ * Cifra destacada. Toda cifra que salga de un cruce de datos debería llevar
+ * `note` con su fuente o metodología: es lo primero que pregunta el cliente.
+ */
 export function Stat({ value, label, note }: StatProps) {
   return (
     <div>
@@ -44,7 +47,7 @@ export function Stat({ value, label, note }: StatProps) {
         {value}
       </p>
       <p className="mt-2 text-sm font-medium">{label}</p>
-      {note ? <p className="mt-1 text-xs opacity-60">{note}</p> : null}
+      {note ? <p className="mt-1 text-xs opacity-70">{note}</p> : null}
     </div>
   );
 }

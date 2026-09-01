@@ -1,8 +1,8 @@
 import type { Propuesta } from "../tipos";
-import { ejemploCircuitoCdmx } from "./ejemplo-circuito-cdmx";
+import { ejemploImplementacion } from "./ejemplo-implementacion";
 
 /** Registro de propuestas. Añadir aquí cada archivo nuevo. */
-const PROPUESTAS: Propuesta[] = [ejemploCircuitoCdmx];
+const PROPUESTAS: Propuesta[] = [ejemploImplementacion];
 
 /** Ordenadas de más reciente a más antigua. */
 export function listarPropuestas(): Propuesta[] {

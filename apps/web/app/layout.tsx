@@ -19,11 +19,11 @@ const mono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "QEB OOH",
-    template: "%s · QEB OOH",
+    default: "QEB",
+    template: "%s · QEB",
   },
   description:
-    "Publicidad exterior: circuitos, propuestas a cliente y herramientas internas.",
+    "Plataforma de gestión de publicidad exterior: propuestas a cliente y herramientas.",
 };
 
 export default function RootLayout({
@@ -34,18 +34,21 @@ export default function RootLayout({
   return (
     <html lang="es-MX" className={`${sans.variable} ${mono.variable}`}>
       <body className="flex min-h-dvh flex-col">
-        <header className="border-b border-ink-900/10">
+        {/* Barra de marca: la franja morada de la identidad QEB. */}
+        <div aria-hidden className="h-1 bg-marca-500" />
+
+        <header className="border-b border-borde">
           <Container
             width="wide"
             className="flex h-16 items-center justify-between"
           >
-            <Link href="/" aria-label="QEB OOH — inicio">
+            <Link href="/" aria-label="QEB — inicio">
               <Logo />
             </Link>
             <nav className="flex items-center gap-6 text-sm">
               <Link
                 href="/propuestas"
-                className="text-ink-700 transition-colors hover:text-ink-900"
+                className="text-texto-tenue transition-colors hover:text-texto"
               >
                 Propuestas
               </Link>
@@ -55,13 +58,13 @@ export default function RootLayout({
 
         <main className="flex-1">{children}</main>
 
-        <footer className="border-t border-ink-900/10 py-10">
+        <footer className="border-t border-borde py-10">
           <Container
             width="wide"
-            className="flex flex-col gap-2 text-sm text-ink-500 md:flex-row md:items-center md:justify-between"
+            className="flex flex-col gap-2 text-sm text-texto-tenue md:flex-row md:items-center md:justify-between"
           >
-            <Logo className="text-ink-900" />
-            <p>© {new Date().getFullYear()} QEB OOH</p>
+            <Logo className="text-texto" />
+            <p>© {new Date().getFullYear()} QEB</p>
           </Container>
         </footer>
       </body>

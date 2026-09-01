@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ButtonLink, Container, Eyebrow, Section } from "@qebooh/ui";
-import { BloquePropuesta } from "@/components/bloque-propuesta";
+import { BloquePropuesta, tonoAlterno } from "@/components/bloque-propuesta";
 import { listarPropuestas, obtenerPropuesta } from "@/content/propuestas";
 import { ETIQUETA_ESTADO, formatearFecha } from "@/lib/formato";
 
@@ -35,34 +35,34 @@ export default async function PropuestaPage({ params }: Props) {
 
   return (
     <>
-      <Section tone="ink" className="pt-20 md:pt-28">
+      <Section className="pt-20 md:pt-28">
         <Container width="wide">
           <Eyebrow>{propuesta.cliente}</Eyebrow>
-          <h1 className="mt-6 max-w-4xl text-5xl font-bold leading-[0.95] tracking-tight md:text-display">
+          <h1 className="mt-6 max-w-4xl text-5xl font-bold leading-[0.95] tracking-tight text-titulo md:text-display">
             {propuesta.titulo}
           </h1>
-          <p className="mt-8 max-w-2xl text-lg leading-relaxed text-ink-300">
+          <p className="mt-8 max-w-2xl text-lg leading-relaxed text-texto-tenue">
             {propuesta.resumen}
           </p>
 
-          <dl className="mt-12 flex flex-wrap gap-x-12 gap-y-6 border-t border-paper/15 pt-8 text-sm">
+          <dl className="mt-12 flex flex-wrap gap-x-12 gap-y-6 border-t border-borde pt-8 text-sm">
             <div>
-              <dt className="text-ink-500">Fecha</dt>
+              <dt className="text-texto-tenue">Fecha</dt>
               <dd className="mt-1">{formatearFecha(propuesta.fecha)}</dd>
             </div>
             {propuesta.periodo ? (
               <div>
-                <dt className="text-ink-500">Periodo</dt>
+                <dt className="text-texto-tenue">Periodo</dt>
                 <dd className="mt-1">{propuesta.periodo}</dd>
               </div>
             ) : null}
             <div>
-              <dt className="text-ink-500">Estado</dt>
+              <dt className="text-texto-tenue">Estado</dt>
               <dd className="mt-1">{ETIQUETA_ESTADO[propuesta.estado]}</dd>
             </div>
             {propuesta.contacto ? (
               <div>
-                <dt className="text-ink-500">Contacto</dt>
+                <dt className="text-texto-tenue">Contacto</dt>
                 <dd className="mt-1">
                   {propuesta.contacto.email ? (
                     <a
@@ -90,19 +90,19 @@ export default async function PropuestaPage({ params }: Props) {
       ))}
 
       {propuesta.cierre ? (
-        <Section tone="ink">
+        <Section tone={tonoAlterno(propuesta.bloques.length + 1)}>
           <Container>
-            <h2 className="text-3xl font-bold tracking-tight">
+            <h2 className="text-3xl font-bold tracking-tight text-titulo">
               {propuesta.cierre.titulo}
             </h2>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-300">
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-texto-tenue">
               {propuesta.cierre.texto}
             </p>
             {propuesta.cierre.accion ? (
               <ButtonLink
                 href={propuesta.cierre.accion.href}
                 size="lg"
-                className="mt-10 bg-signal-500 text-ink-950 hover:bg-signal-400"
+                className="mt-10"
               >
                 {propuesta.cierre.accion.etiqueta}
               </ButtonLink>

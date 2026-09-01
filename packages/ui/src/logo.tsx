@@ -5,8 +5,8 @@ type LogoProps = {
 };
 
 /**
- * Marca denominativa QEB OOH. Es texto, no una imagen, para que escale limpio
- * y siga siendo legible por lectores de pantalla. Sustituir por el logotipo
+ * Marca denominativa QEB. Es texto, no una imagen, para que escale limpio y
+ * siga siendo legible por lectores de pantalla. Sustituir por el logotipo
  * oficial cuando esté disponible en SVG.
  */
 export function Logo({ className }: LogoProps) {
@@ -18,7 +18,7 @@ export function Logo({ className }: LogoProps) {
       )}
     >
       QEB
-      <span className="font-mono text-xs uppercase tracking-[0.2em] text-signal-500">
+      <span className="font-mono text-xs uppercase tracking-[0.2em] text-marca-400">
         OOH
       </span>
     </span>

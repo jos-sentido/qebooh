@@ -1,28 +1,37 @@
 /*
- * Sistema de diseño QEB OOH.
+ * Sistema de diseño QEB.
  *
  * Se importa desde el globals.css de cada app, siempre DESPUÉS de
  * `@import "tailwindcss"`, porque el bloque @theme extiende los tokens de
  * Tailwind. Cambiar un valor aquí lo cambia en todas las landings y apps.
+ *
+ * Los colores vienen de la identidad visual de QEB (ver CLAUDE.md §6). Los
+ * marcados como "derivado" no están en la guía: se calcularon a partir de ella
+ * para cubrir estados (hover, bordes, elevación) manteniendo el contraste.
  */
 
 @theme {
-  /* Paleta. `ink` y `paper` son la base; `signal` es el único acento fuerte:
-     usarlo con moderación para que siga funcionando como acento. */
-  --color-ink-950: #08080a;
-  --color-ink-900: #0f0f12;
-  --color-ink-800: #1c1c21;
-  --color-ink-700: #2e2e36;
-  --color-ink-500: #6b6b78;
-  --color-ink-300: #b3b3bd;
-  --color-ink-100: #e6e6ea;
+  /* Base. QEB es una identidad oscura: el fondo es el lienzo, no el acento. */
+  --color-fondo: #0e0e1a;
+  --color-superficie: #181830;
+  --color-superficie-alta: #22224a; /* derivado — elevación y hover */
+  --color-borde: #2a2a4d; /* derivado */
 
-  --color-paper: #faf9f7;
-  --color-paper-dim: #f0eeea;
+  /* Marca. */
+  --color-marca-400: #8d3fd0; /* derivado — hover; blanco encima da 5.6:1 */
+  --color-marca-500: #7b2fbe;
+  --color-marca-700: #5b2d6e;
 
-  --color-signal-600: #d9430c;
-  --color-signal-500: #ff5a1f;
-  --color-signal-400: #ff7d4d;
+  /* Texto. `titulo` es el color de títulos de la guía; `texto` y
+     `texto-tenue` son derivados para cuerpo y notas secundarias. */
+  --color-titulo: #c9a0ff;
+  --color-texto: #e6e6f2; /* derivado */
+  --color-texto-tenue: #9a9ab5; /* derivado — 7:1 sobre fondo, 6.3:1 sobre superficie */
+
+  /* Acentos. Usar uno a la vez y con moderación: son señal, no decoración. */
+  --color-ambar: #f5a524;
+  --color-cian: #22d3ee;
+  --color-magenta: #e879f9;
 
   /* Tipografía. Las variables --font-* las define el layout de cada app con
      next/font; el fallback mantiene la página legible si la fuente no carga. */
@@ -40,10 +49,9 @@
   --radius-card: 1rem;
 }
 
-/* Superficies base. Cada app hereda esto desde su layout. */
 @layer base {
   :root {
-    color-scheme: light;
+    color-scheme: dark;
   }
 
   html {
@@ -51,8 +59,8 @@
   }
 
   body {
-    background-color: var(--color-paper);
-    color: var(--color-ink-900);
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
   }

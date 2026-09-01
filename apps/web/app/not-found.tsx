@@ -6,10 +6,10 @@ export default function NotFound() {
     <Section>
       <Container>
         <Eyebrow>404</Eyebrow>
-        <h1 className="mt-3 text-4xl font-bold tracking-tight">
+        <h1 className="mt-3 text-4xl font-bold tracking-tight text-titulo">
           Esta página no existe
         </h1>
-        <p className="mt-4 text-ink-700">
+        <p className="mt-4 text-texto-tenue">
           El enlace puede estar mal escrito, o la propuesta se movió.
         </p>
         <Link
