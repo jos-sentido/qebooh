@@ -15,8 +15,8 @@ export type Fila = {
   fecha: string;
   estado: EstadoEditorial;
   etiquetas: string[];
-  /** Las publicaciones tipo enlace redirigen; no tienen página propia. */
-  esEnlace: boolean;
+  /** Cómo se sirve: como página, redirigiendo fuera, o como documento. */
+  tipoContenido: "bloques" | "enlace" | "documento";
   archivada: boolean;
   eliminada: boolean;
   bitacora: EntradaBitacora[];
@@ -275,7 +275,12 @@ function TarjetaPublicacion({
           <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-texto-tenue">
             <span className="font-mono">/{fila.slug}</span>
             <span>{formatearFecha(fila.fecha)}</span>
-            {fila.esEnlace ? <span>Redirige a un destino externo</span> : null}
+            {fila.tipoContenido === "enlace" ? (
+              <span>Redirige a un destino externo</span>
+            ) : null}
+            {fila.tipoContenido === "documento" ? (
+              <span>Documento a pantalla completa</span>
+            ) : null}
             {fila.etiquetas.map((nombre) => (
               <span key={nombre} className="font-mono">
                 #{nombre}

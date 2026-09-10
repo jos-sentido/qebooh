@@ -74,6 +74,8 @@ pnpm lint         # ESLint
    - `propuesta-implementacion.ts` — propuesta comercial
    - `reporte-avance.ts` — reporte de avance
    - `tool-conciliador.ts` — herramienta que vive fuera (redirige a su destino)
+   - `reporte-ventas-prototipo.ts` — dashboard HTML autocontenido servido a
+     pantalla completa (el archivo va en `apps/web/content/documentos/`)
 2. Cambiar `slug`, `seccion` y el contenido.
 3. Registrarlo en `apps/web/content/publicaciones/index.ts`.
 

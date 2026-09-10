@@ -49,7 +49,7 @@ export default async function IndiceSeccion({ params }: Props) {
       fecha: publicacion.fecha,
       estado: publicacion.estado,
       etiquetas: publicacion.etiquetas ?? [],
-      esEnlace: publicacion.contenido.tipo === "enlace",
+      tipoContenido: publicacion.contenido.tipo,
       archivada: estado.archivada,
       eliminada: estado.eliminada,
       bitacora: estado.bitacora,

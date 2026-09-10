@@ -140,6 +140,30 @@ periodo, contacto) y un `contenido`, que es de uno de dos tipos:
 - `enlace` — la publicación vive fuera (otra app, un dashboard, un archivo) y el
   slug redirige. La URL corta de qeb.mx queda como la que se comparte: si el
   destino cambia, se cambia en un sitio y el enlace repartido sigue sirviendo.
+- `documento` — un HTML autocontenido (un dashboard exportado, un reporte
+  generado) que se sirve tal cual, a pantalla completa y sin el marco de la app.
+
+### Documentos HTML
+
+Un documento trae su propio `<html>`, así que no cabe dentro del layout. Se
+sirve desde `[seccion]/doc/[slug]`, y el slug corto redirige ahí: la URL que se
+comparte sigue siendo `reportes.qeb.mx/mi-reporte`.
+
+Los archivos viven en `content/documentos/` y **no** en `public/`, a propósito.
+Lo que hay en `public/` se sirve por su ruta directa sin pasar por nada: una
+publicación retirada seguiría accesible por el nombre del archivo, y eso
+rompería la garantía del borrado suave. Sirviéndolo desde una ruta se comprueba
+el estado en cada visita, y se responde con `no-store` para que ninguna copia
+cacheada sobreviva a un retiro.
+
+Eso obliga a leer del disco en tiempo de ejecución con un nombre que sale del
+registro, no del código, así que el trazador de Next no puede deducir el archivo
+y hay que declararlo en `outputFileTracingIncludes` (`next.config.ts`). Sin esa
+línea el build pasa y en producción la ruta responde 404 — conviene comprobar la
+traza (`.next/server/app/[seccion]/doc/[slug]/route.js.nft.json`) al tocar esto.
+
+`doc` queda reservado como primer segmento dentro de una sección: ninguna
+publicación puede usarlo de slug.
 
 Los cuatro tipos de bloque:
 

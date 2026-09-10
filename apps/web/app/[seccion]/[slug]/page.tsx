@@ -4,6 +4,7 @@ import { ButtonLink, Container, Eyebrow, Section } from "@qebooh/ui";
 import { BloquePublicacion, tonoAlterno } from "@/components/bloques";
 import { obtenerPublicacion } from "@/content/publicaciones";
 import { almacen } from "@/lib/almacen";
+import { baseDeSeccion } from "@/lib/base";
 import { ETIQUETA_ESTADO, formatearFecha } from "@/lib/formato";
 import { esSeccion } from "@/lib/secciones";
 
@@ -49,6 +50,12 @@ export default async function PaginaPublicacion({ params }: Props) {
 
   if (publicacion.contenido.tipo === "enlace") {
     redirect(publicacion.contenido.href);
+  }
+
+  if (publicacion.contenido.tipo === "documento") {
+    // El documento trae su propio `<html>`, así que no cabe en este layout: se
+    // sirve desde su ruta y esta URL corta queda como la que se comparte.
+    redirect(`${await baseDeSeccion(seccion)}/doc/${slug}`);
   }
 
   const { bloques, cierre } = publicacion.contenido;

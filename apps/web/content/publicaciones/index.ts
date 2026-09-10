@@ -2,12 +2,19 @@ import type { Seccion } from "@/lib/secciones";
 import type { Publicacion } from "../tipos";
 import { propuestaImplementacion } from "./propuesta-implementacion";
 import { reporteAvance } from "./reporte-avance";
+import { reporteVentasPrototipo } from "./reporte-ventas-prototipo";
 import { toolConciliador } from "./tool-conciliador";
 
-/** Registro de publicaciones. Añadir aquí cada archivo nuevo. */
+/**
+ * Registro de publicaciones. Añadir aquí cada archivo nuevo.
+ *
+ * `doc` está reservado como primer segmento dentro de una sección (sirve los
+ * documentos HTML), así que ninguna publicación puede usarlo de slug.
+ */
 const PUBLICACIONES: Publicacion[] = [
   propuestaImplementacion,
   reporteAvance,
+  reporteVentasPrototipo,
   toolConciliador,
 ];
 
@@ -28,7 +35,7 @@ export function obtenerPublicacion(
   );
 }
 
-/** Para `generateStaticParams` y para comprobaciones de integridad. */
+/** Para comprobaciones de integridad sobre el registro completo. */
 export function todasLasPublicaciones(): readonly Publicacion[] {
   return PUBLICACIONES;
 }

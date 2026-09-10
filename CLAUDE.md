@@ -232,6 +232,9 @@ ejercitar el flujo, porque nada de eso lo detecta el typecheck.
    objeto del tipo `Publicacion` en `apps/web/content/publicaciones/` y se
    registra en el índice. El renderer usa un `switch` exhaustivo: un tipo de
    bloque nuevo rompe el typecheck hasta que se implementa, a propósito.
+   Un dashboard HTML autocontenido se publica con `tipo: "documento"` y su
+   archivo va en `apps/web/content/documentos/`, nunca en `public/`: desde
+   `public/` seguiría accesible después de retirarlo.
 4. **Añadir un cliente no debe requerir tocar `packages/*`.** Si lo requiere, es
    señal de que falta un punto de configuración en el núcleo.
 5. **El contenido vive en el repo; el estado administrable, en base de datos.**

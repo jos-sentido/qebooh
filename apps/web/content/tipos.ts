@@ -64,7 +64,17 @@ export type Contenido =
    * dashboard, un archivo. El slug redirige al destino, así que la URL corta
    * de qeb.mx sigue siendo la que se comparte aunque el destino cambie.
    */
-  | { tipo: "enlace"; href: string };
+  | { tipo: "enlace"; href: string }
+  /**
+   * Documento HTML autocontenido que se sirve tal cual, a pantalla completa y
+   * sin el marco de la app: dashboards exportados, reportes generados.
+   *
+   * El archivo vive en `content/documentos/` y se sirve desde el servidor —no
+   * desde `public/`— para que el borrado suave lo alcance. Un archivo en
+   * `public/` queda accesible por su ruta directa aunque la publicación se
+   * haya retirado, y eso rompería la garantía del índice.
+   */
+  | { tipo: "documento"; archivo: string };
 
 /**
  * Estado editorial. `borrador`, `enviada` y `aprobada` describen el ciclo de
