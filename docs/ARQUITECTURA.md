@@ -45,8 +45,8 @@ Dos capas que conviene no mezclar:
 
 - **Contenido** — el texto de cada publicación, en `content/publicaciones/`.
   Versionado en git, con su historial y su revisión.
-- **Estado administrable** — archivado, eliminado y bitácora, en Postgres. Es lo
-  que cambia desde el índice, sin desplegar.
+- **Estado administrable** — archivado, eliminado y bitácora, en Firestore. Es
+  lo que cambia desde el índice, sin desplegar.
 
 De ahí que **eliminar sea un borrado suave**: la publicación sale del índice y su
 slug devuelve 404, pero el archivo sigue en el repo. Borrar de verdad desde una
@@ -54,10 +54,22 @@ pantalla web significaría perder trazabilidad, y la trazabilidad del desarrollo
 es justo lo que respalda el producto.
 
 `lib/almacen/` abstrae ese estado detrás de una interfaz con dos adaptadores:
-Postgres en producción y memoria en desarrollo. La instancia se ancla a
+Firestore en producción y memoria en desarrollo. La instancia se ancla a
 `globalThis` y no a una variable de módulo, porque Next empaqueta las Server
 Actions y las páginas por separado y el mismo módulo puede cargarse dos veces en
-un proceso.
+un proceso — con Firestore eso significaría inicializar firebase-admin dos veces
+y lanzar.
+
+Se usa el SDK de administración desde el servidor, no el de cliente: las
+escrituras ya vienen autorizadas por la clave de la sección, así que no hace
+falta exponer nada al navegador ni apoyarse en reglas de seguridad. Como el SDK
+de administración no pasa por las reglas, las reglas de Firestore niegan todo.
+
+Estructura: `publicacion_estado/{seccion}/publicaciones/{slug}`. Con la sección
+en la ruta, listar una sección es leer una colección, sin consultas ni índices
+compuestos. Las notas se añaden con `arrayUnion` —dos simultáneas se conservan
+las dos— y se ordenan al leer; quitar una sí obliga a leer y reescribir, así que
+va en transacción.
 
 Las páginas del índice y de cada slug son `force-dynamic` y **no** exportan
 `generateStaticParams`: exportarlo las prerenderiza al construir, y esa versión

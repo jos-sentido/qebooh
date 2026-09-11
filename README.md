@@ -97,9 +97,9 @@ deliberado: el historial de desarrollo es lo que respalda el producto, así que
 nada se pierde — se retira de circulación. Para borrar de verdad, se borra el
 archivo y se registra en git.
 
-El estado administrable vive en base de datos, no en el repo. Sin
-`POSTGRES_URL` la app funciona pero ese estado no persiste, y el índice lo avisa
-en pantalla.
+El estado administrable vive en Firestore (proyecto `qeb-ooh-e4d1f`), no en el
+repo. Sin `FIREBASE_SERVICE_ACCOUNT` la app funciona pero ese estado no
+persiste, y el índice lo avisa en pantalla.
 
 ## Acceso
 

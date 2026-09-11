@@ -118,8 +118,9 @@ export function Panel({
         <p className="mb-6 rounded-card border border-ambar/40 bg-ambar/10 p-4 text-sm">
           <strong className="font-semibold">Sin base de datos.</strong> Archivar,
           eliminar y las notas funcionan, pero se pierden al reiniciar o
-          desplegar. Configura <code className="font-mono">POSTGRES_URL</code>{" "}
-          para que persistan (ver <code className="font-mono">docs/DESPLIEGUE.md</code>).
+          desplegar. Configura{" "}
+          <code className="font-mono">FIREBASE_SERVICE_ACCOUNT</code> para que
+          persistan (ver <code className="font-mono">docs/DESPLIEGUE.md</code>).
         </p>
       ) : null}
 

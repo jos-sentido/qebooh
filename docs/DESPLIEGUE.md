@@ -52,7 +52,7 @@ lista con sus explicaciones.
 | `QEB_CLAVE_PROPUESTAS`  | Clave del índice de propuestas             | Sí, o la sección queda cerrada       |
 | `QEB_CLAVE_REPORTES`    | Clave del índice de reportes               | Sí, o la sección queda cerrada       |
 | `QEB_CLAVE_TOOL`        | Clave del índice de herramientas           | Sí, o la sección queda cerrada       |
-| `POSTGRES_URL`          | Estado administrable (archivado, bitácora) | No, pero sin ella no persiste        |
+| `FIREBASE_SERVICE_ACCOUNT` | Estado administrable (archivado, bitácora) | No, pero sin ella no persiste     |
 
 Cada sección tiene su propia clave: entrar a propuestas no da acceso a reportes.
 
@@ -61,38 +61,93 @@ intencional — la cookie se firma con la clave, así que cambiarla invalida lo
 emitido antes. Es el comportamiento que se espera de una contraseña compartida
 cuando alguien deja de necesitar acceso.
 
-## 4. Base de datos
+## 4. Base de datos (Firestore)
 
 El contenido de las publicaciones vive en el repo. Lo que necesita base de
 datos es sólo el estado que se maneja desde el índice: **archivado, eliminado y
 bitácora**.
 
-Sin `POSTGRES_URL` la app funciona igual y el índice avisa en pantalla de que
-ese estado no se está guardando. Es un modo válido para probar, no para operar.
+Sin `FIREBASE_SERVICE_ACCOUNT` la app funciona igual y el índice avisa en
+pantalla de que ese estado no se está guardando. Es un modo válido para probar,
+no para operar.
 
-Sirve cualquier Postgres con cadena de conexión estándar (Neon, Supabase,
-Postgres administrado). Pasos:
+Proyecto: `qeb-ooh-e4d1f`.
 
-1. Provisionar la base y copiar la cadena de conexión.
-2. **Usar la cadena del pooler**, no la del puerto directo. Cada instancia
-   serverless abre su propio pool; sin pooler se agotan las conexiones — es el
-   mismo problema de agotamiento que ya se conoce en la plataforma.
-3. Cargarla como `POSTGRES_URL` y volver a desplegar.
+### Crear la cuenta de servicio
 
-La tabla se crea sola en el primer uso; no hay migración manual. Para
-referencia, es esta:
+1. En la consola de Firebase: **Configuración del proyecto → Cuentas de
+   servicio → Generar nueva clave privada**. Descarga un JSON.
+2. Codifícalo para pegarlo sin pelearte con los saltos de línea:
+   ```bash
+   base64 -w0 qeb-ooh-e4d1f-firebase-adminsdk-xxxxx.json
+   ```
+3. Pega el resultado en Vercel como `FIREBASE_SERVICE_ACCOUNT` y vuelve a
+   desplegar.
 
-```sql
-create table if not exists publicacion_estado (
-  seccion     text        not null,
-  slug        text        not null,
-  archivada   boolean     not null default false,
-  eliminada   boolean     not null default false,
-  bitacora    jsonb       not null default '[]'::jsonb,
-  actualizado timestamptz not null default now(),
-  primary key (seccion, slug)
-);
+El JSON también se acepta tal cual, sin base64; la app detecta cuál de los dos
+le llegó.
+
+**Ese archivo es una credencial con acceso total al proyecto.** No va al repo
+(el `.gitignore` ya cubre los nombres habituales), no va en un chat y no va en
+un correo. Si se filtra, se revoca desde la misma pantalla y se genera otra.
+
+### Reglas de seguridad: cerrar todo
+
+La app usa el **SDK de administración** desde el servidor, y ese SDK no pasa por
+las reglas de seguridad. Eso significa que las reglas pueden —y deben— negar
+todo: nadie debe poder leer esta base desde un navegador.
+
+Si creaste la base en **modo de prueba**, quedó abierta a lectura y escritura
+para cualquiera durante 30 días. Conviene cerrarla ahora:
+
 ```
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+```
+
+La app sigue funcionando con esas reglas, porque entra por el SDK de
+administración.
+
+### Estructura
+
+Se crea sola al primer uso; no hay migración.
+
+```
+publicacion_estado/{seccion}/publicaciones/{slug}
+  archivada:   boolean
+  eliminada:   boolean
+  bitacora:    array<{ id, fecha, autor, texto }>
+  actualizado: timestamp
+```
+
+Con la sección en la ruta, listar una sección es leer una colección — sin
+consultas ni índices compuestos que mantener. Los campos que nunca se han
+tocado no existen en el documento; la app los lee como `false`.
+
+### Probar en local sin credenciales
+
+El emulador evita tener que bajar una cuenta de servicio para desarrollar:
+
+```bash
+npx firebase-tools emulators:start --only firestore --project qeb-ooh-e4d1f
+```
+
+Y en `apps/web/.env.local`:
+
+```
+FIRESTORE_EMULATOR_HOST=127.0.0.1:8080
+FIREBASE_PROJECT_ID=qeb-ooh-e4d1f
+```
+
+Con esas dos variables el SDK se conecta al emulador y no pide credenciales. No
+definirlas en Vercel.
+
 
 ## 5. Qué está protegido y qué no
 
@@ -124,8 +179,9 @@ curl -s https://propuestas.qeb.mx/robots.txt
 ```
 
 Después, entrar al índice con la clave y archivar algo: si el cambio sobrevive
-a un redespliegue, la base de datos está bien conectada. Si el índice muestra el
-aviso de "sin base de datos", falta `POSTGRES_URL`.
+a un redespliegue, Firestore está bien conectado. Si el índice muestra el aviso
+de "sin base de datos", falta `FIREBASE_SERVICE_ACCOUNT` o el JSON no se pudo
+leer — los errores de credenciales aparecen en los logs de la función en Vercel.
 
 ## 7. Desarrollo local
 
@@ -141,5 +197,5 @@ pnpm dev
 - `localhost:3000/propuestas` — índice (pide clave)
 - `localhost:3000/propuestas/<slug>` — publicación
 
-Sin `POSTGRES_URL`, el estado se guarda en memoria del proceso: sirve para
-probar el flujo completo, pero se pierde al reiniciar.
+Sin credenciales ni emulador, el estado se guarda en memoria del proceso: sirve
+para probar el flujo completo, pero se pierde al reiniciar.

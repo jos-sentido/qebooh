@@ -239,7 +239,9 @@ ejercitar el flujo, porque nada de eso lo detecta el typecheck.
    señal de que falta un punto de configuración en el núcleo.
 5. **El contenido vive en el repo; el estado administrable, en base de datos.**
    Archivar, eliminar y la bitácora se manejan desde el índice y se guardan en
-   Postgres. Eliminar es borrado suave: la publicación sale de circulación pero
+   Firestore (proyecto `qeb-ooh-e4d1f`), con el SDK de administración desde el
+   servidor: el navegador nunca toca la base, así que sus reglas de seguridad
+   niegan todo. Eliminar es borrado suave: la publicación sale de circulación pero
    el archivo sigue versionado. Borrar de verdad es borrar el archivo y que
    quede en git.
 
