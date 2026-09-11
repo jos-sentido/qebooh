@@ -46,3 +46,5 @@ scripts/e2e/capturas/
 *.log
 npm-debug.log*
 pnpm-debug.log*
+.vercel
+.env*
