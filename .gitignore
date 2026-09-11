@@ -39,6 +39,9 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 
+# capturas de las pruebas de extremo a extremo
+scripts/e2e/capturas/
+
 # logs
 *.log
 npm-debug.log*

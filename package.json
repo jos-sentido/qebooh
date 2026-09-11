@@ -11,9 +11,14 @@
     "start": "turbo run start",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
+    "e2e": "node scripts/e2e/admin.mjs && node scripts/e2e/documento.mjs",
+    "emulador": "firebase emulators:start --only firestore",
+    "reglas": "firebase deploy --only firestore:rules",
     "clean": "turbo run clean && rm -rf node_modules"
   },
   "devDependencies": {
+    "firebase-tools": "^14.24.1",
+    "playwright": "^1.56.1",
     "turbo": "^2.5.5",
     "typescript": "^5.9.2"
   }

@@ -2,6 +2,10 @@
 
 Contexto permanente para Claude Code. Léelo antes de proponer cambios.
 
+> ⏳ **Si existe `docs/CONTINUAR.md`, léelo primero.** Recoge el estado de lo
+> que quedó a medias y qué sigue. Es transitorio: se borra —y se quita este
+> aviso— cuando sus pendientes se cierran.
+
 ---
 
 ## 0. Qué es este repo (y qué no es)
