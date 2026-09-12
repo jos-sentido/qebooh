@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!--
+    Favicon QEB. Identidad oscura: el fondo es el lienzo, la barra morada es la
+    firma de marca (la misma franja de packages/ui y del layout). La "Q" va en
+    el color de títulos. Ver CLAUDE.md §6.
+  -->
+  <rect width="32" height="32" rx="7" fill="#0e0e1a"/>
+  <path d="M0 7a7 7 0 0 1 7-7h18a7 7 0 0 1 7 7v1H0Z" fill="#7b2fbe"/>
+  <text x="16" y="25" text-anchor="middle" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#c9a0ff">Q</text>
+</svg>
