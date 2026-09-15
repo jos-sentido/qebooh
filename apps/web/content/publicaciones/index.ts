@@ -1,5 +1,6 @@
 import type { Seccion } from "@/lib/secciones";
 import type { Publicacion } from "../tipos";
+import { colaboracionComercialLorena } from "./colaboracion-comercial-lorena";
 import { reporteVentasPrototipo } from "./reporte-ventas-prototipo";
 
 /**
@@ -15,7 +16,10 @@ import { reporteVentasPrototipo } from "./reporte-ventas-prototipo";
  * cambia slug y contenido, y se registran aquí. No se importan a propósito,
  * para no publicarlas.
  */
-const PUBLICACIONES: Publicacion[] = [reporteVentasPrototipo];
+const PUBLICACIONES: Publicacion[] = [
+  colaboracionComercialLorena,
+  reporteVentasPrototipo,
+];
 
 /** Todas las de una sección, de más reciente a más antigua. */
 export function listarPublicaciones(seccion: Seccion): Publicacion[] {
