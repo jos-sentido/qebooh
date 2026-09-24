@@ -2,6 +2,7 @@ import type { Seccion } from "@/lib/secciones";
 import type { Publicacion } from "../tipos";
 import { colaboracionComercialLorena } from "./colaboracion-comercial-lorena";
 import { reporteVentasPrototipo } from "./reporte-ventas-prototipo";
+import { toolSitioQeb } from "./tool-sitio-qeb";
 
 /**
  * Registro de publicaciones. Añadir aquí cada archivo nuevo.
@@ -19,6 +20,7 @@ import { reporteVentasPrototipo } from "./reporte-ventas-prototipo";
 const PUBLICACIONES: Publicacion[] = [
   colaboracionComercialLorena,
   reporteVentasPrototipo,
+  toolSitioQeb,
 ];
 
 /** Todas las de una sección, de más reciente a más antigua. */

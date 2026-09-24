@@ -1,0 +1,120 @@
+@import "tailwindcss";
+@import "@qebooh/ui/styles.css";
+
+/* @qebooh/ui entra como symlink del workspace y Tailwind ignora node_modules:
+   sin esta línea las clases del paquete no llegarían al CSS final. */
+@source "../../../packages/ui/src";
+
+/*
+ * Capa propia del sitio público qeb.mx.
+ *
+ * El núcleo (@qebooh/ui) define la identidad de los entregables. El sitio
+ * sigue el manual de marca 2024 (Branding/QEB brand 2024), que es más
+ * expresivo: fondo negro, degradado magenta → púrpura y Barlow en titulares.
+ * Esos valores viven aquí y no en packages/ui para no alterar propuestas y
+ * reportes ya publicados.
+ */
+@theme {
+  /* Manual 2024. */
+  --color-negro: #000000;
+  --color-magenta-marca: #87286b;
+  --color-purpura-marca: #632a94;
+
+  /* Derivados para texto sobre negro. El magenta y el púrpura del manual no
+     llegan a 3:1 sobre negro, así que para acentos de texto se usan tintes
+     claros de los mismos tonos (ambos > 7:1 sobre #000). */
+  --color-rosa: #e59ad3;
+  --color-lila: #c3a4f0;
+
+  /* Superficies del sitio: casi negro con un tinte morado, como el
+     dashboard del manual. */
+  --color-tinta: #0a0710;
+  --color-tinta-alta: #140e1f;
+  --color-linea: #2a2138;
+
+  /* Estados de inventario (lámina "Botones" del manual). */
+  --color-estado-espera: #f5a524;
+  --color-estado-propuesta: #d9468f;
+  --color-estado-campana: #6d4bd8;
+  --color-estado-activo: #c3a4f0;
+
+  --font-display: var(--font-qeb-display), var(--font-qeb-sans), ui-sans-serif,
+    system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-negro);
+  }
+
+  ::selection {
+    background: var(--color-magenta-marca);
+    color: white;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-rosa);
+    outline-offset: 3px;
+  }
+}
+
+@utility degradado-marca {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-magenta-marca),
+    var(--color-purpura-marca)
+  );
+}
+
+@utility texto-degradado {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-rosa),
+    var(--color-lila)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Trazo de la onda de marca: se "dibuja" una vez al entrar en pantalla. */
+@keyframes trazar {
+  from {
+    stroke-dashoffset: var(--largo, 2000);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@utility onda-animada {
+  stroke-dasharray: var(--largo, 2000);
+  animation: trazar 2.4s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+/* Barras del ecualizador del panel de demostración. */
+@keyframes latido {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0.72);
+  }
+}
+
+@utility latido {
+  transform-origin: bottom;
+  animation: latido 3.2s ease-in-out infinite;
+}

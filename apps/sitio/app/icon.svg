@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Favicon del sitio: la onda del logotipo QEB sobre negro (manual 2024). -->
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#b8388f"/>
+      <stop offset="1" stop-color="#6f4bd0"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="7" fill="#000"/>
+  <path d="M4 17h3v-4a2 2 0 0 1 4 0v8a2 2 0 0 0 4 0V8a2 2 0 0 1 4 0v12a2 2 0 0 0 4 0v-3h5" fill="none" stroke="url(#g)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

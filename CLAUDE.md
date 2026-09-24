@@ -11,9 +11,9 @@ cliente y web apps sueltas — herramientas internas y comerciales.
 
 **No es la plataforma QEB.** La plataforma es un producto aparte, con su propio
 stack y sus propios repos (`Develop-QEB/qeb-Back` y su frontend React + Vite).
-Nada de lo que se escriba aquí forma parte del producto ni se despliega en
-`qeb.mx`. Si un requerimiento pertenece a la plataforma, decirlo y no
-implementarlo aquí.
+Nada de lo que se escriba aquí forma parte del producto. El sitio público
+`qeb.mx` (marketing, en `apps/sitio`) sí vive aquí; la plataforma no. Si un
+requerimiento pertenece a la plataforma, decirlo y no implementarlo aquí.
 
 El contexto de negocio de las secciones 1–4 se hereda del CLAUDE.md de la
 plataforma porque hace falta para escribir contenido, propuestas y herramientas
@@ -172,6 +172,7 @@ y **pnpm 10** (`corepack enable`).
 ```
 apps/
   web/            Las tres secciones + sistema de publicaciones
+  sitio/          Sitio público qeb.mx (marketing, blog, contacto)
 packages/
   ui/             Sistema de diseño: tokens y componentes compartidos
   config/         Configuraciones base de TypeScript
@@ -179,6 +180,13 @@ packages/
 
 `apps/web` es **Next.js 15 (App Router) + React 19 + TypeScript + Tailwind v4**,
 desplegado en Vercel con Root Directory `apps/web`.
+
+`apps/sitio` es el sitio público `qeb.mx` con el mismo stack, en un proyecto
+de Vercel aparte (Root Directory `apps/sitio`). Sigue el manual de marca 2024
+(negro, magenta `#87286b` → púrpura `#632a94`, Barlow); esos tokens viven en
+`apps/sitio/app/globals.css`, no en `packages/ui`. Es indexable, al revés que
+las secciones. Las ilustraciones de producto se hacen en código con datos de
+ejemplo: nunca capturas de la plataforma, que traen datos de clientes.
 
 ### Las tres secciones
 

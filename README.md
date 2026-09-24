@@ -1,7 +1,7 @@
 # QEB — espacio de trabajo
 
-Monorepo de trabajo de QEB. Publica en tres subdominios de `qeb.mx`, todos
-desde el mismo proyecto de Vercel y con el mismo sistema de diseño:
+Monorepo de trabajo de QEB. Publica el sitio público `qeb.mx` (`apps/sitio`)
+y tres subdominios que salen del mismo proyecto de Vercel (`apps/web`):
 
 | Subdominio          | Qué se publica                      |
 | ------------------- | ----------------------------------- |
@@ -14,8 +14,7 @@ archivar, eliminar y bitácora— y todo lo demás es un slug que se comparte
 directo: `propuestas.qeb.mx/imu-implementacion`.
 
 > **Este repo no es la plataforma QEB.** La plataforma es un producto aparte,
-> con su propio stack y sus propios repos, desplegada en `qeb.mx`. Aquí no se
-> desarrolla producto. El contexto de negocio, el glosario y las reglas están en
+> con su propio stack y sus propios repos. Aquí no se desarrolla producto. El contexto de negocio, el glosario y las reglas están en
 > [`CLAUDE.md`](CLAUDE.md).
 
 ## QEB atiende a varios clientes
@@ -39,6 +38,7 @@ de configuración en el núcleo.
 ```
 apps/
   web/            Las tres secciones + sistema de publicaciones
+  sitio/          Sitio público qeb.mx (puerto 3001 en local)
 packages/
   ui/             Sistema de diseño: tokens y componentes compartidos
   config/         Configuraciones base de TypeScript
