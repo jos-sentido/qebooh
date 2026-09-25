@@ -1,18 +1,21 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo, Barlow, IBM_Plex_Mono } from "next/font/google";
+import { Barlow, IBM_Plex_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import { Encabezado } from "@/components/encabezado";
 import { Pie } from "@/components/pie";
 import { DESCRIPCION, INDEXAR, SITIO_URL } from "@/lib/sitio";
 import "./globals.css";
 
-// Titulares: el manual usa RF Dewi Extended (Rostype). Mientras no esté
-// disponible como webfont en el repo, Archivo en su ancho expandido (eje
-// wdth 125) reproduce la misma familia de formas: extendida y pesada.
-// Para cambiar a RF Dewi: next/font/local con los .woff2 de la carpeta
-// Brending/tipografias/font y la misma variable --font-qeb-display.
-const display = Archivo({
-  subsets: ["latin"],
-  axes: ["wdth"],
+// Titulares: RF Dewi Extended (Russian Fonts), la tipografía de titulares
+// del manual. Los .woff2 vienen de Brending/tipografias/font en Dropbox.
+const display = localFont({
+  src: [
+    { path: "./fuentes/RFDewiExtended-Regular.woff2", weight: "400" },
+    { path: "./fuentes/RFDewiExtended-Semibold.woff2", weight: "600" },
+    { path: "./fuentes/RFDewiExtended-Bold.woff2", weight: "700" },
+    { path: "./fuentes/RFDewiExtended-Ultrabold.woff2", weight: "800" },
+    { path: "./fuentes/RFDewiExtended-Black.woff2", weight: "900" },
+  ],
   variable: "--font-qeb-display",
   display: "swap",
 });

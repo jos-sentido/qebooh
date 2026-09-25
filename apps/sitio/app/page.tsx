@@ -199,7 +199,7 @@ export default function Inicio() {
                     <Link href={e.href} className="group block">
                       <BarraTitulo como="span">{e.sistema}</BarraTitulo>
                       <span className="mt-2 flex items-center justify-between gap-3">
-                        <span className="font-display text-lg font-extrabold uppercase leading-tight text-grafito [font-stretch:125%]">
+                        <span className="font-display text-lg font-extrabold uppercase leading-tight text-grafito">
                           {e.solucion}
                         </span>
                         <span
@@ -249,7 +249,7 @@ export default function Inicio() {
                   <IconoCirculo tipo={s.id === "operacion" ? "panel" : "analisis"} />
                   <BarraTitulo como="span">{s.categoria}</BarraTitulo>
                 </div>
-                <h3 className="mt-6 text-3xl font-extrabold uppercase text-white [font-stretch:125%] md:text-4xl">
+                <h3 className="mt-6 text-3xl font-extrabold uppercase text-white md:text-4xl">
                   {s.nombre}
                 </h3>
                 <p className="mt-4 max-w-md text-lg leading-relaxed text-texto-tenue">{s.lema}</p>
@@ -347,8 +347,8 @@ export default function Inicio() {
                 key={t}
                 className={
                   i % 4 === 0
-                    ? "degradado-marca px-5 py-2.5 font-display text-base font-extrabold uppercase text-white [font-stretch:125%]"
-                    : "border border-grafito/15 bg-white px-5 py-2.5 font-display text-base font-bold uppercase text-grafito [font-stretch:125%]"
+                    ? "degradado-marca px-5 py-2.5 font-display text-base font-extrabold uppercase text-white"
+                    : "border border-grafito/15 bg-white px-5 py-2.5 font-display text-base font-bold uppercase text-grafito"
                 }
               >
                 {t}
@@ -375,7 +375,7 @@ export default function Inicio() {
               >
                 <LineaTopografica className="absolute inset-0 h-full w-full opacity-25 transition-opacity group-hover:opacity-50" densidad={5} />
                 <IconoCirculo tipo={i === 0 ? "ubicacion" : "wifi"} tamano="lg" className="relative" />
-                <h3 className="relative mt-10 text-2xl font-extrabold uppercase text-white [font-stretch:125%] md:text-3xl">
+                <h3 className="relative mt-10 text-2xl font-extrabold uppercase text-white md:text-3xl">
                   {s.nombre}
                 </h3>
                 <p className="relative mt-4 max-w-md leading-relaxed text-texto-tenue">{s.lema}</p>

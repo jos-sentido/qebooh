@@ -268,7 +268,7 @@ export function Tarjeta({
     >
       <span aria-hidden className="absolute inset-x-0 top-0 h-1 degradado-marca opacity-0 transition-opacity group-hover:opacity-100" />
       {indice ? (
-        <p className="font-display text-sm font-extrabold text-lila [font-stretch:125%]">
+        <p className="font-display text-sm font-extrabold text-lila">
           {indice}
         </p>
       ) : null}

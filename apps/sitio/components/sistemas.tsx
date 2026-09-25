@@ -34,7 +34,7 @@ export function NavSistemas({ actual }: { actual: SistemaId | "general" }) {
                     : "text-texto-tenue hover:bg-tinta-alta hover:text-white",
                 )}
               >
-                <span className="font-display text-sm font-extrabold uppercase [font-stretch:125%]">{s.nombre}</span>
+                <span className="font-display text-sm font-extrabold uppercase">{s.nombre}</span>
                 <span className={cn("text-[11px]", esActual ? "text-white/80" : "text-texto-tenue")}>
                   {s.categoria}
                 </span>
@@ -74,7 +74,7 @@ export function DiagramaConexion({ resaltar }: { resaltar?: SistemaId }) {
             <IconoCirculo tipo={id === "operacion" ? "panel" : "analisis"} />
             <BarraTitulo como="span">{s.categoria}</BarraTitulo>
           </div>
-          <h3 className="mt-6 text-2xl font-extrabold uppercase text-white [font-stretch:125%]">
+          <h3 className="mt-6 text-2xl font-extrabold uppercase text-white">
             {s.nombre}
           </h3>
           <ul className="mt-5 flex flex-wrap gap-1.5">
@@ -133,7 +133,7 @@ export function DiagramaConexion({ resaltar }: { resaltar?: SistemaId }) {
       <Nodo id="operacion" />
       <div className="relative flex flex-col justify-center gap-6 rounded-3xl border border-dashed border-linea p-5 md:p-6">
         <LineaTopografica className="absolute inset-0 h-full w-full rounded-3xl opacity-20" densidad={5} />
-        <p className="relative text-center font-display text-base font-extrabold uppercase text-white [font-stretch:125%]">
+        <p className="relative text-center font-display text-base font-extrabold uppercase text-white">
           En tiempo real, sin recapturar
         </p>
         <div className="relative space-y-6">

@@ -83,7 +83,7 @@ export function BarraTitulo({
   return (
     <Tag
       className={cn(
-        "inline-block degradado-marca px-3 py-1 font-display text-xs font-extrabold uppercase tracking-[0.08em] text-white [font-stretch:125%] md:text-sm",
+        "inline-block degradado-marca px-3 py-1 font-display text-xs font-extrabold uppercase tracking-[0.08em] text-white md:text-sm",
         className,
       )}
     >
@@ -110,7 +110,7 @@ export function Orbe({
         <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_30%_25%,rgba(255,255,255,0.35),transparent_45%)]" />
       </div>
       {etiqueta ? (
-        <span className="absolute left-[-6%] right-[-6%] top-1/2 -translate-y-1/2 degradado-marca py-2 text-center font-display text-sm font-extrabold uppercase tracking-[0.06em] text-white [font-stretch:125%] md:text-base">
+        <span className="absolute left-[-6%] right-[-6%] top-1/2 -translate-y-1/2 degradado-marca py-2 text-center font-display text-sm font-extrabold uppercase tracking-[0.06em] text-white md:text-base">
           {etiqueta}
         </span>
       ) : null}
