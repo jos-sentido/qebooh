@@ -14,8 +14,8 @@ import {
   BarraTitulo,
   IconoCirculo,
   Cruces,
-  type TipoIcono,
 } from "@/components/graficos";
+import { HistoriaApilada, type Escena } from "@/components/historia-apilada";
 import { Onda } from "@/components/onda";
 import { PanelDemo, PanelInteligencia } from "@/components/visuales";
 import { entradas } from "@/content/blog";
@@ -28,9 +28,9 @@ import { LISTA_SISTEMAS, SISTEMAS } from "@/lib/sistemas";
  * QEB Operación e Inteligencia: Geo Behavior y WiFi son soluciones por
  * proyecto, fuera del foco comercial, y viven sólo en el menú.
  */
-const ESCENAS = [
+const ESCENAS: Escena[] = [
   {
-    icono: "inventario" as TipoIcono,
+    icono: "inventario",
     cuando: "Lunes · 9:12",
     quien: "Comercial",
     frase: "“¿Esa ubicación está libre la próxima catorcena?”",
@@ -41,7 +41,7 @@ const ESCENAS = [
     sistema: SISTEMAS.operacion.nombre,
   },
   {
-    icono: "propuesta" as TipoIcono,
+    icono: "propuesta",
     cuando: "Martes · 17:40",
     quien: "Comercial",
     frase: "“El cliente pidió la propuesta ayer.”",
@@ -52,7 +52,7 @@ const ESCENAS = [
     sistema: SISTEMAS.operacion.nombre,
   },
   {
-    icono: "campana" as TipoIcono,
+    icono: "campana",
     cuando: "Miércoles · 11:05",
     quien: "Operación",
     frase: "“¿Qué arte va en esta cara?”",
@@ -63,7 +63,7 @@ const ESCENAS = [
     sistema: SISTEMAS.operacion.nombre,
   },
   {
-    icono: "analisis" as TipoIcono,
+    icono: "analisis",
     cuando: "Jueves · 19:30",
     quien: "Administración",
     frase: "“Los números no cuadran.”",
@@ -74,7 +74,7 @@ const ESCENAS = [
     sistema: SISTEMAS.inteligencia.nombre,
   },
   {
-    icono: "objetivo" as TipoIcono,
+    icono: "objetivo",
     cuando: "Viernes · 10:00",
     quien: "Dirección",
     frase: "“¿Vamos a llegar a la meta?”",
@@ -85,7 +85,7 @@ const ESCENAS = [
     sistema: SISTEMAS.inteligencia.nombre,
   },
   {
-    icono: "ubicacion" as TipoIcono,
+    icono: "ubicacion",
     cuando: "Fin de mes",
     quien: "Dirección",
     frase: "“¿Por qué esa zona siempre está vacía?”",
@@ -129,10 +129,6 @@ export default function Inicio() {
             {/* Marco de cruces alrededor del producto, como en las piezas de
                 marca: la retícula queda detrás y asoma por los bordes. */}
             <Cruces className="absolute -inset-x-10 -bottom-12 -top-12 hidden h-[calc(100%+6rem)] w-[calc(100%+5rem)] opacity-60 md:block" />
-            <Onda
-              animada
-              className="absolute -top-24 right-[24%] hidden h-48 w-48 md:block"
-            />
             <PanelDemo className="relative z-10 lg:w-[78%]" />
             <PanelInteligencia className="relative z-20 mt-4 lg:absolute lg:bottom-0 lg:right-0 lg:mt-0 lg:w-[58%]" />
             <p className="mt-3 text-right font-mono text-[10px] uppercase tracking-widest text-texto-tenue/70 lg:absolute lg:-bottom-7 lg:right-0">
@@ -142,68 +138,8 @@ export default function Inicio() {
         </Contenedor>
       </section>
 
-      {/* Historia: una semana en una empresa OOH */}
-      <Seccion className="md:pt-40">
-        <Contenedor className="grid gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
-          <div className="lg:sticky lg:top-32 lg:self-start">
-            <Etiqueta>Si trabajas en OOH, esto te suena</Etiqueta>
-            <h2 className="mt-5 text-4xl font-extrabold leading-[1.02] text-white md:text-5xl">
-              Una semana cualquiera.
-            </h2>
-            <p className="mt-6 text-lg leading-relaxed text-texto-tenue">
-              La publicidad exterior se vende rápido y se opera en la calle. Pero
-              detrás, casi siempre, hay hojas de cálculo, correos y la memoria
-              de alguien. Así se ve una semana normal.
-            </p>
-            <Onda variante="tubo" className="mt-12 hidden h-64 w-64 lg:block" />
-          </div>
-
-          <ol className="space-y-5 md:space-y-6">
-            {ESCENAS.map((e) => (
-              <li key={e.cuando}>
-                <article className="grid overflow-hidden rounded-3xl md:grid-cols-[1fr_1.05fr]">
-                  {/* Panel oscuro: la escena. */}
-                  <div className="relative flex flex-col justify-between gap-6 bg-grafito p-6 md:p-8">
-                    <span
-                      aria-hidden
-                      className="absolute inset-y-0 right-0 hidden w-1.5 bg-gradient-to-b from-violeta via-violeta-claro to-magenta-vivo md:block"
-                    />
-                    <div className="flex items-center gap-3">
-                      <IconoCirculo tipo={e.icono} tamano="sm" />
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-texto-tenue">
-                        {e.cuando}
-                        <br />
-                        <span className="text-rosa">{e.quien}</span>
-                      </p>
-                    </div>
-                    <h3 className="text-2xl font-extrabold leading-tight text-white md:text-[1.7rem]">
-                      {e.frase}
-                    </h3>
-                  </div>
-                  {/* Panel claro: qué pasa y qué lo resuelve. */}
-                  <div className="flex flex-col justify-between gap-6 bg-niebla p-6 md:p-8">
-                    <p className="text-lg leading-relaxed text-grafito/80">{e.historia}</p>
-                    <Link href={e.href} className="group block">
-                      <BarraTitulo como="span">{e.sistema}</BarraTitulo>
-                      <span className="mt-2 flex items-center justify-between gap-3">
-                        <span className="font-display text-lg font-extrabold uppercase leading-tight text-grafito">
-                          {e.solucion}
-                        </span>
-                        <span
-                          aria-hidden
-                          className="flex size-10 shrink-0 items-center justify-center rounded-full bg-grafito text-white transition-transform group-hover:translate-x-1"
-                        >
-                          →
-                        </span>
-                      </span>
-                    </Link>
-                  </div>
-                </article>
-              </li>
-            ))}
-          </ol>
-        </Contenedor>
-      </Seccion>
+      {/* Historia: una semana en una empresa OOH, como mazo de cartas. */}
+      <HistoriaApilada escenas={ESCENAS} />
 
       {/* Giro: dos sistemas */}
       <Seccion tono="tinta">
