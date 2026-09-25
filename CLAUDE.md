@@ -194,7 +194,13 @@ licencia: confirmar el permiso de uso web antes de publicar en qeb.mx. El sitio 
 dos sistemas, QEB Operación e QEB Inteligencia (nombres en
 `apps/sitio/lib/sistemas.ts`). Es indexable, al revés que
 las secciones. Las ilustraciones de producto se hacen en código con datos de
-ejemplo: nunca capturas de la plataforma, que traen datos de clientes.
+ejemplo: nunca capturas de la plataforma, que traen datos de clientes. Los
+códigos de inventario de ejemplo usan el formato genérico Formato + número +
+cara (`Parabus001A`, `Espectacular101A`); el formato
+`{code}_{Flujo|Contraflujo}_{Plaza}` es el de IMU y no se usa en el sitio.
+El foco comercial son QEB Operación e QEB Inteligencia; Geo Behavior Indoor
+y WiFi Inteligente son soluciones por proyecto y sólo aparecen en el menú, el
+pie y sus propias páginas.
 
 ### Las tres secciones
 

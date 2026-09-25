@@ -91,17 +91,3 @@ export const FLUJOS: { de: SistemaId; dato: string; resultado: string }[] = [
     resultado: "Qué inventario empujar en las próximas propuestas",
   },
 ];
-
-/** Soluciones de audiencia, complementarias a los sistemas. */
-export const AUDIENCIAS = [
-  {
-    nombre: "Geo Behavior Indoor",
-    href: "/geo-behavior-indoor",
-    lema: "Afluencia, movilidad y tiempos de estancia en espacios cerrados.",
-  },
-  {
-    nombre: "WiFi Inteligente",
-    href: "/wifi-inteligente",
-    lema: "Tu red WiFi como fuente de analítica y audiencias.",
-  },
-];

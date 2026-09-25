@@ -41,7 +41,7 @@ export default function GeoBehavior() {
   return (
     <>
       <Portada
-        etiqueta="Geo Behavior Indoor"
+        etiqueta="Geo Behavior Indoor · Por proyecto"
         titulo={
           <>
             Lo que pasa dentro de tus espacios,{" "}

@@ -147,7 +147,7 @@ export function PanelDemo({ className }: { className?: string }) {
                   Conflicto detectado
                 </p>
                 <p className="mt-1.5 font-mono text-[10px] leading-relaxed text-texto">
-                  1042_Flujo_Monterrey
+                  Parabus042A
                 </p>
                 <p className="text-[10px] leading-relaxed text-texto-tenue">
                   En 2 propuestas para la Cat. 20. Se bloquea antes de venderse
@@ -248,7 +248,13 @@ export function Embudo() {
   );
 }
 
-/** Tira de catorcenas con ocupación de una cara y un conflicto marcado. */
+/**
+ * Tira de catorcenas con ocupación de una cara y un conflicto marcado.
+ *
+ * Los códigos de inventario de ejemplo siguen el formato genérico
+ * Formato + número + cara (Parabus042A, Espectacular101A). No usar la
+ * nomenclatura de IMU ({code}_{Flujo|Contraflujo}_{Plaza}).
+ */
 export function TiraCatorcenas() {
   const cats = [
     { c: 17, e: "campana" },
@@ -268,11 +274,11 @@ export function TiraCatorcenas() {
       "bg-[repeating-linear-gradient(135deg,#f5a524_0_6px,#6d4bd8_6px_12px)]",
   };
   return (
-    <Marco titulo="Inventarios · 1042_Flujo_Monterrey">
+    <Marco titulo="Inventarios · Parabus042A">
       <div className="space-y-5 p-5">
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[11px] text-texto-tenue">
           <span>
-            Parabús · Cara <b className="font-semibold text-texto">Flujo</b>
+            Parabús · Cara <b className="font-semibold text-texto">A</b>
           </span>
           <span>Plaza Monterrey</span>
           <span>1.21 × 1.77 m</span>
@@ -316,10 +322,10 @@ function Leyenda({
 /** Versionario: qué arte va en cada cara. */
 export function Versionario() {
   const filas = [
-    { cara: "1042_Flujo_Monterrey", version: "V3 · Temporada otoño", estado: "Aprobada" },
-    { cara: "1042_Contraflujo_Monterrey", version: "V3 · Temporada otoño", estado: "Aprobada" },
-    { cara: "2210_Flujo_Guadalajara", version: "V2 · Lanzamiento", estado: "En revisión" },
-    { cara: "0877_Flujo_Ciudad de México", version: "V4 · Promoción", estado: "Instalada" },
+    { cara: "Parabus042A", version: "V3 · Temporada otoño", estado: "Aprobada" },
+    { cara: "Parabus042B", version: "V3 · Temporada otoño", estado: "Aprobada" },
+    { cara: "Mupi210A", version: "V2 · Lanzamiento", estado: "En revisión" },
+    { cara: "Espectacular101A", version: "V4 · Promoción", estado: "Instalada" },
   ];
   const tono: Record<string, string> = {
     Aprobada: "text-estado-activo border-estado-activo/40",

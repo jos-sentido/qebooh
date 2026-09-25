@@ -20,11 +20,13 @@ import { Onda } from "@/components/onda";
 import { PanelDemo, PanelInteligencia } from "@/components/visuales";
 import { entradas } from "@/content/blog";
 import { formatoFecha } from "@/lib/formato";
-import { AUDIENCIAS, LISTA_SISTEMAS, SISTEMAS } from "@/lib/sistemas";
+import { LISTA_SISTEMAS, SISTEMAS } from "@/lib/sistemas";
 
 /**
  * Una semana cualquiera en una empresa OOH. Cada escena es un dolor real
- * contado sin tecnicismos y termina en la solución que lo resuelve.
+ * contado sin tecnicismos y termina en el sistema que lo resuelve. Sólo
+ * QEB Operación e Inteligencia: Geo Behavior y WiFi son soluciones por
+ * proyecto, fuera del foco comercial, y viven sólo en el menú.
  */
 const ESCENAS = [
   {
@@ -92,17 +94,6 @@ const ESCENAS = [
     solucion: "Ocupación estratégica",
     href: SISTEMAS.inteligencia.href,
     sistema: SISTEMAS.inteligencia.nombre,
-  },
-  {
-    icono: "wifi" as TipoIcono,
-    cuando: "En la negociación",
-    quien: "El anunciante",
-    frase: "“¿Y cuánta gente lo va a ver?”",
-    historia:
-      "Sin datos de audiencia, el precio se defiende con intuición. El anunciante quiere pruebas, no promesas.",
-    solucion: "Datos de afluencia y audiencia",
-    href: "/geo-behavior-indoor",
-    sistema: "Geo Behavior · WiFi Inteligente",
   },
 ];
 
@@ -357,36 +348,6 @@ export default function Inicio() {
           </ul>
         </Contenedor>
       </section>
-
-      {/* Audiencias */}
-      <Seccion>
-        <Contenedor>
-          <Encabezado
-            etiqueta="Datos de audiencia"
-            titulo="Vende con pruebas, no con promesas."
-            bajada="Soluciones que suman información del comportamiento real de las personas a tu propuesta comercial."
-          />
-          <div className="mt-16 grid gap-4 lg:grid-cols-2">
-            {AUDIENCIAS.map((s, i) => (
-              <Link
-                key={s.href}
-                href={s.href}
-                className="group relative overflow-hidden rounded-3xl border border-linea bg-tinta p-8 transition-colors hover:border-violeta md:p-12"
-              >
-                <LineaTopografica className="absolute inset-0 h-full w-full opacity-25 transition-opacity group-hover:opacity-50" densidad={5} />
-                <IconoCirculo tipo={i === 0 ? "ubicacion" : "wifi"} tamano="lg" className="relative" />
-                <h3 className="relative mt-10 text-2xl font-extrabold uppercase text-white md:text-3xl">
-                  {s.nombre}
-                </h3>
-                <p className="relative mt-4 max-w-md leading-relaxed text-texto-tenue">{s.lema}</p>
-                <p className="relative mt-8 text-sm font-semibold uppercase tracking-[0.14em] text-rosa">
-                  Conocer más <span aria-hidden>→</span>
-                </p>
-              </Link>
-            ))}
-          </div>
-        </Contenedor>
-      </Seccion>
 
       {/* Blog */}
       <Seccion tono="tinta">

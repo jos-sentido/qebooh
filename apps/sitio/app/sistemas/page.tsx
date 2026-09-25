@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import {
   Boton,
   Contenedor,
@@ -10,7 +9,6 @@ import {
   Tarjeta,
 } from "@/components/bloques";
 import { DiagramaConexion, NavSistemas } from "@/components/sistemas";
-import { AUDIENCIAS } from "@/lib/sistemas";
 
 export const metadata: Metadata = {
   title: "Sistemas",
@@ -72,31 +70,6 @@ export default function Sistemas() {
               Sólo las campañas cerradas cuentan como venta; solicitudes y
               propuestas se ven como lo que son: pipeline.
             </Tarjeta>
-          </div>
-        </Contenedor>
-      </Seccion>
-
-      <Seccion>
-        <Contenedor>
-          <Encabezado
-            etiqueta="Complementos"
-            titulo="Y datos de audiencia para vender mejor."
-            bajada="Soluciones que suman información del comportamiento real de las personas a tu propuesta comercial."
-          />
-          <div className="mt-14 grid gap-4 md:grid-cols-2">
-            {AUDIENCIAS.map((a) => (
-              <Link
-                key={a.href}
-                href={a.href}
-                className="group rounded-3xl border border-linea bg-tinta p-8 transition-colors hover:border-violeta"
-              >
-                <h3 className="text-2xl font-bold text-white">{a.nombre}</h3>
-                <p className="mt-2 leading-relaxed text-texto-tenue">{a.lema}</p>
-                <p className="mt-6 text-sm font-semibold text-rosa">
-                  Conocer más <span aria-hidden>→</span>
-                </p>
-              </Link>
-            ))}
           </div>
         </Contenedor>
       </Seccion>

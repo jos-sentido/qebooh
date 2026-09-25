@@ -22,7 +22,7 @@ export default function Wifi() {
   return (
     <>
       <Portada
-        etiqueta="WiFi Inteligente"
+        etiqueta="WiFi Inteligente · Por proyecto"
         titulo={
           <>
             Tu red WiFi,{" "}
