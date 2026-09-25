@@ -141,7 +141,9 @@ export function HistoriaApilada({ escenas }: { escenas: Escena[] }) {
         className="relative"
         style={{ height: `${100 + (escenas.length - 1) * SCROLL_POR_CARTA * 100}vh` }}
       >
-        <div className="sticky top-0 flex h-dvh items-center overflow-hidden">
+        {/* La zona fija empieza bajo el encabezado (4.5rem) para que el mazo
+            nunca quede pegado al menú, sobre todo en móvil. */}
+        <div className="sticky top-18 flex h-[calc(100dvh-4.5rem)] items-center overflow-hidden">
           <div className="mx-auto grid w-full max-w-7xl items-center gap-14 px-6 md:px-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
             <div className="hidden lg:block">
               {intro}
@@ -155,7 +157,7 @@ export function HistoriaApilada({ escenas }: { escenas: Escena[] }) {
             </div>
 
             <div>
-              <ol className="relative h-[34rem] sm:h-[26rem]" aria-label="Una semana en una empresa OOH">
+              <ol className="relative h-[29rem] sm:h-[26rem]" aria-label="Una semana en una empresa OOH">
                 {escenas.map((e, i) => {
                   const d = i - progreso; // < 0: ya pasó; 0: al frente; > 0: detrás
                   let estilo: React.CSSProperties;
@@ -192,7 +194,7 @@ export function HistoriaApilada({ escenas }: { escenas: Escena[] }) {
                   );
                 })}
               </ol>
-              <div className="mt-14 lg:hidden">
+              <div className="mt-12 lg:hidden">
                 <Contador
                   actual={actual}
                   total={escenas.length}
@@ -220,30 +222,49 @@ function Contador({
   alVolver: () => void;
 }) {
   const dos = (n: number) => String(n).padStart(2, "0");
+  const avanzado = actual > 0;
+  const botonBase =
+    "items-center gap-2 rounded-full border border-linea font-semibold uppercase text-white transition hover:border-violeta-claro hover:bg-tinta-alta";
   return (
-    <div className="mt-10 max-w-xs">
-      <p className="flex items-baseline gap-2 font-display font-extrabold uppercase text-white">
+    <div className="max-w-xs lg:mt-10">
+      <div className="flex items-center gap-2 font-display font-extrabold uppercase text-white">
         <span className="text-3xl">{dos(actual + 1)}</span>
         <span className="text-sm text-texto-tenue">/ {dos(total)}</span>
-        <span className="ml-auto text-[11px] font-semibold tracking-[0.22em] text-rosa">
+        <span
+          className={cn(
+            "ml-auto text-[11px] font-semibold tracking-[0.22em] text-rosa",
+            avanzado && "hidden lg:inline",
+          )}
+        >
           {actual < total - 1 ? "Sigue bajando ↓" : "Así se ve con QEB ↓"}
         </span>
-      </p>
+        {/* Móvil: el botón va en la misma fila para no robar altura. */}
+        {avanzado ? (
+          <button
+            type="button"
+            onClick={alVolver}
+            className={cn(botonBase, "ml-auto inline-flex h-9 px-4 font-sans text-[11px] tracking-[0.14em] lg:hidden")}
+          >
+            <span aria-hidden>↑</span> A la 1
+          </button>
+        ) : null}
+      </div>
       <span className="mt-3 block h-1 bg-white/10">
         <span
           className="block h-full degradado-marca"
           style={{ width: `${((progreso + 1) / total) * 100}%` }}
         />
       </span>
-      {/* Sólo cuando ya se avanzó: evita un botón que no hace nada. */}
+      {/* Escritorio: botón debajo, sólo cuando ya se avanzó. */}
       <button
         type="button"
         onClick={alVolver}
-        tabIndex={actual > 0 ? 0 : -1}
-        aria-hidden={actual === 0}
+        tabIndex={avanzado ? 0 : -1}
+        aria-hidden={!avanzado}
         className={cn(
-          "mt-5 inline-flex h-10 items-center gap-2 rounded-full border border-linea px-5 text-xs font-semibold uppercase tracking-[0.16em] text-white transition hover:border-violeta-claro hover:bg-tinta-alta",
-          actual > 0 ? "opacity-100" : "pointer-events-none opacity-0",
+          botonBase,
+          "mt-5 hidden h-10 px-5 text-xs tracking-[0.16em] lg:inline-flex",
+          avanzado ? "opacity-100" : "pointer-events-none opacity-0",
         )}
       >
         <span aria-hidden>↑</span> Volver a la 1
@@ -261,7 +282,7 @@ function Carta({ escena: e, alta = false }: { escena: Escena; alta?: boolean }) 
       )}
     >
       {/* Panel oscuro: la escena. */}
-      <div className="relative flex flex-col justify-between gap-6 bg-grafito p-6 md:p-8">
+      <div className="relative flex flex-col justify-between gap-4 bg-grafito p-5 sm:gap-6 md:p-8">
         <span
           aria-hidden
           className="absolute inset-y-0 right-0 hidden w-1.5 bg-gradient-to-b from-violeta via-violeta-claro to-magenta-vivo sm:block"
@@ -274,17 +295,17 @@ function Carta({ escena: e, alta = false }: { escena: Escena; alta?: boolean }) 
             <span className="text-rosa">{e.quien}</span>
           </p>
         </div>
-        <h3 className="text-2xl font-extrabold leading-tight text-white md:text-[1.7rem]">
+        <h3 className="text-xl font-extrabold leading-tight text-white sm:text-2xl md:text-[1.7rem]">
           {e.frase}
         </h3>
       </div>
       {/* Panel claro: qué pasa y qué lo resuelve. */}
-      <div className="flex flex-col justify-between gap-6 bg-niebla p-6 md:p-8">
-        <p className="text-lg leading-relaxed text-grafito/80">{e.historia}</p>
+      <div className="flex flex-col justify-between gap-4 bg-niebla p-5 sm:gap-6 md:p-8">
+        <p className="text-base leading-relaxed text-grafito/80 sm:text-lg">{e.historia}</p>
         <Link href={e.href} className="group block">
           <BarraTitulo como="span">{e.sistema}</BarraTitulo>
           <span className="mt-2 flex items-center justify-between gap-3">
-            <span className="font-display text-lg font-extrabold uppercase leading-tight text-grafito">
+            <span className="font-display text-base font-extrabold uppercase leading-tight text-grafito sm:text-lg">
               {e.solucion}
             </span>
             <span
