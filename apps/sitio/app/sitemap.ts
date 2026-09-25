@@ -4,7 +4,9 @@ import { SITIO_URL } from "@/lib/sitio";
 
 const PAGINAS = [
   "",
-  "/plataforma",
+  "/sistemas",
+  "/sistemas/operacion",
+  "/sistemas/inteligencia",
   "/geo-behavior-indoor",
   "/wifi-inteligente",
   "/nosotros",
@@ -17,7 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...PAGINAS.map((p) => ({
       url: `${SITIO_URL}${p}`,
-      priority: p === "" ? 1 : p === "/plataforma" ? 0.9 : 0.6,
+      priority: p === "" ? 1 : p.startsWith("/sistemas") ? 0.9 : 0.6,
     })),
     ...entradas().map((e) => ({
       url: `${SITIO_URL}/blog/${e.slug}`,

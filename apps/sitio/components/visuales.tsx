@@ -41,7 +41,7 @@ function Marco({
   return (
     <figure
       className={cn(
-        "overflow-hidden rounded-2xl border border-white/10 bg-[#0d0a14] shadow-[0_40px_120px_-30px_rgba(99,42,148,0.7)] ring-1 ring-black",
+        "overflow-hidden rounded-2xl border border-white/10 bg-[#180c24] shadow-[0_40px_120px_-30px_rgba(99,42,148,0.7)] ring-1 ring-black",
         className,
       )}
     >
@@ -108,7 +108,7 @@ export function PanelDemo({ className }: { className?: string }) {
                     {k.etiqueta}
                   </span>
                 </div>
-                <p className="mt-1.5 font-display text-lg font-semibold tabular-nums text-white">
+                <p className="mt-1.5 text-xl font-light tabular-nums text-white">
                   {k.valor}
                 </p>
               </div>
@@ -384,7 +384,7 @@ export function MapaAfluencia() {
         </div>
         <div className="mt-4 flex items-center justify-between text-[11px] text-texto-tenue">
           <span>Bajo flujo</span>
-          <span className="mx-3 h-1.5 flex-1 rounded-full bg-gradient-to-r from-purpura-marca via-magenta-marca to-rosa" />
+          <span className="mx-3 h-1.5 flex-1 rounded-full bg-gradient-to-r from-purpura-marca via-violeta to-rosa" />
           <span>Alto flujo</span>
         </div>
       </div>
@@ -407,7 +407,7 @@ export function PanelWifi() {
             <p className="truncate text-[9px] uppercase tracking-wider text-texto-tenue">
               {k.e}
             </p>
-            <p className="mt-1 font-display text-lg font-semibold text-white">{k.v}</p>
+            <p className="mt-1 text-xl font-light text-white">{k.v}</p>
           </div>
         ))}
       </div>
@@ -428,6 +428,256 @@ export function PanelWifi() {
           <span>07:00</span>
           <span>14:00</span>
           <span>22:00</span>
+        </div>
+      </div>
+    </Marco>
+  );
+}
+
+/* ------------------------------------------------------------------------ */
+/* QEB Inteligencia. Datos de ejemplo, coherentes entre sí:                  */
+/* embudo 120 → 92 → 62 (conversión 51.7 %), ventas por catorcena contra     */
+/* el año anterior y un objetivo repartido entre asesores genéricos.         */
+/* ------------------------------------------------------------------------ */
+
+const CATORCENAS_VENTA = [
+  { c: "C13", real: 58, anterior: 52 },
+  { c: "C14", real: 64, anterior: 55 },
+  { c: "C15", real: 61, anterior: 60 },
+  { c: "C16", real: 72, anterior: 63 },
+  { c: "C17", real: 70, anterior: 66 },
+  { c: "C18", real: 81, anterior: 68 },
+  { c: "C19", real: 86, anterior: 71 },
+];
+
+/** Tablero principal de inteligencia: KPIs, ventas vs. año anterior, embudo. */
+export function PanelInteligencia({ className }: { className?: string }) {
+  const max = 90;
+  return (
+    <Marco titulo="QEB Inteligencia · Resumen de ventas" className={className}>
+      <div className="space-y-3 p-3 sm:p-4">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          {[
+            { e: "Venta acumulada", v: "$48.6 M", n: "+7.9 % vs. año ant.", c: "text-estado-activo" },
+            { e: "Avance vs. objetivo", v: "71.5 %", n: "Meta anual $68 M", c: "text-rosa" },
+            { e: "Conversión", v: "51.7 %", n: "Solicitud → campaña", c: "text-estado-espera" },
+            { e: "Ciclo de venta", v: "24 días", n: "Solicitud → campaña", c: "text-lila" },
+          ].map((k, i) => (
+            <div
+              key={k.e}
+              className={cn(
+                "rounded-xl border border-white/5 bg-white/[0.03] p-2.5",
+                i > 1 && "hidden sm:block",
+              )}
+            >
+              <p className="truncate text-[9px] uppercase tracking-wider text-texto-tenue">{k.e}</p>
+              <p className="mt-1 text-xl font-light tabular-nums text-white">{k.v}</p>
+              <p className={cn("truncate text-[9px]", k.c)}>{k.n}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="grid gap-3 md:grid-cols-[1.4fr_1fr]">
+          <div className="rounded-xl border border-white/5 bg-white/[0.03] p-3">
+            <div className="flex items-center justify-between">
+              <p className="text-[10px] uppercase tracking-wider text-texto-tenue">
+                Venta por catorcena
+              </p>
+              <div className="flex gap-3 text-[9px] text-texto-tenue">
+                <span className="inline-flex items-center gap-1">
+                  <span className="size-1.5 rounded-full bg-rosa" /> Real
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <span className="size-1.5 rounded-full bg-white/25" /> Año anterior
+                </span>
+              </div>
+            </div>
+            <div className="mt-3 flex h-28 items-end gap-2">
+              {CATORCENAS_VENTA.map((k, i) => (
+                <div key={k.c} className="flex h-full flex-1 flex-col justify-end">
+                  <div className="flex h-full items-end gap-0.5">
+                    <span
+                      className="flex-1 rounded-t-sm bg-white/15"
+                      style={{ height: `${(k.anterior / max) * 100}%` }}
+                    />
+                    <span
+                      className="latido flex-1 rounded-t-sm degradado-marca"
+                      style={{ height: `${(k.real / max) * 100}%`, animationDelay: `${i * 0.2}s` }}
+                    />
+                  </div>
+                  <p className="mt-1 text-center font-mono text-[9px] text-texto-tenue">{k.c}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-white/5 bg-white/[0.03] p-3">
+            <p className="text-[10px] uppercase tracking-wider text-texto-tenue">
+              Embudo de conversión
+            </p>
+            <ul className="mt-3 space-y-2">
+              {[
+                { e: "Solicitudes", n: 120, c: "bg-estado-espera" },
+                { e: "Propuestas", n: 92, c: "bg-estado-propuesta" },
+                { e: "Campañas", n: 62, c: "bg-estado-campana" },
+              ].map((f) => (
+                <li key={f.e}>
+                  <div className="flex justify-between text-[10px]">
+                    <span className="text-texto-tenue">{f.e}</span>
+                    <span className="font-mono tabular-nums text-texto">{f.n}</span>
+                  </div>
+                  <span className="mt-1 block h-2 rounded-full bg-white/5">
+                    <span
+                      className={cn("block h-full rounded-full", f.c)}
+                      style={{ width: `${(f.n / 120) * 100}%` }}
+                    />
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-3 border-t border-white/5 pt-2 text-[10px] leading-relaxed text-texto-tenue">
+              Sólo las campañas cerradas cuentan como venta.
+            </p>
+          </div>
+        </div>
+      </div>
+    </Marco>
+  );
+}
+
+/** Objetivo anual repartido entre asesores, con avance de cada uno. */
+export function ObjetivosAsesores() {
+  const asesores = [
+    { n: "Asesor A", meta: 14.3, real: 11.2 },
+    { n: "Asesor B", meta: 13.6, real: 10.4 },
+    { n: "Asesor C", meta: 12.2, real: 8.1 },
+    { n: "Asesor D", meta: 10.9, real: 8.3 },
+    { n: "Asesor E", meta: 9.5, real: 5.6 },
+    { n: "Asesor F", meta: 7.5, real: 5.0 },
+  ];
+  return (
+    <Marco titulo="QEB Inteligencia · Objetivos">
+      <div className="p-5">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <p className="text-sm font-semibold text-white">Objetivo anual $68 M</p>
+          <p className="text-[11px] text-estado-activo">Reparto 100 % · cuadra ✓</p>
+        </div>
+        <ul className="mt-4 space-y-3">
+          {asesores.map((a) => {
+            const avance = (a.real / a.meta) * 100;
+            return (
+              <li key={a.n}>
+                <div className="flex justify-between text-[11px]">
+                  <span className="text-texto">{a.n}</span>
+                  <span className="font-mono tabular-nums text-texto-tenue">
+                    ${a.real} M / ${a.meta} M ·{" "}
+                    <b className={avance >= 75 ? "text-estado-activo" : "text-estado-espera"}>
+                      {avance.toFixed(0)} %
+                    </b>
+                  </span>
+                </div>
+                <span className="mt-1 block h-2 rounded-full bg-white/5">
+                  <span
+                    className="block h-full rounded-full degradado-marca"
+                    style={{ width: `${avance}%` }}
+                  />
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </Marco>
+  );
+}
+
+/** Historial de ediciones que movieron la venta de campañas ya cerradas. */
+export function HistorialVariaciones() {
+  const filas = [
+    { id: "CMP-0412", campo: "Caras", cambio: "6 → 9", delta: "+$27,000", sube: true },
+    { id: "CMP-0388", campo: "Tarifa", cambio: "24 k → 22.5 k", delta: "−$9,000", sube: false },
+    { id: "CMP-0371", campo: "Caras", cambio: "5 → 7", delta: "+$26,000", sube: true },
+    { id: "CMP-0359", campo: "Caras", cambio: "10 → 6", delta: "−$36,000", sube: false },
+  ];
+  return (
+    <Marco titulo="QEB Inteligencia · Variaciones e impacto">
+      <div className="grid grid-cols-3 gap-2 p-4">
+        {[
+          { e: "Alzas", v: "+$2.1 M", c: "text-estado-activo" },
+          { e: "Bajas", v: "−$1.8 M", c: "text-estado-espera" },
+          { e: "Variación neta", v: "+$0.3 M", c: "text-white" },
+        ].map((k) => (
+          <div key={k.e} className="rounded-xl border border-white/5 bg-white/[0.03] p-3">
+            <p className="text-[9px] uppercase tracking-wider text-texto-tenue">{k.e}</p>
+            <p className={cn("mt-1 text-xl font-light", k.c)}>{k.v}</p>
+          </div>
+        ))}
+      </div>
+      <ul className="divide-y divide-white/5 border-t border-white/5">
+        {filas.map((f) => (
+          <li key={f.id + f.cambio} className="grid grid-cols-[1fr_auto] items-center gap-2 px-4 py-3 sm:grid-cols-[1fr_1fr_auto]">
+            <span className="font-mono text-[11px] text-texto">{f.id}</span>
+            <span className="hidden text-[11px] text-texto-tenue sm:block">
+              {f.campo} · {f.cambio}
+            </span>
+            <span
+              className={cn(
+                "text-right font-mono text-[11px] font-semibold",
+                f.sube ? "text-estado-activo" : "text-estado-espera",
+              )}
+            >
+              {f.delta}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </Marco>
+  );
+}
+
+/** Mapa de ocupación: caras (filas) por catorcena (columnas). */
+export function MapaOcupacion() {
+  // Cada fila es una cara; 1 = vendida, 0 = libre. Patrones distintos para
+  // que se lean zonas que rinden y zonas subutilizadas.
+  const filas = [
+    { z: "Av. Reforma", o: [1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1] },
+    { z: "Periférico", o: [1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1] },
+    { z: "Av. Vallarta", o: [1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0] },
+    { z: "Garza Sada", o: [0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1] },
+    { z: "Av. Itzáes", o: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0] },
+    { z: "Blvd. 5 de Mayo", o: [0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0] },
+  ];
+  return (
+    <Marco titulo="QEB Inteligencia · Ocupación por zona × catorcena">
+      <div className="space-y-2 p-5">
+        {filas.map((f) => {
+          const pct = Math.round((f.o.reduce((a, b) => a + b, 0) / f.o.length) * 100);
+          return (
+            <div key={f.z} className="grid grid-cols-[6.5rem_1fr_2.5rem] items-center gap-3">
+              <span className="truncate text-[11px] text-texto-tenue">{f.z}</span>
+              <div className="grid grid-cols-12 gap-1">
+                {f.o.map((v, i) => (
+                  <span
+                    key={i}
+                    className={cn("h-4 rounded-[3px]", v ? "degradado-marca" : "bg-white/[0.06]")}
+                  />
+                ))}
+              </div>
+              <span
+                className={cn(
+                  "text-right font-mono text-[11px] tabular-nums",
+                  pct >= 70 ? "text-estado-activo" : pct < 45 ? "text-estado-espera" : "text-texto",
+                )}
+              >
+                {pct}%
+              </span>
+            </div>
+          );
+        })}
+        <div className="flex flex-wrap gap-4 pt-3 text-[11px] text-texto-tenue">
+          <Leyenda color="degradado-marca">Vendida</Leyenda>
+          <Leyenda color="bg-white/10">Libre</Leyenda>
+          <span className="text-estado-espera">&lt; 45 % subutilizada</span>
         </div>
       </div>
     </Marco>

@@ -11,17 +11,25 @@ import {
   Seccion,
 } from "@/components/bloques";
 import {
+  DiagramaConexion,
+  NavSistemas,
+  OtroSistema,
+} from "@/components/sistemas";
+import {
   Embudo,
   PanelDemo,
   TiraCatorcenas,
   Versionario,
 } from "@/components/visuales";
+import { SISTEMAS } from "@/lib/sistemas";
+
+const S = SISTEMAS.operacion;
 
 export const metadata: Metadata = {
-  title: "Plataforma",
+  title: S.nombre,
   description:
-    "Módulos de QEB: inventario en vivo, solicitudes, propuestas, campañas, Versionario, catorcenas, reportes e integraciones vía API.",
-  alternates: { canonical: "/plataforma" },
+    "QEB Operación, el sistema operativo OOH: inventario en vivo, solicitudes, propuestas, campañas, Versionario, catorcenas e integraciones vía API.",
+  alternates: { canonical: S.href },
 };
 
 const DETALLE: {
@@ -58,14 +66,14 @@ const DETALLE: {
     visual: <Versionario />,
   },
   {
-    etiqueta: "Reportes y análisis",
-    titulo: "Decisiones con datos, no con capturas.",
+    etiqueta: "Dashboard operativo",
+    titulo: "El estado de tu inventario, hoy.",
     texto:
-      "El dashboard resume el estado del inventario y del negocio en tiempo real. La reportería separa lo vendido de lo que todavía es pipeline.",
+      "Disponible, reservado, vendido y bloqueado, por catorcena, plaza y mueble. Lo que el equipo necesita para operar el día; el análisis de negocio vive en QEB Inteligencia, con los mismos datos.",
     puntos: [
-      "Ocupación por mueble, tipo, municipio y nivel socioeconómico.",
-      "Embudo comercial: solicitudes, propuestas y campañas por estatus.",
-      "Ventas cerradas por periodo, plaza y asesor.",
+      "Resumen de inventario por estatus en la catorcena vigente.",
+      "Distribución por mueble, tipo, municipio y nivel socioeconómico.",
+      "Mapa de inventario por plaza.",
       "Exportación a CSV en cada vista.",
     ],
     visual: <PanelDemo />,
@@ -99,18 +107,19 @@ const PREGUNTAS = [
   },
 ];
 
-export default function Plataforma() {
+export default function Operacion() {
   return (
     <>
       <Portada
-        etiqueta="Plataforma"
+        etiqueta={`${S.nombre} · ${S.categoria}`}
+        orbe={S.nombre}
         titulo={
           <>
             Tu operación OOH,{" "}
             <span className="texto-degradado">de punta a punta.</span>
           </>
         }
-        bajada="Comercial, operación y análisis sobre el mismo inventario. QEB reemplaza las hojas de cálculo y los correos con un flujo que deja rastro en cada paso."
+        bajada="Comercial, tráfico y administración sobre el mismo inventario. QEB Operación reemplaza las hojas de cálculo y los correos con un flujo que deja rastro en cada paso."
       >
         <div className="mt-10 flex flex-wrap gap-3">
           <Boton href="/contacto">Agendar demo</Boton>
@@ -120,7 +129,9 @@ export default function Plataforma() {
         </div>
       </Portada>
 
-      <Seccion tono="tinta">
+      <NavSistemas actual="operacion" />
+
+      <Seccion>
         <Contenedor>
           <Encabezado
             etiqueta="El flujo central"
@@ -133,7 +144,7 @@ export default function Plataforma() {
         </Contenedor>
       </Seccion>
 
-      <Seccion id="modulos">
+      <Seccion id="modulos" tono="tinta">
         <Contenedor className="space-y-28 md:space-y-40">
           {DETALLE.map((m, i) => (
             <div
@@ -157,6 +168,19 @@ export default function Plataforma() {
               </div>
             </div>
           ))}
+        </Contenedor>
+      </Seccion>
+
+      <Seccion id="conexion">
+        <Contenedor>
+          <Encabezado
+            etiqueta="Conectado con QEB Inteligencia"
+            titulo="Lo que operas, se vuelve análisis."
+            bajada="Cada movimiento en QEB Operación alimenta a QEB Inteligencia en tiempo real. Y lo que ahí se decide —metas, zonas por empujar— regresa a la operación."
+          />
+          <div className="mt-14">
+            <DiagramaConexion resaltar="operacion" />
+          </div>
         </Contenedor>
       </Seccion>
 
@@ -201,7 +225,7 @@ export default function Plataforma() {
             centrado
             etiqueta="Integraciones"
             titulo="Se conecta con lo que ya usas."
-            bajada="QEB se integra vía API con el software de tu empresa. Así la venta cerrada llega a administración sin recaptura."
+            bajada="QEB Operación se integra vía API con el software de tu empresa. Así la venta cerrada llega a administración sin recaptura."
           />
           <ul className="mx-auto mt-14 grid max-w-4xl gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {["ERP", "Facturación", "Instalación y montaje", "Tus reportes"].map((t) => (
@@ -237,6 +261,12 @@ export default function Plataforma() {
               </details>
             ))}
           </div>
+        </Contenedor>
+      </Seccion>
+
+      <Seccion className="pb-0 md:pb-0">
+        <Contenedor>
+          <OtroSistema desde="operacion" />
         </Contenedor>
       </Seccion>
 

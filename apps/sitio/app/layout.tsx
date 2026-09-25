@@ -1,21 +1,26 @@
 import type { Metadata, Viewport } from "next";
-import { Barlow, IBM_Plex_Mono, Mulish } from "next/font/google";
+import { Archivo, Barlow, IBM_Plex_Mono } from "next/font/google";
 import { Encabezado } from "@/components/encabezado";
 import { Pie } from "@/components/pie";
 import { DESCRIPCION, INDEXAR, SITIO_URL } from "@/lib/sitio";
 import "./globals.css";
 
-// Manual 2024: Barlow en titulares y Brandon Text en cuerpo. Brandon es de
-// pago; Mulish es la alternativa libre más cercana en proporciones.
-const display = Barlow({
+// Titulares: el manual usa RF Dewi Extended (Rostype). Mientras no esté
+// disponible como webfont en el repo, Archivo en su ancho expandido (eje
+// wdth 125) reproduce la misma familia de formas: extendida y pesada.
+// Para cambiar a RF Dewi: next/font/local con los .woff2 de la carpeta
+// Brending/tipografias/font y la misma variable --font-qeb-display.
+const display = Archivo({
   subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
+  axes: ["wdth"],
   variable: "--font-qeb-display",
   display: "swap",
 });
 
-const sans = Mulish({
+// Cuerpo: Barlow, como en el manual y las presentaciones.
+const sans = Barlow({
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
   variable: "--font-qeb-sans",
   display: "swap",
 });
@@ -30,7 +35,7 @@ const mono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITIO_URL),
   title: {
-    default: "QEB — Software de gestión de publicidad exterior (OOH)",
+    default: "QEB — Gestión de negocio para publicidad exterior (OOH)",
     template: "%s · QEB",
   },
   description: DESCRIPCION,
@@ -44,7 +49,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#000000",
+  themeColor: "#0d0814",
   colorScheme: "dark",
 };
 

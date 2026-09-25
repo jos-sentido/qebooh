@@ -5,16 +5,16 @@ import { Onda } from "./onda";
 
 const COLUMNAS = [
   {
-    titulo: "Producto",
+    titulo: "Sistemas",
     enlaces: [
-      { href: "/plataforma", texto: "Plataforma" },
-      { href: "/plataforma#modulos", texto: "Módulos" },
-      { href: "/plataforma#integraciones", texto: "Integraciones" },
-      { href: "/plataforma#preguntas", texto: "Preguntas frecuentes" },
+      { href: "/sistemas", texto: "Visión general" },
+      { href: "/sistemas/operacion", texto: "QEB Operación" },
+      { href: "/sistemas/inteligencia", texto: "QEB Inteligencia" },
+      { href: "/sistemas/operacion#preguntas", texto: "Preguntas frecuentes" },
     ],
   },
   {
-    titulo: "Soluciones",
+    titulo: "Audiencias",
     enlaces: [
       { href: "/geo-behavior-indoor", texto: "Geo Behavior Indoor" },
       { href: "/wifi-inteligente", texto: "WiFi Inteligente" },
@@ -38,7 +38,7 @@ export function Pie() {
         <div>
           <LogoQeb className="h-10" />
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-texto-tenue">
-            El sistema operativo de la publicidad exterior. Software mexicano
+            Gestión de negocio para la publicidad exterior. Software mexicano
             para empresas que comercializan y operan inventario OOH.
           </p>
           <a

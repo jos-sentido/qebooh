@@ -183,8 +183,15 @@ desplegado en Vercel con Root Directory `apps/web`.
 
 `apps/sitio` es el sitio público `qeb.mx` con el mismo stack, en un proyecto
 de Vercel aparte (Root Directory `apps/sitio`). Sigue el manual de marca 2024
-(negro, magenta `#87286b` → púrpura `#632a94`, Barlow); esos tokens viven en
-`apps/sitio/app/globals.css`, no en `packages/ui`. Es indexable, al revés que
+(logo magenta `#87286b` → púrpura `#632a94`), las presentaciones QEB
+(titulares extendidos en mayúsculas, barras de degradado, vidrio iridiscente,
+línea topográfica, la onda como tubo) y la UI 2026 de la plataforma (fondo
+`#180c24`, violeta `#7860f0`, cian `#5accea`). Esos tokens viven en
+`apps/sitio/app/globals.css`, no en `packages/ui`. La fuente de titulares de
+marca es RF Dewi Extended; mientras sus .woff2 no estén en el repo se usa
+Archivo expandido. El sitio presenta a QEB como **gestión de negocio OOH**:
+dos sistemas, QEB Operación e QEB Inteligencia (nombres en
+`apps/sitio/lib/sistemas.ts`). Es indexable, al revés que
 las secciones. Las ilustraciones de producto se hacen en código con datos de
 ejemplo: nunca capturas de la plataforma, que traen datos de clientes.
 

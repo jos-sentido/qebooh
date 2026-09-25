@@ -1,6 +1,8 @@
 /** Temas del formulario de contacto. La clave viaja en `?interes=` y en el form. */
 export const INTERESES = {
-  plataforma: "Plataforma de gestión OOH",
+  sistemas: "QEB Operación e Inteligencia",
+  operacion: "QEB Operación",
+  inteligencia: "QEB Inteligencia",
   "geo-behavior": "Geo Behavior Indoor",
   wifi: "WiFi Inteligente",
   otro: "Otro tema",

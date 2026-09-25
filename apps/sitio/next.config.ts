@@ -9,7 +9,10 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: "/inicio", destination: "/", permanent: true },
-      { source: "/software", destination: "/plataforma", permanent: true },
+      { source: "/software", destination: "/sistemas/operacion", permanent: true },
+      // La primera versión del sitio nuevo tenía una sola página "Plataforma";
+      // ahora son sistemas con página propia.
+      { source: "/plataforma", destination: "/sistemas", permanent: true },
       { source: "/politicas-de-privacidad", destination: "/privacidad", permanent: true },
       { source: "/propuesta-imu", destination: "/", permanent: true },
       // Las entradas del blog vivían bajo /AAAA/MM/DD/slug.

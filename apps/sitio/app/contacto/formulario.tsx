@@ -31,7 +31,7 @@ export function Formulario({ interesInicial }: { interesInicial?: string }) {
   const val = estado.estado === "error" ? estado.valores ?? {} : {};
   const interes =
     val.interes ??
-    (interesInicial && interesInicial in INTERESES ? interesInicial : "plataforma");
+    (interesInicial && interesInicial in INTERESES ? interesInicial : "sistemas");
 
   return (
     <form

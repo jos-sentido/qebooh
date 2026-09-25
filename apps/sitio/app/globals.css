@@ -8,32 +8,44 @@
 /*
  * Capa propia del sitio público qeb.mx.
  *
- * El núcleo (@qebooh/ui) define la identidad de los entregables. El sitio
- * sigue el manual de marca 2024 (Branding/QEB brand 2024), que es más
- * expresivo: fondo negro, degradado magenta → púrpura y Barlow en titulares.
- * Esos valores viven aquí y no en packages/ui para no alterar propuestas y
- * reportes ya publicados.
+ * Fuentes del lenguaje visual (ver docs/DESPLIEGUE.md §8 y CLAUDE.md):
+ *  - Manual de marca 2024: logo magenta #87286b → púrpura #632a94, Barlow,
+ *    titulares extendidos en mayúsculas, íconos en círculo degradado.
+ *  - Presentaciones QEB (editables): barras de degradado violeta → magenta
+ *    tras los títulos, vidrio iridiscente, línea topográfica, la onda del
+ *    logo como tubo translúcido y ritmo de paneles oscuros y claros.
+ *  - UI de la plataforma 2026: fondo morado casi negro (#180c24), violeta
+ *    #7860f0 / #9c60f0, cian #5accea para datos, cifras en peso ligero.
+ *
+ * Los tokens viven aquí y no en packages/ui para no alterar los entregables.
  */
 @theme {
-  /* Manual 2024. */
-  --color-negro: #000000;
+  /* Base: el morado casi negro de la UI, un paso más profundo para el sitio. */
+  --color-negro: #0d0814;
+  --color-tinta: #170f22;
+  --color-tinta-alta: #21162f;
+  --color-linea: #2f2340;
+
+  /* Manual 2024 (logo). */
   --color-magenta-marca: #87286b;
   --color-purpura-marca: #632a94;
 
-  /* Derivados para texto sobre negro. El magenta y el púrpura del manual no
-     llegan a 3:1 sobre negro, así que para acentos de texto se usan tintes
-     claros de los mismos tonos (ambos > 7:1 sobre #000). */
-  --color-rosa: #e59ad3;
-  --color-lila: #c3a4f0;
+  /* UI 2026 y presentaciones. */
+  --color-violeta: #7860f0;
+  --color-violeta-claro: #9c60f0;
+  --color-magenta-vivo: #c045d8;
+  --color-cian-dato: #5accea;
 
-  /* Superficies del sitio: casi negro con un tinte morado, como el
-     dashboard del manual. */
-  --color-tinta: #0a0710;
-  --color-tinta-alta: #140e1f;
-  --color-linea: #2a2138;
+  /* Acentos de texto sobre fondo oscuro (> 7:1). */
+  --color-rosa: #dc9cf6;
+  --color-lila: #b9a6ff;
+
+  /* Superficies claras (paneles blancos de las presentaciones). */
+  --color-niebla: #f1f0f5;
+  --color-grafito: #16121d;
 
   /* Estados de inventario (lámina "Botones" del manual). */
-  --color-estado-espera: #f5a524;
+  --color-estado-espera: #f09c30;
   --color-estado-propuesta: #d9468f;
   --color-estado-campana: #6d4bd8;
   --color-estado-activo: #c3a4f0;
@@ -43,20 +55,52 @@
 }
 
 @layer base {
+  /* Las decoraciones (ondas, líneas) se salen del borde a propósito. El
+     recorte va en html y en body: si sólo va en body, el navegador lo
+     propaga al viewport y la página sigue desplazándose en horizontal. */
+  html,
+  body {
+    overflow-x: clip;
+  }
+
   body {
     background-color: var(--color-negro);
   }
 
+  /* Grano de película sobre todo el sitio, como los fondos del manual. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0.06;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
   ::selection {
-    background: var(--color-magenta-marca);
+    background: var(--color-violeta);
     color: white;
   }
 
+  /* Titulares: extendida, pesada y en mayúsculas (manual y presentaciones). */
   h1,
-  h2,
+  h2 {
+    font-family: var(--font-display);
+    font-stretch: 125%;
+    text-transform: uppercase;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+
   h3 {
     font-family: var(--font-display);
+    font-stretch: 112%;
     text-wrap: balance;
+  }
+
+  .font-display {
+    font-stretch: 112%;
   }
 
   p {
@@ -69,7 +113,18 @@
   }
 }
 
+/* Degradado de las barras de título de las presentaciones. */
 @utility degradado-marca {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-violeta) 0%,
+    var(--color-violeta-claro) 45%,
+    var(--color-magenta-vivo) 100%
+  );
+}
+
+/* Degradado del logotipo (manual 2024). */
+@utility degradado-logo {
   background-image: linear-gradient(
     100deg,
     var(--color-magenta-marca),
@@ -80,12 +135,42 @@
 @utility texto-degradado {
   background-image: linear-gradient(
     100deg,
-    var(--color-rosa),
-    var(--color-lila)
+    var(--color-rosa) 0%,
+    var(--color-lila) 55%,
+    var(--color-cian-dato) 130%
   );
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
+}
+
+/* Versión para fondos claros (títulos "SOLICITUDES", "OBJETIVO"). */
+@utility texto-degradado-claro {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-magenta-vivo),
+    var(--color-violeta) 70%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/*
+ * Vidrio iridiscente: capas de color (magenta, violeta, azul, lila) más una
+ * textura de vidrio esmerilado con ruido. Es el fondo de portadas del manual.
+ */
+@utility vidrio-iridiscente {
+  background-color: #7a3fd6;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 500' preserveAspectRatio='none'%3E%3Cfilter id='v'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.006 0.012' numOctaves='2' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.3 0'/%3E%3C/filter%3E%3Crect width='800' height='500' filter='url(%23v)'/%3E%3C/svg%3E"),
+    radial-gradient(60% 80% at 12% 20%, #d33fd6 0%, transparent 60%),
+    radial-gradient(50% 60% at 85% 15%, #5b8cf0 0%, transparent 60%),
+    radial-gradient(60% 70% at 70% 90%, #9c60f0 0%, transparent 65%),
+    radial-gradient(40% 50% at 40% 60%, #e7b7f7 0%, transparent 60%),
+    linear-gradient(120deg, #8a2fd0, #6a4be6);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
 }
 
 /* Trazo de la onda de marca: se "dibuja" una vez al entrar en pantalla. */
@@ -117,4 +202,18 @@
 @utility latido {
   transform-origin: bottom;
   animation: latido 3.2s ease-in-out infinite;
+}
+
+/* Deriva lenta de la línea topográfica. */
+@keyframes deriva {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-4%, 2%, 0);
+  }
+}
+
+@utility deriva {
+  animation: deriva 18s ease-in-out infinite alternate;
 }

@@ -26,7 +26,7 @@ export default function Blog() {
           {principal ? (
             <Link
               href={`/blog/${principal.slug}`}
-              className="group grid items-center gap-8 rounded-3xl border border-linea bg-tinta p-4 transition-colors hover:border-magenta-marca md:grid-cols-2 md:p-6"
+              className="group grid items-center gap-8 rounded-3xl border border-linea bg-tinta p-4 transition-colors hover:border-violeta md:grid-cols-2 md:p-6"
             >
               <div className="relative aspect-[16/10] overflow-hidden rounded-2xl">
                 <Image
