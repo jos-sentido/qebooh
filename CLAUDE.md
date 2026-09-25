@@ -185,7 +185,8 @@ desplegado en Vercel con Root Directory `apps/web`.
 de Vercel aparte (Root Directory `apps/sitio`). Sigue el manual de marca 2024
 (logo magenta `#87286b` → púrpura `#632a94`), las presentaciones QEB
 (titulares extendidos en mayúsculas, barras de degradado, vidrio iridiscente,
-línea topográfica, la onda como tubo) y la UI 2026 de la plataforma (fondo
+retícula de cruces "+", la onda real del imagotipo, también como tubo). No usar
+líneas onduladas delgadas de fondo: no son del estilo QEB y la UI 2026 de la plataforma (fondo
 `#180c24`, violeta `#7860f0`, cian `#5accea`). Esos tokens viven en
 `apps/sitio/app/globals.css`, no en `packages/ui`. Los titulares usan RF Dewi
 Extended (Russian Fonts), cargada con next/font/local desde

@@ -197,17 +197,3 @@
   transform-origin: bottom;
   animation: latido 3.2s ease-in-out infinite;
 }
-
-/* Deriva lenta de la línea topográfica. */
-@keyframes deriva {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(-4%, 2%, 0);
-  }
-}
-
-@utility deriva {
-  animation: deriva 18s ease-in-out infinite alternate;
-}

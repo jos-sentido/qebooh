@@ -13,7 +13,7 @@ import {
 import {
   BarraTitulo,
   IconoCirculo,
-  LineaTopografica,
+  Cruces,
   type TipoIcono,
 } from "@/components/graficos";
 import { Onda } from "@/components/onda";
@@ -105,7 +105,6 @@ export default function Inicio() {
       {/* Portada */}
       <section className="relative overflow-hidden pt-12 md:pt-20">
         <Resplandor className="-top-60 opacity-50" />
-        <LineaTopografica className="absolute inset-x-0 top-0 h-[42rem] w-full opacity-50" />
         <Contenedor className="relative">
           <div className="max-w-5xl">
             <Etiqueta>Gestión de negocio OOH</Etiqueta>
@@ -127,9 +126,12 @@ export default function Inicio() {
           </div>
 
           <div className="relative mt-16 md:mt-24 lg:pb-40">
+            {/* Marco de cruces alrededor del producto, como en las piezas de
+                marca: la retícula queda detrás y asoma por los bordes. */}
+            <Cruces className="absolute -inset-x-10 -bottom-12 -top-12 hidden h-[calc(100%+6rem)] w-[calc(100%+5rem)] opacity-60 md:block" />
             <Onda
               animada
-              className="absolute -top-14 right-10 hidden h-28 w-[26rem] md:block"
+              className="absolute -top-24 right-[24%] hidden h-48 w-48 md:block"
             />
             <PanelDemo className="relative z-10 lg:w-[78%]" />
             <PanelInteligencia className="relative z-20 mt-4 lg:absolute lg:bottom-0 lg:right-0 lg:mt-0 lg:w-[58%]" />
@@ -153,13 +155,7 @@ export default function Inicio() {
               detrás, casi siempre, hay hojas de cálculo, correos y la memoria
               de alguien. Así se ve una semana normal.
             </p>
-            <Onda
-              variante="tubo"
-              grosor={10}
-              className="mt-12 hidden h-44 w-80 lg:block"
-              pulsos={[20, 32, 44, 32, 20]}
-              cola={30}
-            />
+            <Onda variante="tubo" className="mt-12 hidden h-64 w-64 lg:block" />
           </div>
 
           <ol className="space-y-5 md:space-y-6">
@@ -303,10 +299,8 @@ export default function Inicio() {
       <section className="relative overflow-hidden bg-niebla py-20 text-grafito md:py-28">
         <Onda
           variante="tubo"
-          grosor={11}
-          className="pointer-events-none absolute -bottom-24 -left-20 h-[30rem] w-[34rem] opacity-80"
-          pulsos={[20, 34, 46, 34, 20]}
-          cola={40}
+          cola={400}
+          className="pointer-events-none absolute -bottom-44 -right-[30rem] h-[26rem] opacity-70"
         />
         <Contenedor className="relative grid items-center gap-14 lg:grid-cols-2">
           <div>

@@ -6,7 +6,7 @@ import {
   SISTEMAS,
   type SistemaId,
 } from "@/lib/sistemas";
-import { BarraTitulo, IconoCirculo, LineaTopografica } from "./graficos";
+import { BarraTitulo, Cruces, IconoCirculo } from "./graficos";
 
 /**
  * Barra que une las páginas de sistemas. Va bajo la portada de cada una para
@@ -132,7 +132,6 @@ export function DiagramaConexion({ resaltar }: { resaltar?: SistemaId }) {
     <div className="grid gap-4 lg:grid-cols-[1fr_1.35fr_1fr] lg:items-stretch">
       <Nodo id="operacion" />
       <div className="relative flex flex-col justify-center gap-6 rounded-3xl border border-dashed border-linea p-5 md:p-6">
-        <LineaTopografica className="absolute inset-0 h-full w-full rounded-3xl opacity-20" densidad={5} />
         <p className="relative text-center font-display text-base font-extrabold uppercase text-white">
           En tiempo real, sin recapturar
         </p>
@@ -163,7 +162,7 @@ export function OtroSistema({ desde }: { desde: SistemaId }) {
       href={otro.href}
       className="group relative block overflow-hidden rounded-[2rem] border border-linea bg-tinta p-8 transition-colors hover:border-violeta md:p-14"
     >
-      <LineaTopografica className="absolute inset-0 h-full w-full opacity-40 transition-opacity group-hover:opacity-70" />
+      <Cruces className="absolute inset-y-0 right-0 h-full w-1/2 opacity-30 transition-opacity [mask-image:linear-gradient(to_left,black,transparent)] group-hover:opacity-60" />
       <div className="relative flex items-center gap-4">
         <IconoCirculo tipo={otro.id === "operacion" ? "panel" : "analisis"} tamano="lg" />
         <BarraTitulo como="span">Siguiente sistema · {otro.categoria}</BarraTitulo>

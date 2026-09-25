@@ -1,61 +1,65 @@
 import { useId } from "react";
 import { cn } from "@qebooh/ui";
 
+/**
+ * La onda del imagotipo QEB, trazada en vector a partir del archivo oficial
+ * (Brending/logo/imagotipo.png, 1080 × 1080, fondo transparente). Las
+ * coordenadas son las del PNG: línea de entrada, cinco vueltas de radio 33,
+ * curvas de 55 y 75 en los extremos, trazo de 37 px. No se deforma: sólo se
+ * escala, y opcionalmente se alargan las colas horizontales.
+ *
+ * Sin fondo detrás: es un trazo, nunca una imagen con fondo sólido.
+ */
+
+const Y = 595.5; // línea base
+const GROSOR = 37;
+
+function trazo(cola: number) {
+  const inicio = 217 - cola;
+  const fin = 864 + cola;
+  return [
+    `M ${inicio} ${Y} H 276.5`,
+    "A 55 55 0 0 0 331.5 540.5",
+    "V 518.5 A 33 33 0 0 1 397.5 518.5",
+    "V 678.5 A 33 33 0 0 0 463.5 678.5",
+    "V 391.5 A 33 33 0 0 1 529.5 391.5",
+    "V 821.5 A 33 33 0 0 0 595.5 821.5",
+    "V 257.5 A 33 33 0 0 1 661.5 257.5",
+    "V 520 A 75.5 75.5 0 0 0 737 595.5",
+    `H ${fin}`,
+  ].join(" ");
+}
+
 type OndaProps = {
   /**
-   * Amplitudes de cada pulso, en unidades del viewBox (alto 100, centro 50).
-   * Alternan arriba y abajo, como la onda que forma la "q" del logotipo.
-   */
-  pulsos?: number[];
-  /** Largo de la línea plana antes y después de los pulsos. */
-  cola?: number;
-  grosor?: number;
-  animada?: boolean;
-  /**
-   * `linea` es el trazo del logotipo. `tubo` es la onda gruesa y translúcida
-   * en lila de las presentaciones, para usar grande y de fondo.
+   * `linea` es la onda con el degradado del logotipo. `tubo` es la misma onda
+   * en lila translúcido, como en las presentaciones, para usar grande y de
+   * fondo.
    */
   variante?: "linea" | "tubo";
+  /** Alarga las colas horizontales (en px del original), p. ej. para que la
+   *  onda salga del borde como en las portadas de las presentaciones. */
+  cola?: number;
+  animada?: boolean;
   className?: string;
 };
 
-
-/**
- * La onda / ecualizador del logotipo QEB, como trazo SVG. Es el elemento
- * gráfico de la marca (manual 2024, lámina de sistema de logo y patrón):
- * línea que entra plana, pulsa y vuelve a la calma — del caos al control.
- */
 export function Onda({
-  pulsos = [14, 22, 34, 44, 30, 18],
-  cola = 60,
-  grosor = 6,
-  animada = false,
   variante = "linea",
+  cola = 0,
+  animada = false,
   className,
 }: OndaProps) {
   const id = useId().replace(/:/g, "");
-  const centro = 50;
-  // El radio de cada vuelta debe superar el grosor del trazo; si no, las
-  // curvas se funden y el tubo se lee como una mancha.
-  const RADIO = variante === "tubo" ? Math.max(7, grosor * 1.15) : 7;
-  let x = cola;
-  let d = `M 0 ${centro} H ${x}`;
-
-  pulsos.forEach((amp, i) => {
-    const arriba = i % 2 === 0;
-    // El extremo del pulso es la cima del arco, no el final del segmento.
-    const y = arriba
-      ? Math.min(centro, centro - amp + RADIO)
-      : Math.max(centro, centro + amp - RADIO);
-    d += ` V ${y} A ${RADIO} ${RADIO} 0 0 ${arriba ? 1 : 0} ${x + RADIO * 2} ${y}`;
-    x += RADIO * 2;
-  });
-  d += ` V ${centro} H ${x + cola}`;
-  const ancho = x + cola;
+  const m = GROSOR / 2;
+  const x0 = 217 - cola - m;
+  const ancho = 864 + cola + m - x0;
+  const y0 = 205;
+  const alto = 875 - y0;
 
   return (
     <svg
-      viewBox={`${-grosor} 0 ${ancho + grosor * 2} 100`}
+      viewBox={`${x0} ${y0} ${ancho} ${alto}`}
       className={cn("overflow-visible", className)}
       aria-hidden
       fill="none"
@@ -68,16 +72,25 @@ export function Onda({
             <stop offset="1" stopColor="#a996f2" />
           </linearGradient>
         ) : (
-          <linearGradient id={id} x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0" stopColor="#b8388f" />
-            <stop offset="1" stopColor="#6f4bd0" />
+          // Degradado medido en el imagotipo oficial.
+          <linearGradient
+            id={id}
+            gradientUnits="userSpaceOnUse"
+            x1={217}
+            x2={864}
+            y1={0}
+            y2={0}
+          >
+            <stop offset="0" stopColor="#a5358a" />
+            <stop offset="0.5" stopColor="#8a3f92" />
+            <stop offset="1" stopColor="#6a4c9a" />
           </linearGradient>
         )}
       </defs>
       <path
-        d={d}
+        d={trazo(cola)}
         stroke={`url(#${id})`}
-        strokeWidth={grosor}
+        strokeWidth={GROSOR}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeOpacity={variante === "tubo" ? 0.55 : 1}

@@ -77,8 +77,8 @@ export function Pie() {
         </div>
       </div>
       <Onda
-        className="pointer-events-none absolute -right-10 bottom-10 hidden h-40 w-[34rem] opacity-15 md:block"
-        pulsos={[10, 18, 30, 42, 26, 14, 8]}
+        cola={300}
+        className="pointer-events-none absolute -right-48 bottom-6 hidden h-44 opacity-20 md:block"
       />
     </footer>
   );

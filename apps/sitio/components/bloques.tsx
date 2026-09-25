@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { cn } from "@qebooh/ui";
-import { LineaTopografica, Orbe } from "./graficos";
+import { Cruces, Orbe } from "./graficos";
 import { Onda } from "./onda";
 
 /** Ancho estándar del sitio. */
@@ -165,7 +165,7 @@ export function Portada({
   return (
     <section className="relative overflow-hidden pt-16 pb-20 md:pt-24 md:pb-28">
       <Resplandor />
-      <LineaTopografica className="absolute inset-0 h-full w-full opacity-40" />
+      <Cruces className="absolute inset-y-0 right-0 hidden h-full w-1/2 opacity-40 [mask-image:linear-gradient(to_left,black,transparent)] lg:block" />
       <Contenedor
         className={cn(
           "relative",
@@ -217,10 +217,8 @@ export function LlamadoFinal({
       <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] vidrio-iridiscente px-6 py-16 md:px-16 md:py-24">
         <Onda
           variante="tubo"
-          grosor={11}
-          className="pointer-events-none absolute -right-10 top-1/2 hidden h-[26rem] w-[40rem] -translate-y-1/2 md:block"
-          pulsos={[20, 32, 42, 46, 34, 22]}
-          cola={40}
+          cola={500}
+          className="pointer-events-none absolute -right-[22rem] top-1/2 hidden h-[26rem] -translate-y-1/2 md:block"
         />
         <div className="relative max-w-2xl">
           <h2 className="text-3xl font-extrabold leading-[1.02] text-white md:text-5xl">

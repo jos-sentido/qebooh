@@ -3,66 +3,40 @@
  * manual 2024. Todos son decorativos (aria-hidden) salvo BarraTitulo.
  */
 
-import type { ReactNode } from "react";
+import { useId, type ReactNode } from "react";
 import { cn } from "@qebooh/ui";
 
 /**
- * Líneas topográficas fluidas en magenta y cian (portadas de fase de las
- * presentaciones). Van de fondo en secciones oscuras.
+ * Retícula de cruces "+" con un leve desfase cromático (magenta y cian), como
+ * en las piezas de marca: enmarca fotos de producto, fondos de posts y la
+ * playera. Es el elemento de fondo del sitio; no usar líneas onduladas
+ * delgadas, que no son parte del estilo QEB.
  */
-export function LineaTopografica({
+export function Cruces({
   className,
-  densidad = 9,
+  paso = 88,
+  tamano = 14,
 }: {
   className?: string;
-  densidad?: number;
+  /** Distancia entre cruces, en px. */
+  paso?: number;
+  /** Largo de cada brazo de la cruz, en px. */
+  tamano?: number;
 }) {
-  const lineas = Array.from({ length: densidad }, (_, i) => i);
+  const id = useId().replace(/:/g, "");
+  const c = paso / 2;
+  const h = tamano / 2;
+  const cruz = `M ${c - h} ${c} H ${c + h} M ${c} ${c - h} V ${c + h}`;
   return (
-    <svg
-      aria-hidden
-      viewBox="0 0 1200 600"
-      preserveAspectRatio="xMidYMid slice"
-      className={cn("pointer-events-none", className)}
-      fill="none"
-    >
+    <svg aria-hidden className={cn("pointer-events-none", className)}>
       <defs>
-        <linearGradient id="topo-a" x1="0" x2="1">
-          <stop offset="0" stopColor="#c045d8" />
-          <stop offset="0.6" stopColor="#9c60f0" />
-          <stop offset="1" stopColor="#5accea" />
-        </linearGradient>
-        <linearGradient id="topo-b" x1="1" x2="0">
-          <stop offset="0" stopColor="#5accea" />
-          <stop offset="1" stopColor="#c045d8" />
-        </linearGradient>
+        <pattern id={id} width={paso} height={paso} patternUnits="userSpaceOnUse">
+          <path d={cruz} stroke="#e04fd8" strokeWidth={2} transform="translate(-1.5 0)" opacity={0.8} />
+          <path d={cruz} stroke="#5accea" strokeWidth={2} transform="translate(1.5 0)" opacity={0.8} />
+          <path d={cruz} stroke="#ffffff" strokeWidth={2} />
+        </pattern>
       </defs>
-      <g className="deriva">
-        {lineas.map((i) => {
-          const d = i * 9;
-          return (
-            <path
-              key={`a${i}`}
-              d={`M -50 ${120 + d} C 180 ${-20 + d}, 320 ${320 + d}, 560 ${190 + d} S 900 ${-10 + d}, 1250 ${150 + d}`}
-              stroke="url(#topo-a)"
-              strokeWidth={1}
-              opacity={0.55 - i * 0.04}
-            />
-          );
-        })}
-        {lineas.map((i) => {
-          const d = i * 10;
-          return (
-            <path
-              key={`b${i}`}
-              d={`M -50 ${470 - d} C 220 ${360 - d}, 380 ${620 - d}, 640 ${450 - d} S 1000 ${300 - d}, 1250 ${420 - d}`}
-              stroke="url(#topo-b)"
-              strokeWidth={1}
-              opacity={0.45 - i * 0.035}
-            />
-          );
-        })}
-      </g>
+      <rect width="100%" height="100%" fill={`url(#${id})`} />
     </svg>
   );
 }
@@ -106,7 +80,6 @@ export function Orbe({
   return (
     <div aria-hidden className={cn("relative aspect-square", className)}>
       <div className="absolute inset-0 overflow-hidden rounded-full vidrio-iridiscente shadow-[0_40px_120px_-30px_rgba(156,96,240,0.8)]">
-        <LineaTopografica className="absolute inset-0 h-full w-full opacity-70 mix-blend-screen" densidad={6} />
         <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_30%_25%,rgba(255,255,255,0.35),transparent_45%)]" />
       </div>
       {etiqueta ? (

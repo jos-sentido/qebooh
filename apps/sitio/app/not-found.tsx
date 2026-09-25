@@ -4,7 +4,7 @@ import { Onda } from "@/components/onda";
 export default function NoEncontrada() {
   return (
     <Contenedor className="flex min-h-[60vh] flex-col items-start justify-center py-24">
-      <Onda className="h-20 w-72" pulsos={[6, 10, 6]} />
+      <Onda className="h-28 w-28" />
       <h1 className="mt-10 text-5xl font-bold text-white md:text-7xl">
         Esta cara está libre.
       </h1>
