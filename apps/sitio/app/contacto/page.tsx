@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Contenedor, Etiqueta, ListaMarca, Resplandor } from "@/components/bloques";
-import { CORREO_CONTACTO } from "@/lib/sitio";
+import { Boton, Contenedor, Etiqueta, ListaMarca, Resplandor } from "@/components/bloques";
+import { AGENDA_URL, CORREO_CONTACTO } from "@/lib/sitio";
 import { Formulario } from "./formulario";
 
 export const metadata: Metadata = {
@@ -26,9 +26,12 @@ export default async function Contacto({
             Agenda una <span className="texto-degradado">demo.</span>
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-texto-tenue">
-            Cuéntanos de tu operación y te mostramos QEB sobre un caso parecido
-            al tuyo.
+            Elige el horario que te acomode en la agenda, o cuéntanos de tu
+            operación con el formulario y te escribimos.
           </p>
+          <Boton href={AGENDA_URL} className="mt-8">
+            Ver horarios disponibles
+          </Boton>
           <div className="mt-10">
             <ListaMarca
               items={[

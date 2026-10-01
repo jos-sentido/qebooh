@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@qebooh/ui";
-import { MENU, type EnlaceMenu } from "@/lib/sitio";
+import { AGENDA_URL, MENU, type EnlaceMenu } from "@/lib/sitio";
 import { LogoQeb } from "./logo";
 
 export function Encabezado() {
@@ -48,17 +48,23 @@ export function Encabezado() {
     enlaces.some((e) => activo(e.href));
 
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-50 transition-colors duration-300",
-        desplazado || abierto || grupo
-          ? "border-b border-linea bg-negro/90 backdrop-blur-xl"
-          : "border-b border-transparent",
-      )}
-    >
-      <div className="mx-auto flex h-18 w-full max-w-7xl items-center justify-between px-6 md:px-10">
+    /*
+     * Barra flotante, como la del sitio anterior de qeb.mx: separada del
+     * borde, redondeada y con borde morado. Mide 5rem en total (0.75rem de
+     * margen + 4.25rem de barra); la historia apilada del home lo descuenta.
+     */
+    <header className="sticky top-0 z-50 px-3 pt-3 md:px-6">
+      <div
+        className={cn(
+          "mx-auto w-full max-w-6xl rounded-2xl border backdrop-blur-xl transition-colors duration-300",
+          desplazado || abierto || grupo
+            ? "border-violeta/70 bg-negro/90 shadow-[0_20px_60px_-25px_rgba(120,96,240,0.6)]"
+            : "border-violeta/45 bg-negro/55",
+        )}
+      >
+      <div className="flex h-17 items-center justify-between gap-4 pl-5 pr-3 md:pl-7">
         <Link href="/" aria-label="QEB — inicio" className="shrink-0">
-          <LogoQeb prioridad />
+          <LogoQeb prioridad className="h-8" />
         </Link>
 
         <nav ref={nav} aria-label="Principal" className="hidden lg:block">
@@ -70,7 +76,7 @@ export function Encabezado() {
                     href={e.href}
                     aria-current={activo(e.href) ? "page" : undefined}
                     className={cn(
-                      "rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                      "rounded-full px-4 py-2 text-[13px] font-semibold uppercase tracking-[0.12em] transition-colors",
                       activo(e.href) ? "text-white" : "text-texto-tenue hover:text-white",
                     )}
                   >
@@ -90,7 +96,7 @@ export function Encabezado() {
                     aria-controls={`menu-${e.texto}`}
                     onClick={() => setGrupo((g) => (g === e.texto ? null : e.texto))}
                     className={cn(
-                      "inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                      "inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[13px] font-semibold uppercase tracking-[0.12em] transition-colors",
                       grupoActivo(e.enlaces) || grupo === e.texto
                         ? "text-white"
                         : "text-texto-tenue hover:text-white",
@@ -108,7 +114,7 @@ export function Encabezado() {
                   <div
                     id={`menu-${e.texto}`}
                     hidden={grupo !== e.texto}
-                    className="absolute left-1/2 top-full w-80 -translate-x-1/2 pt-3"
+                    className="absolute left-1/2 top-full w-80 -translate-x-1/2 pt-5"
                   >
                     <ul className="rounded-2xl border border-linea bg-tinta p-2 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9)]">
                       {e.enlaces.map((l) => (
@@ -138,12 +144,14 @@ export function Encabezado() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <Link
-            href="/contacto"
-            className="hidden h-10 items-center rounded-full degradado-marca px-5 text-sm font-semibold text-white transition hover:brightness-125 sm:inline-flex"
+          <a
+            href={AGENDA_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden h-11 items-center rounded-xl degradado-marca px-5 text-[13px] font-semibold uppercase tracking-[0.12em] text-white ring-4 ring-violeta/30 transition hover:brightness-110 hover:ring-violeta/50 sm:inline-flex"
           >
             Agendar demo
-          </Link>
+          </a>
           <button
             type="button"
             onClick={() => setAbierto((v) => !v)}
@@ -167,9 +175,9 @@ export function Encabezado() {
         id="menu-movil"
         aria-label="Principal"
         hidden={!abierto}
-        className="max-h-[calc(100dvh-4.5rem)] overflow-y-auto border-t border-linea lg:hidden"
+        className="max-h-[calc(100dvh-6rem)] overflow-y-auto border-t border-linea lg:hidden"
       >
-        <ul className="mx-auto flex max-w-7xl flex-col px-6 py-4">
+        <ul className="flex flex-col px-5 py-4">
           {MENU.map((e) =>
             e.tipo === "enlace" ? (
               <li key={e.href}>
@@ -208,15 +216,18 @@ export function Encabezado() {
             ),
           )}
           <li className="pt-5">
-            <Link
-              href="/contacto"
+            <a
+              href={AGENDA_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex h-12 items-center justify-center rounded-full degradado-marca font-semibold text-white"
             >
               Agendar demo
-            </Link>
+            </a>
           </li>
         </ul>
       </nav>
+      </div>
     </header>
   );
 }

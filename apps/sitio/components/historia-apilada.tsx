@@ -95,7 +95,7 @@ export function HistoriaApilada({ escenas }: { escenas: Escena[] }) {
   const volverAlInicio = () => {
     const el = seccion.current;
     if (!el) return;
-    const encabezado = 72; // alto del encabezado fijo
+    const encabezado = 80; // alto del encabezado flotante
     const y = el.getBoundingClientRect().top + window.scrollY - encabezado;
     const reducir = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     window.scrollTo({ top: y, behavior: reducir ? "auto" : "smooth" });
@@ -141,9 +141,9 @@ export function HistoriaApilada({ escenas }: { escenas: Escena[] }) {
         className="relative"
         style={{ height: `${100 + (escenas.length - 1) * SCROLL_POR_CARTA * 100}vh` }}
       >
-        {/* La zona fija empieza bajo el encabezado (4.5rem) para que el mazo
-            nunca quede pegado al menú, sobre todo en móvil. */}
-        <div className="sticky top-18 flex h-[calc(100dvh-4.5rem)] items-center overflow-hidden">
+        {/* La zona fija empieza bajo el encabezado flotante (5rem) para que
+            el mazo nunca quede pegado al menú, sobre todo en móvil. */}
+        <div className="sticky top-20 flex h-[calc(100dvh-5rem)] items-center overflow-hidden">
           <div className="mx-auto grid w-full max-w-7xl items-center gap-14 px-6 md:px-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
             <div className="hidden lg:block">
               {intro}

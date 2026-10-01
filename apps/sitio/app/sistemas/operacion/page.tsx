@@ -22,6 +22,7 @@ import {
   Versionario,
 } from "@/components/visuales";
 import { SISTEMAS } from "@/lib/sistemas";
+import { AGENDA_URL } from "@/lib/sitio";
 
 const S = SISTEMAS.operacion;
 
@@ -122,7 +123,7 @@ export default function Operacion() {
         bajada="Comercial, tráfico y administración sobre el mismo inventario. QEB Operación reemplaza las hojas de cálculo y los correos con un flujo que deja rastro en cada paso."
       >
         <div className="mt-10 flex flex-wrap gap-3">
-          <Boton href="/contacto">Agendar demo</Boton>
+          <Boton href={AGENDA_URL}>Agendar demo</Boton>
           <Boton href="#modulos" variante="borde">
             Ver módulos
           </Boton>

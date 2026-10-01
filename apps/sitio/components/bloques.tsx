@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { cn } from "@qebooh/ui";
+import { AGENDA_URL } from "@/lib/sitio";
 import { Cruces, Orbe } from "./graficos";
 import { Onda } from "./onda";
 
@@ -125,9 +126,13 @@ export function Boton({
   variante = "marca",
   className,
 }: BotonProps) {
+  // Los enlaces externos (p. ej. la agenda de demos) abren en pestaña nueva.
+  const externo = /^https?:\/\//.test(href);
+  const Tag = externo ? "a" : Link;
   return (
-    <Link
+    <Tag
       href={href}
+      {...(externo ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       className={cn(
         "group inline-flex h-12 items-center justify-center gap-2 rounded-full px-7 text-sm font-semibold uppercase tracking-[0.12em] transition",
         variante === "marca"
@@ -143,7 +148,7 @@ export function Boton({
       >
         →
       </span>
-    </Link>
+    </Tag>
   );
 }
 
@@ -226,12 +231,14 @@ export function LlamadoFinal({
           </h2>
           <p className="mt-6 text-lg leading-relaxed text-white/90">{bajada}</p>
           <div className="mt-10 flex flex-wrap gap-3">
-            <Link
-              href="/contacto"
+            <a
+              href={AGENDA_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex h-12 items-center rounded-full bg-white px-7 text-sm font-semibold uppercase tracking-[0.12em] text-grafito transition hover:bg-white/90"
             >
               Agendar demo
-            </Link>
+            </a>
             <Link
               href="/sistemas"
               className="inline-flex h-12 items-center rounded-full border border-white/60 px-7 text-sm font-semibold uppercase tracking-[0.12em] text-white transition hover:bg-white/15"

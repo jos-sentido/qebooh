@@ -13,6 +13,13 @@ export const INDEXAR = process.env.NEXT_PUBLIC_INDEXAR === "true";
 
 export const CORREO_CONTACTO = "contacto@qeb.mx";
 
+/**
+ * Agenda de demos (LeadConnector). Todos los botones "Agendar demo" apuntan
+ * aquí y abren en pestaña nueva.
+ */
+export const AGENDA_URL =
+  "https://api.leadconnectorhq.com/widget/booking/M51HmuoRAOqKXXHogsBR";
+
 export const DESCRIPCION =
   "QEB es la plataforma de gestión de negocio para publicidad exterior (OOH): un sistema que opera inventario, propuestas y campañas, y otro que convierte esa operación en inteligencia de negocio en tiempo real.";
 

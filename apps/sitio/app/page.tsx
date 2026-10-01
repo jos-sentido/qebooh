@@ -21,6 +21,7 @@ import { PanelDemo, PanelInteligencia } from "@/components/visuales";
 import { entradas } from "@/content/blog";
 import { formatoFecha } from "@/lib/formato";
 import { LISTA_SISTEMAS, SISTEMAS } from "@/lib/sistemas";
+import { AGENDA_URL } from "@/lib/sitio";
 
 /**
  * Una semana cualquiera en una empresa OOH. Cada escena es un dolor real
@@ -118,7 +119,7 @@ export default function Inicio() {
               cómo va tu negocio.
             </p>
             <div className="mt-10 flex flex-wrap gap-3">
-              <Boton href="/contacto">Agendar demo</Boton>
+              <Boton href={AGENDA_URL}>Agendar demo</Boton>
               <Boton href="/sistemas" variante="borde">
                 Conocer los sistemas
               </Boton>

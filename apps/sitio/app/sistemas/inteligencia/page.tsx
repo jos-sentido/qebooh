@@ -23,6 +23,7 @@ import {
   PanelInteligencia,
 } from "@/components/visuales";
 import { SISTEMAS } from "@/lib/sistemas";
+import { AGENDA_URL } from "@/lib/sitio";
 
 const S = SISTEMAS.inteligencia;
 
@@ -108,7 +109,7 @@ export default function Inteligencia() {
         bajada="Inteligencia de negocio y planificación estratégica para OOH, conectada en tiempo real a la operación. Las cifras salen de lo que tu equipo ya registra: nadie arma un Excel a fin de mes."
       >
         <div className="mt-10 flex flex-wrap gap-3">
-          <Boton href="/contacto?interes=inteligencia">Agendar demo</Boton>
+          <Boton href={AGENDA_URL}>Agendar demo</Boton>
           <Boton href="#modulos" variante="borde">
             Ver módulos
           </Boton>
