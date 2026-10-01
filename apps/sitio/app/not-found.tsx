@@ -3,7 +3,7 @@ import { Onda } from "@/components/onda";
 
 export default function NoEncontrada() {
   return (
-    <Contenedor className="flex min-h-[60vh] flex-col items-start justify-center py-24">
+    <Contenedor className="flex min-h-[60vh] flex-col items-start justify-center pt-44 pb-24">
       <Onda className="h-28 w-28" />
       <h1 className="mt-10 text-5xl font-bold text-white md:text-7xl">
         Esta cara está libre.

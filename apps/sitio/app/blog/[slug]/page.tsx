@@ -72,7 +72,7 @@ export default async function EntradaBlog({ params }: Props) {
 
   return (
     <>
-      <article className="pt-12 pb-20 md:pt-20 md:pb-28">
+      <article className="pt-32 pb-20 md:pt-40 md:pb-28">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

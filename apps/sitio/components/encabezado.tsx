@@ -51,15 +51,17 @@ export function Encabezado() {
     /*
      * Barra flotante, como la del sitio anterior de qeb.mx: separada del
      * borde, redondeada y con borde morado. Mide 5rem en total (0.75rem de
-     * margen + 4.25rem de barra); la historia apilada del home lo descuenta.
+     * margen + 4.25rem de barra) y no ocupa espacio (-mb-20): la portada de
+     * cada página sube por detrás y suma 5rem de relleno arriba. La historia
+     * apilada del home también lo descuenta.
      */
-    <header className="sticky top-0 z-50 px-3 pt-3 md:px-6">
+    <header className="sticky top-0 z-50 -mb-20 px-3 pt-3 md:px-6">
       <div
         className={cn(
           "mx-auto w-full max-w-6xl rounded-2xl border backdrop-blur-xl transition-colors duration-300",
           desplazado || abierto || grupo
             ? "border-violeta/70 bg-negro/90 shadow-[0_20px_60px_-25px_rgba(120,96,240,0.6)]"
-            : "border-violeta/45 bg-negro/55",
+            : "border-white/15 bg-negro/25",
         )}
       >
       <div className="flex h-17 items-center justify-between gap-4 pl-5 pr-3 md:pl-7">

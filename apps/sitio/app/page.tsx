@@ -104,7 +104,7 @@ export default function Inicio() {
   return (
     <>
       {/* Portada */}
-      <section className="relative overflow-hidden pt-12 md:pt-20">
+      <section className="relative overflow-hidden pt-32 md:pt-40">
         <Resplandor className="-top-60 opacity-50" />
         <Contenedor className="relative">
           <div className="max-w-5xl">

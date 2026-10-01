@@ -59,7 +59,7 @@ const SECCIONES: { t: string; p?: string; li?: string[] }[] = [
 
 export default function Privacidad() {
   return (
-    <section className="py-16 md:py-24">
+    <section className="pt-36 pb-16 md:pt-44 md:pb-24">
       <Contenedor angosto>
         <Etiqueta>Legal</Etiqueta>
         <h1 className="mt-4 text-4xl font-bold tracking-tight text-white md:text-6xl">

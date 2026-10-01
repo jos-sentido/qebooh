@@ -23,7 +23,7 @@ export default async function Contacto({
 }) {
   const { interes } = await searchParams;
   return (
-    <section className="relative overflow-hidden py-16 md:py-24">
+    <section className="relative overflow-hidden pt-36 pb-16 md:pt-44 md:pb-24">
       <Resplandor />
       <Contenedor className="relative">
         <Etiqueta>Contacto</Etiqueta>

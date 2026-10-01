@@ -168,7 +168,7 @@ export function Portada({
   children?: ReactNode;
 }) {
   return (
-    <section className="relative overflow-hidden pt-16 pb-20 md:pt-24 md:pb-28">
+    <section className="relative overflow-hidden pt-36 pb-20 md:pt-44 md:pb-28">
       <Resplandor />
       <Cruces className="absolute inset-y-0 right-0 hidden h-full w-1/2 opacity-40 [mask-image:linear-gradient(to_left,black,transparent)] lg:block" />
       <Contenedor
@@ -201,7 +201,7 @@ export function Resplandor({ className }: { className?: string }) {
     <div
       aria-hidden
       className={cn(
-        "pointer-events-none absolute -top-40 left-1/2 h-[36rem] w-[60rem] -translate-x-1/2 rounded-full opacity-45 blur-[120px]",
+        "pointer-events-none absolute -top-24 left-1/2 h-[36rem] w-[60rem] -translate-x-1/2 rounded-full opacity-45 blur-[120px]",
         "bg-[radial-gradient(closest-side,#9c60f0,transparent),radial-gradient(closest-side,#c045d8,transparent)] bg-[length:60%_100%,60%_100%] bg-[position:0_0,100%_0] bg-no-repeat",
         className,
       )}
