@@ -22,6 +22,12 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       { source: "/feed", destination: "/blog", permanent: true },
+      // qeb.mx ahora lo sirve Vercel, pero el correo sigue en A2 Hosting.
+      // Quien entraba al webmail o al cPanel por el dominio raíz llega a
+      // sus subdominios, que siguen apuntando al hosting.
+      { source: "/webmail", destination: "https://webmail.qeb.mx", permanent: false },
+      { source: "/webmail/:ruta*", destination: "https://webmail.qeb.mx", permanent: false },
+      { source: "/cpanel", destination: "https://cpanel.qeb.mx", permanent: false },
     ];
   },
 };
