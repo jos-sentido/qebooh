@@ -16,12 +16,12 @@ export function Formulario({ interesInicial }: { interesInicial?: string }) {
 
   if (estado.estado === "enviado") {
     return (
-      <div role="status" className="rounded-3xl border border-linea bg-tinta p-10">
+      <div role="status" className="rounded-2xl border border-linea bg-negro p-8">
         <p className="font-display text-3xl font-bold text-white">
           Recibimos tu mensaje.
         </p>
         <p className="mt-4 leading-relaxed text-texto-tenue">
-          Te escribimos pronto para agendar la demo.
+          Te respondemos pronto por correo.
         </p>
       </div>
     );
@@ -37,7 +37,7 @@ export function Formulario({ interesInicial }: { interesInicial?: string }) {
     <form
       action={accion}
       noValidate
-      className="rounded-3xl border border-linea bg-tinta p-6 md:p-10"
+      className="relative"
     >
       <div className="grid gap-5 sm:grid-cols-2">
         <Campo etiqueta="Nombre" nombre="nombre" error={err.nombre}>
@@ -106,13 +106,16 @@ export function Formulario({ interesInicial }: { interesInicial?: string }) {
             ))}
           </select>
         </Campo>
-        <Campo etiqueta="Cuéntanos de tu operación" nombre="mensaje" opcional className="sm:col-span-2">
+        <Campo etiqueta="¿En qué te podemos ayudar?" nombre="mensaje" error={err.mensaje} className="sm:col-span-2">
           <textarea
             id="mensaje"
             name="mensaje"
             rows={5}
+            required
             defaultValue={val.mensaje}
-            placeholder="Plazas, tipo de inventario, cuántas caras manejan, qué les duele hoy…"
+            aria-invalid={!!err.mensaje}
+            aria-describedby={err.mensaje ? "mensaje-error" : undefined}
+            placeholder="Cuéntanos tu pregunta. Si nos dices cuántas plazas y caras manejan, te respondemos con más precisión."
             className={cn(CAMPO, "resize-y")}
           />
         </Campo>
@@ -153,7 +156,7 @@ export function Formulario({ interesInicial }: { interesInicial?: string }) {
         disabled={enviando}
         className="mt-8 inline-flex h-12 w-full items-center justify-center rounded-full degradado-marca px-8 text-sm font-semibold text-white transition hover:brightness-125 disabled:opacity-60 sm:w-auto"
       >
-        {enviando ? "Enviando…" : "Enviar solicitud"}
+        {enviando ? "Enviando…" : "Enviar mensaje"}
       </button>
     </form>
   );

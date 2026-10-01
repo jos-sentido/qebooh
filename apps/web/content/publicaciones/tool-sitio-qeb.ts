@@ -11,15 +11,15 @@ import type { Publicacion } from "../tipos";
 export const toolSitioQeb: Publicacion = {
   slug: "sitio-qeb",
   seccion: "tool",
-  titulo: "Sitio qeb.mx (en revisión)",
+  titulo: "Sitio qeb.mx",
   resumen:
     "Nueva versión del sitio público: plataforma, Geo Behavior Indoor, WiFi " +
-    "Inteligente, blog y formulario de demo. No indexado.",
+    "Inteligente, blog y contacto. Publicado en www.qeb.mx.",
   fecha: "2026-09-24",
   estado: "vigente",
   etiquetas: ["interna", "sitio web"],
   contenido: {
     tipo: "enlace",
-    href: "https://qeb-sitio.vercel.app",
+    href: "https://www.qeb.mx",
   },
 };

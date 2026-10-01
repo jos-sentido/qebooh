@@ -62,6 +62,7 @@ export async function enviarContacto(
   if (!CORREO_VALIDO.test(valores.correo))
     errores.correo = "Revisa tu correo; parece incompleto.";
   if (!(valores.interes in INTERESES)) errores.interes = "Elige un tema.";
+  if (valores.mensaje.length < 5) errores.mensaje = "Cuéntanos en qué te podemos ayudar.";
 
   if (Object.keys(errores).length > 0 || !acepta) {
     return {
@@ -102,7 +103,7 @@ export async function enviarContacto(
   ];
 
   const html = `
-    <h2 style="font-family:sans-serif">Nueva solicitud desde qeb.mx</h2>
+    <h2 style="font-family:sans-serif">Solicitud de información desde qeb.mx</h2>
     <table style="font-family:sans-serif;font-size:14px;border-collapse:collapse">
       ${filas
         .map(
@@ -126,7 +127,7 @@ export async function enviarContacto(
         from: remitente,
         to: destino,
         reply_to: valores.correo,
-        subject: `Demo · ${valores.empresa} (${tema})`,
+        subject: `Información · ${valores.empresa} (${tema})`,
         html,
         text: textoPlano,
       }),

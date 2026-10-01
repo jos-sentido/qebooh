@@ -1,15 +1,16 @@
 /** Datos generales del sitio público. Un solo lugar para URL, correo y menú. */
 
-export const SITIO_URL = (
-  process.env.NEXT_PUBLIC_SITIO_URL ?? "https://qeb.mx"
-).replace(/\/$/, "");
+/**
+ * URL canónica del sitio. Fija en código: el sitio vive en www.qeb.mx (qeb.mx
+ * redirige ahí desde Vercel).
+ */
+export const SITIO_URL = "https://www.qeb.mx";
 
 /**
- * Sólo se indexa en buscadores si se pide explícitamente. Mientras el sitio se
- * revisa (tool.qeb.mx/sitio-qeb) queda fuera de Google; al publicarlo en qeb.mx se
- * define NEXT_PUBLIC_INDEXAR=true.
+ * Sólo el despliegue de producción de Vercel se indexa en buscadores. Las
+ * vistas previas y el desarrollo local quedan con noindex.
  */
-export const INDEXAR = process.env.NEXT_PUBLIC_INDEXAR === "true";
+export const INDEXAR = process.env.VERCEL_ENV === "production";
 
 export const CORREO_CONTACTO = "contacto@qeb.mx";
 

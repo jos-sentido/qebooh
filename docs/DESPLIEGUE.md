@@ -207,20 +207,34 @@ mismo repo y con la misma rama de producción.
 
 - **Root Directory**: `apps/sitio`
 - **Framework Preset**: Next.js
-- **Revisión**: mientras se hace el desarrollo inicial, el sitio se publica
-  como herramienta en `tool.qeb.mx/sitio-qeb` (publicación de tipo `enlace`
-  en `apps/web/content/publicaciones/tool-sitio-qeb.ts`) que redirige a
-  `qeb-sitio.vercel.app`. Sin indexar. La protección de despliegue del
-  proyecto está desactivada para que el enlace se pueda compartir.
-- **Dominios finales** (cuando se apruebe): `qeb.mx` y `www.qeb.mx`, con
-  `NEXT_PUBLIC_SITIO_URL=https://qeb.mx` y `NEXT_PUBLIC_INDEXAR=true`.
+- **Dominios**: `www.qeb.mx` (principal) y `qeb.mx`, que redirige a `www`
+  con 308 desde Vercel. En producción desde el 2026-10-01.
+- **URL canónica e indexación**: la URL está fija en `lib/sitio.ts`
+  (`https://www.qeb.mx`) y sólo el despliegue de producción se indexa
+  (`VERCEL_ENV === "production"`). No dependen de variables de entorno.
+
+### DNS en A2 Hosting (cPanel → Zone Editor)
+
+La zona de `qeb.mx` sigue en los nameservers de A2 Hosting. Para el sitio se
+tocaron sólo estos registros; el correo (MX, `mail`, `webmail`, DKIM, SPF), el
+panel (`cpanel`, `whm`, `webdisk`…) y los subdominios de la plataforma y del
+espacio de trabajo (`app`, `pruebas`, `jos`, `admin`, `bi`, `demo`,
+`propuestas`, `reportes`, `tool`) no se modificaron.
+
+| Registro                | Antes                 | Después                                   |
+| ----------------------- | --------------------- | ----------------------------------------- |
+| `qeb.mx` A              | `68.66.226.117`       | `216.198.79.1` (Vercel)                   |
+| `www.qeb.mx` CNAME      | `qeb.mx`              | `8239774b0218d583.vercel-dns-017.com`     |
+| `ftp.qeb.mx`            | CNAME `qeb.mx`        | A `68.66.226.117` (sigue en el hosting)   |
+| `_vercel.qeb.mx` TXT    | —                     | `vc-domain-verify=qeb.mx,…` y `…www.qeb.mx,…` |
+
+`ftp` era un CNAME a `qeb.mx`: al mover el apex a Vercel se habría ido con él,
+por eso se fijó a la IP del hosting antes del corte.
 
 ### Variables de entorno
 
 | Variable                | Para qué                                          |
 | ----------------------- | ------------------------------------------------- |
-| `NEXT_PUBLIC_SITIO_URL` | URL canónica; metadatos y sitemap                  |
-| `NEXT_PUBLIC_INDEXAR`   | `true` sólo en qeb.mx; si no, `noindex` y robots cerrado |
 | `RESEND_API_KEY`        | Envío del formulario de demo por correo (Resend)  |
 | `CONTACTO_REMITENTE`    | Remitente verificado, p. ej. `QEB <sitio@qeb.mx>` |
 | `CONTACTO_DESTINO`      | Destinatarios, separados por coma                  |
@@ -230,16 +244,7 @@ error amable que invita a escribir a `contacto@qeb.mx`. Para enviar desde
 `@qeb.mx`, el dominio debe estar verificado en Resend (registros SPF/DKIM que
 indica su panel, en la zona DNS de `qeb.mx`).
 
-### Cambio desde el WordPress anterior
-
-Hoy `qeb.mx` apunta a un WordPress. El corte es sólo DNS:
-
-1. Desplegar el proyecto y revisarlo en su URL `*.vercel.app`.
-2. Añadir `qeb.mx` y `www.qeb.mx` en Domains y crear los registros que indique
-   Vercel (para el apex suele ser un `A`; usar siempre el valor del panel).
-3. **Antes de cambiar el DNS**, confirmar que ningún otro servicio depende del
-   hosting actual: correo (`MX`), subdominios o la plataforma. Sólo se cambian
-   los registros de `qeb.mx` y `www`.
+### Redirecciones del WordPress anterior
 
 Las URLs del WordPress (`/software`, `/politicas-de-privacidad`, las entradas
 del blog en `/AAAA/MM/DD/slug`) redirigen con 301 desde `next.config.ts`.
