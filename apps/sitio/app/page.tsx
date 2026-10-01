@@ -186,14 +186,14 @@ export default function Inicio() {
                   ))}
                 </ul>
                 <p className="mt-10 text-sm font-semibold text-white">
-                  Conocer {s.nombre} <span aria-hidden className="text-rosa">→</span>
+                  Conocer {s.nombre}
                 </p>
               </Link>
             ))}
           </div>
           <p className="mt-8 text-center">
             <Link href="/sistemas" className="text-sm font-semibold text-rosa hover:text-white">
-              Ver cómo se conectan <span aria-hidden>→</span>
+              Ver cómo se conectan
             </Link>
           </p>
         </Contenedor>

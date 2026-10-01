@@ -67,9 +67,6 @@ export default async function Contacto({
                 className="group mt-10 inline-flex h-14 items-center gap-3 whitespace-nowrap rounded-full bg-white px-6 text-xs font-semibold uppercase tracking-[0.12em] text-grafito transition hover:bg-white/90 sm:px-8 sm:text-sm sm:tracking-[0.14em]"
               >
                 Ver horarios disponibles
-                <span aria-hidden className="transition-transform group-hover:translate-x-0.5">
-                  →
-                </span>
               </a>
               <p className="mt-3 text-xs text-white/75">Se abre en una pestaña nueva.</p>
             </div>

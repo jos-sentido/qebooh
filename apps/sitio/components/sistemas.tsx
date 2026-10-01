@@ -89,7 +89,7 @@ export function DiagramaConexion({ resaltar }: { resaltar?: SistemaId }) {
           </ul>
         </div>
         <p className="mt-6 text-sm font-semibold text-rosa">
-          Ver {s.nombre} <span aria-hidden>→</span>
+          Ver {s.nombre}
         </p>
       </Link>
     );
@@ -174,7 +174,7 @@ export function OtroSistema({ desde }: { desde: SistemaId }) {
         {otro.lema}
       </p>
       <p className="relative mt-8 text-sm font-semibold text-white">
-        Conocer {otro.nombre} <span aria-hidden className="text-rosa">→</span>
+        Conocer {otro.nombre}
       </p>
     </Link>
   );

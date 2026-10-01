@@ -142,12 +142,6 @@ export function Boton({
       )}
     >
       {children}
-      <span
-        aria-hidden
-        className="transition-transform group-hover:translate-x-0.5"
-      >
-        →
-      </span>
     </Tag>
   );
 }
