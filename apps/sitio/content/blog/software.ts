@@ -33,7 +33,7 @@ export const entradaSoftware: Entrada = {
     {
       tipo: "parrafo",
       texto:
-        "Cada formato se comercializa de forma distinta: un espectacular puede venderse por mes o por catorcena, un parabús por semana, una pantalla digital por día, por horario o por spot. Y cada empresa tiene sus propias reglas. Un software que obliga a un solo periodo fija genera descuadres en la disponibilidad, la ocupación y la facturación. Pregunta qué periodicidades maneja, si se pueden combinar en una misma propuesta y si se configuran según tu forma de vender.",
+        "Cada formato se comercializa de forma distinta: los espectaculares se venden por mes, los parabuses por catorcena y una pantalla digital puede venderse por día, por horario o por spot. Y cada empresa tiene sus propias reglas. Un software que obliga a un solo periodo fija genera descuadres en la disponibilidad, la ocupación y la facturación. Pregunta qué periodicidades maneja, si se pueden combinar en una misma propuesta y si se configuran según tu forma de vender.",
     },
     { tipo: "subtitulo", texto: "3. Detección de conflictos antes de vender" },
     {

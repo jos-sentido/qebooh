@@ -27,7 +27,7 @@ export const entradaOohDooh: Entrada = {
     {
       tipo: "parrafo",
       texto:
-        "Para el operador, el inventario OOH tradicional tiene una lógica simple: cada cara se vende completa a un anunciante por un periodo, normalmente por catorcena. Una cara, un anunciante, un arte.",
+        "Para el operador, el inventario OOH tradicional tiene una lógica simple: cada cara se vende completa a un anunciante por un periodo, que depende del formato: los espectaculares por mes, los parabuses por catorcena. Una cara, un anunciante, un arte.",
     },
     { tipo: "subtitulo", texto: "¿Qué es DOOH?" },
     {
@@ -47,7 +47,7 @@ export const entradaOohDooh: Entrada = {
         {
           titulo: "Unidad de venta",
           texto:
-            "En OOH se vende la cara completa por catorcena. En DOOH se vende una fracción del tiempo de pantalla: un spot dentro de un loop, por horario o por número de impactos.",
+            "En OOH se vende la cara completa por un periodo: mes en espectaculares, catorcena en parabuses. En DOOH se vende una fracción del tiempo de pantalla: un spot dentro de un loop, por horario o por número de impactos.",
         },
         {
           titulo: "Capacidad",
@@ -87,9 +87,9 @@ export const entradaOohDooh: Entrada = {
             "Cada cara impresa y cada pantalla se registran con su código, plaza, ubicación y formato en un solo lugar. Lo que cambia es cómo se mide su disponibilidad.",
         },
         {
-          titulo: "Disponibilidad por catorcena para ambos",
+          titulo: "Disponibilidad en un mismo calendario",
           texto:
-            "Razonar todo en catorcenas permite comparar y combinar: una cara ocupada contra un loop con espacios libres, en el mismo calendario.",
+            "Cada formato con su periodo de venta, pero todos en el mismo calendario, para comparar y combinar: una cara ocupada contra un loop con espacios libres.",
         },
         {
           titulo: "Propuestas mixtas",
