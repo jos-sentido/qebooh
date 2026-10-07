@@ -34,7 +34,7 @@ const ESCENAS: Escena[] = [
     icono: "inventario",
     cuando: "Lunes · 9:12",
     quien: "Comercial",
-    frase: "“¿Esa ubicación está libre la próxima catorcena?”",
+    frase: "“¿Esa ubicación está libre el próximo mes?”",
     historia:
       "Nadie lo sabe con certeza. Alguien abre un Excel, otro pregunta por WhatsApp. A veces el mismo espacio termina vendido dos veces.",
     solucion: "Inventario en vivo",
@@ -91,7 +91,7 @@ const ESCENAS: Escena[] = [
     quien: "Dirección",
     frase: "“¿Por qué esa zona siempre está vacía?”",
     historia:
-      "Hay espacios que casi no se venden y nadie lo ve a tiempo. Es dinero que se queda en la mesa, catorcena tras catorcena.",
+      "Hay espacios que casi no se venden y nadie lo ve a tiempo. Es dinero que se queda en la mesa, periodo tras periodo.",
     solucion: "Ocupación estratégica",
     href: SISTEMAS.inteligencia.href,
     sistema: SISTEMAS.inteligencia.nombre,
@@ -254,7 +254,7 @@ export default function Inicio() {
           </div>
           <ul className="flex flex-wrap gap-2.5" aria-label="Conceptos que QEB maneja de origen">
             {[
-              "Catorcenas",
+              "Meses y catorcenas",
               "Plazas",
               "Caras",
               "Flujo / Contraflujo",

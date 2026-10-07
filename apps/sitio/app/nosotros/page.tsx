@@ -62,7 +62,7 @@ export default function Nosotros() {
           <Encabezado etiqueta="Cómo trabajamos" titulo="Tres principios." />
           <div className="mt-14 grid gap-4 md:grid-cols-3">
             <Tarjeta indice="01" titulo="Entender la operación">
-              Hablamos de catorcenas, caras y plazas porque así funciona el
+              Hablamos de periodos de venta, caras y plazas porque así funciona el
               negocio. Primero entendemos tu operación; después configuramos.
             </Tarjeta>
             <Tarjeta indice="02" titulo="Datos que cuadran">

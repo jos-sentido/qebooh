@@ -92,7 +92,7 @@ traduzcas al inglés.**
 | Término                          | Significado                                                                 |
 | -------------------------------- | --------------------------------------------------------------------------- |
 | **Solicitud / Propuesta / Campaña** | Las tres etapas del flujo comercial.                                     |
-| **Catorcena**                    | Periodo de facturación de 14 días. Unidad base de vigencia y tarifa, no el mes. |
+| **Periodo de venta**             | Unidad de vigencia y tarifa de cada formato: mensual, catorcenal (14 días) o variable. QEB maneja varios en el mismo inventario; p. ej. espectaculares por mes, parabuses por catorcena, digital por día, horario o spot. |
 | **Cara**                         | Cada lado publicitario de una estructura. Una estructura puede tener varias caras y cada cara se vende por separado. |
 | **Flujo / Contraflujo**          | Sentido de circulación vehicular al que mira la cara.                       |
 | **Plaza**                        | Ciudad o mercado (GDL, CDMX, MTY, etc.).                                     |
@@ -135,7 +135,9 @@ texto o diagrama.
    normalizar (`trim` + case) antes de comparar. Los archivos externos traen
    espacios al final y mayúsculas inconsistentes; sin normalizar se generan
    falsos negativos.
-3. **La vigencia se razona en catorcenas**, no en meses ni en días sueltos.
+3. **La vigencia se razona en el periodo de venta de cada formato** (mensual,
+   catorcenal o variable), nunca en una sola unidad fija para todo. En textos
+   públicos no presentar la catorcena como la forma general de vender OOH.
 
 ### 3.2 Específico de IMU
 

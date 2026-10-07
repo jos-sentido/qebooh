@@ -11,13 +11,13 @@ export const entradaMedicion: Entrada = {
   titulo: "Cómo medir la ocupación del inventario de publicidad exterior y usarla para planear",
   fecha: "2026-10-01",
   resumen:
-    "La ocupación es la métrica que dice cómo va el negocio de una empresa de publicidad exterior. Cómo calcularla por catorcena, cómo leerla por plaza, zona y tipo de mueble, y cómo usarla para decidir precios, paquetes e inventario.",
+    "La ocupación es la métrica que dice cómo va el negocio de una empresa de publicidad exterior. Cómo calcularla según el periodo en que se vende cada formato, cómo leerla por plaza, zona y tipo de mueble, y cómo usarla para decidir precios, paquetes e inventario.",
   imagen: "/blog/medicion.png",
   cuerpo: [
     {
       tipo: "parrafo",
       texto:
-        "En una empresa de publicidad exterior, el inventario es el negocio. Cada cara que pasa una catorcena sin venderse es ingreso que no regresa. Aun así, muchas operaciones saben cuánto vendieron, pero no qué tan lleno estuvo su inventario, dónde se queda vacío ni por qué.",
+        "En una empresa de publicidad exterior, el inventario es el negocio. Cada cara que pasa un periodo sin venderse es ingreso que no regresa. Aun así, muchas operaciones saben cuánto vendieron, pero no qué tan lleno estuvo su inventario, dónde se queda vacío ni por qué.",
     },
     {
       tipo: "parrafo",
@@ -28,12 +28,12 @@ export const entradaMedicion: Entrada = {
     {
       tipo: "parrafo",
       texto:
-        "La ocupación es la proporción del inventario vendido sobre el inventario disponible en un periodo. En México se calcula en catorcenas, porque es la unidad en que se vende y se factura: catorcenas vendidas entre catorcenas disponibles.",
+        "La ocupación es la proporción del inventario vendido sobre el inventario disponible en un periodo. Se mide en la misma unidad en que se vende cada formato: los espectaculares suelen venderse por mes, los parabuses por catorcena y el inventario digital por día, horario o spot. Una operación con varios formatos necesita medir cada uno en su propio periodo.",
     },
     {
       tipo: "parrafo",
       texto:
-        "Por ejemplo, si una plaza tiene 100 caras y el periodo tiene 6 catorcenas, hay 600 catorcenas disponibles. Si se vendieron 420, la ocupación es de 70 %. Medirla en meses o en días sueltos produce cifras que no cuadran con la facturación, y por eso conviene hacerlo siempre por catorcena.",
+        "Por ejemplo, si una plaza tiene 100 espectaculares y el periodo de análisis es de 6 meses, hay 600 meses-cara disponibles; si se vendieron 420, la ocupación es de 70 %. Con 200 parabuses en 12 catorcenas hay 2,400 catorcenas-cara disponibles, y la cuenta es la misma. Medir todo en una sola unidad que no corresponde a como se vende cada formato produce cifras que no cuadran con la facturación.",
     },
     { tipo: "subtitulo", texto: "Qué contar como ocupado" },
     {
@@ -81,14 +81,14 @@ export const entradaMedicion: Entrada = {
             "Espectaculares, parabuses, mupis, puentes y pantallas no se venden igual. Saber qué formato se llena y cuál no orienta inversión y tarifas.",
         },
         {
-          titulo: "Por cara y por catorcena",
+          titulo: "Por cara y por periodo",
           texto:
-            "Un mapa de inventario contra catorcenas deja ver huecos concretos: qué caras están libres y cuándo, para ofrecerlas antes de que se pierdan.",
+            "Un mapa de inventario contra periodos deja ver huecos concretos: qué caras están libres y cuándo, para ofrecerlas antes de que se pierdan.",
         },
         {
           titulo: "Contra el año anterior",
           texto:
-            "Comparar la misma catorcena del año pasado separa la temporada de un problema real de venta.",
+            "Comparar el mismo periodo del año pasado separa la temporada de un problema real de venta.",
         },
       ],
     },
@@ -96,7 +96,7 @@ export const entradaMedicion: Entrada = {
     {
       tipo: "parrafo",
       texto:
-        "Dos métricas complementan a la ocupación. El ingreso por ocupación dice cuánto generó el inventario vendido en el periodo. La asignación promedio dice cuántas catorcenas se vende en promedio cada cara. Juntas distinguen una zona llena a buen precio de una zona llena porque se vendió barato.",
+        "Dos métricas complementan a la ocupación. El ingreso por ocupación dice cuánto generó el inventario vendido en el periodo. La asignación promedio dice cuántos periodos se vende en promedio cada cara. Juntas distinguen una zona llena a buen precio de una zona llena porque se vendió barato.",
     },
     { tipo: "subtitulo", texto: "Cómo usar la ocupación en la planificación estratégica" },
     {
@@ -134,7 +134,7 @@ export const entradaMedicion: Entrada = {
     {
       tipo: "parrafo",
       texto:
-        "La ocupación por catorcena es la forma más clara de saber qué tan bien rinde el inventario y de decidir con datos qué vender, a qué precio y dónde crecer. QEB Inteligencia la calcula en tiempo real a partir de lo que el equipo ya registra en QEB Operación: ocupación global, por plaza, zona, tipo de mueble y cara, junto con el ingreso que genera.",
+        "La ocupación medida en el periodo de venta de cada formato es la forma más clara de saber qué tan bien rinde el inventario y de decidir con datos qué vender, a qué precio y dónde crecer. QEB Inteligencia la calcula en tiempo real a partir de lo que el equipo ya registra en QEB Operación: ocupación global, por plaza, zona, tipo de mueble y cara, junto con el ingreso que genera.",
     },
   ],
 };

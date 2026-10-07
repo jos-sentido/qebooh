@@ -45,7 +45,7 @@ export const MENU: EntradaMenu[] = [
       {
         href: "/sistemas/operacion",
         texto: "QEB Operación",
-        detalle: "Inventario, propuestas, campañas y catorcenas",
+        detalle: "Inventario, propuestas, campañas y periodos de venta",
       },
       {
         href: "/sistemas/inteligencia",

@@ -31,7 +31,7 @@ export const SISTEMAS: Record<SistemaId, Sistema> = {
       "Inventario en vivo",
       "Solicitudes y propuestas",
       "Campañas y Versionario",
-      "Catorcenas y facturación",
+      "Periodos de venta y facturación",
       "Montaje y testigos",
       "Integraciones vía API",
     ],
@@ -77,7 +77,7 @@ export const FLUJOS: { de: SistemaId; dato: string; resultado: string }[] = [
   },
   {
     de: "operacion",
-    dato: "Ocupación del inventario por catorcena",
+    dato: "Ocupación del inventario por periodo de venta",
     resultado: "Mapa de ocupación por plaza, zona y tipo de mueble",
   },
   {

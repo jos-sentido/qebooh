@@ -190,7 +190,7 @@ export function Embudo() {
       anillo: "border-estado-espera/50",
       texto:
         "Se levanta la necesidad del anunciante: plazas, formatos, fechas y presupuesto. Nada se pierde en un correo.",
-      dato: "Plazas · formatos · catorcenas · presupuesto",
+      dato: "Plazas · formatos · periodos · presupuesto",
     },
     {
       n: "02",

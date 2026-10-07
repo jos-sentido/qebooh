@@ -86,9 +86,9 @@ const DETALLE: {
     texto:
       "Ocupación por plaza, zona y tipo de mueble, con el ingreso que genera y las caras que se subutilizan. Es la base para planear precios, paquetes y qué inventario empujar.",
     puntos: [
-      "Ocupación global: catorcenas vendidas sobre disponibles.",
+      "Ocupación global: periodos vendidos sobre disponibles, sea por mes, catorcena o variable.",
       "Venta y ocupación por zona, plaza y mueble.",
-      "Mapa de inventario por catorcena para detectar huecos.",
+      "Mapa de inventario por periodo para detectar huecos.",
     ],
     visual: <MapaOcupacion />,
   },

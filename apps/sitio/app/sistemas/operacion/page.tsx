@@ -29,7 +29,7 @@ const S = SISTEMAS.operacion;
 export const metadata: Metadata = {
   title: S.nombre,
   description:
-    "QEB Operación, el sistema operativo OOH: inventario en vivo, solicitudes, propuestas, campañas, Versionario, catorcenas e integraciones vía API.",
+    "QEB Operación, el sistema operativo OOH: inventario en vivo, solicitudes, propuestas, campañas, Versionario, múltiples periodos de venta e integraciones vía API.",
   alternates: { canonical: S.href },
 };
 
@@ -44,10 +44,10 @@ const DETALLE: {
     etiqueta: "Inventario",
     titulo: "Cada cara, en vivo y sin empalmes.",
     texto:
-      "El inventario es el centro de QEB. Cada cara tiene un código único, su plaza, formato, dimensiones y sentido de circulación, y su ocupación se lee por catorcena.",
+      "El inventario es el centro de QEB. Cada cara tiene un código único, su plaza, formato, dimensiones y sentido de circulación, y su ocupación se lee por el periodo en que se vende: mensual, catorcenal o variable.",
     puntos: [
       "Carga masiva desde tus archivos actuales, con normalización de códigos.",
-      "Disponibilidad y ocupación por catorcena, plaza, mueble y tipo.",
+      "Disponibilidad y ocupación por periodo (mes, catorcena o variable), plaza, mueble y tipo.",
       "Bloqueos y detección de conflictos antes de comprometer una cara.",
       "Mapa de inventario y filtros por nivel socioeconómico y puntos de interés.",
     ],
@@ -61,7 +61,7 @@ const DETALLE: {
     puntos: [
       "Órdenes de montaje generadas desde la campaña.",
       "Versiones de arte por cara, con estatus de aprobación e instalación.",
-      "Vista por catorcena para planear cambios de versión.",
+      "Vista por periodo para planear cambios de versión.",
       "Envío de testigos y seguimiento posventa al anunciante.",
     ],
     visual: <Versionario />,
@@ -70,9 +70,9 @@ const DETALLE: {
     etiqueta: "Dashboard operativo",
     titulo: "El estado de tu inventario, hoy.",
     texto:
-      "Disponible, reservado, vendido y bloqueado, por catorcena, plaza y mueble. Lo que el equipo necesita para operar el día; el análisis de negocio vive en QEB Inteligencia, con los mismos datos.",
+      "Disponible, reservado, vendido y bloqueado, por periodo, plaza y mueble. Lo que el equipo necesita para operar el día; el análisis de negocio vive en QEB Inteligencia, con los mismos datos.",
     puntos: [
-      "Resumen de inventario por estatus en la catorcena vigente.",
+      "Resumen de inventario por estatus en el periodo vigente.",
       "Distribución por mueble, tipo, municipio y nivel socioeconómico.",
       "Mapa de inventario por plaza.",
       "Exportación a CSV en cada vista.",
@@ -95,8 +95,8 @@ const PREGUNTAS = [
     r: "Con carga masiva desde tus archivos. Antes de cruzar datos normalizamos los códigos (espacios, mayúsculas) para que no aparezcan duplicados ni faltantes falsos.",
   },
   {
-    p: "¿Por qué trabajan en catorcenas?",
-    r: "Porque es la unidad real de vigencia y tarifa en la publicidad exterior en México. Razonar en meses o en días sueltos es lo que provoca descuadres en la facturación.",
+    p: "¿Con qué periodos de venta trabajan?",
+    r: "Con los que use tu operación: mensuales, catorcenales o variables. Cada formato se comercializa distinto —los espectaculares suelen venderse por mes, los parabuses por catorcena y el inventario digital por día, horario o spot— y QEB maneja varios periodos en el mismo inventario y en la misma propuesta. Así la disponibilidad, la ocupación y la facturación cuadran con la forma real de vender.",
   },
   {
     p: "¿Se integra con nuestro ERP?",
