@@ -56,8 +56,8 @@ export const MENU: EntradaMenu[] = [
   },
   {
     tipo: "grupo",
-    texto: "Audiencias",
-    base: "/audiencias",
+    texto: "Smart Spaces",
+    base: "/smart-spaces",
     enlaces: [
       {
         href: "/geo-behavior-indoor",

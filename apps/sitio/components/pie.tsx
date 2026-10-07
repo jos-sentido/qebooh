@@ -14,7 +14,7 @@ const COLUMNAS = [
     ],
   },
   {
-    titulo: "Audiencias",
+    titulo: "Smart Spaces",
     enlaces: [
       { href: "/geo-behavior-indoor", texto: "Geo Behavior Indoor" },
       { href: "/wifi-inteligente", texto: "WiFi Inteligente" },
