@@ -202,8 +202,8 @@ códigos de inventario de ejemplo usan el formato genérico Formato + número +
 cara (`Parabus001A`, `Espectacular101A`); el formato
 `{code}_{Flujo|Contraflujo}_{Plaza}` es el de IMU y no se usa en el sitio.
 El foco comercial son QEB Operación e QEB Inteligencia; Geo Behavior Indoor
-y WiFi Inteligente son soluciones por proyecto y sólo aparecen en el menú, el
-pie y sus propias páginas.
+y WiFi Inteligente ("Smart Spaces") son soluciones por proyecto: sólo aparecen
+en el pie y en sus propias páginas, no en el menú principal.
 
 ### Las tres secciones
 

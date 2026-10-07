@@ -54,23 +54,6 @@ export const MENU: EntradaMenu[] = [
       },
     ],
   },
-  {
-    tipo: "grupo",
-    texto: "Smart Spaces",
-    base: "/smart-spaces",
-    enlaces: [
-      {
-        href: "/geo-behavior-indoor",
-        texto: "Geo Behavior Indoor",
-        detalle: "Afluencia y movilidad en espacios cerrados",
-      },
-      {
-        href: "/wifi-inteligente",
-        texto: "WiFi Inteligente",
-        detalle: "Analítica y audiencias desde tu red WiFi",
-      },
-    ],
-  },
   { tipo: "enlace", href: "/blog", texto: "Blog" },
   { tipo: "enlace", href: "/nosotros", texto: "Nosotros" },
 ];
