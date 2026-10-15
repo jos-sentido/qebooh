@@ -869,14 +869,21 @@ body.m .sysc b{font-size:17px}
 body.m .sysc .d{font-size:12.5px}
 body.m .rt{position:static;transform:none;justify-content:center;margin-top:18px;opacity:1}
 
-/* 2 la semana: el mazo se vuelve lista */
+/* 2 la semana: el mismo mazo que en PC, con la carta en vertical. Las cartas
+   se apilan en una sola celda de rejilla, asi el mazo toma la altura de la
+   carta mas alta; el espacio de abajo es para las que asoman detras. La que
+   sale con el swipe se recorta en el borde de la lamina. */
+body.m #s2{overflow-x:clip}
 body.m .semana{display:block}
 body.m .sem-izq h2{font-size:24px;max-width:none}
 body.m .sem-izq .lead{max-width:none}
-body.m .cont,body.m .onda-chica{display:none}
-body.m .mazo{position:static;height:auto;display:flex;flex-direction:column;gap:14px;margin-top:22px}
-body.m .carta{position:static;opacity:1 !important;transform:none !important;filter:none !important;transition:none}
-body.m .carta article{grid-template-columns:minmax(0,1fr);height:auto;border-radius:18px}
+body.m .onda-chica{display:none}
+body.m .cont{max-width:none;margin-top:20px}
+body.m .cont-n #semN{font-size:24px}
+body.m .cont-n .tot{font-size:13px}
+body.m .mazo{display:grid;height:auto;margin-top:20px;padding-bottom:54px}
+body.m .carta{position:relative;inset:auto;grid-area:1/1}
+body.m .carta article{grid-template-columns:minmax(0,1fr);grid-template-rows:auto 1fr;border-radius:18px}
 body.m .carta .oscuro{padding:18px 18px 20px;gap:14px}
 body.m .carta .oscuro::after{inset:auto 0 0 0;width:auto;height:4px;
   background:linear-gradient(to right,var(--brand),var(--brand2),var(--mag))}
@@ -2032,6 +2039,7 @@ document.getElementById("replay").addEventListener("click", e => { e.stopPropaga
     if(vigia || !("IntersectionObserver" in window)) return;
     const arranques = {
       s1: () => drawCover(),
+      s2: () => runSemana(),
       s3: () => runMorph(),
       s5: () => runOcupa(),
       sCon: () => runConex(),
@@ -2057,7 +2065,6 @@ document.getElementById("replay").addEventListener("click", e => { e.stopPropaga
       b.setAttribute("aria-pressed", String(b.dataset.m === m)));
     if(movil){
       envolver();
-      clearTimeout(semT);                 // el mazo se vuelve lista: sin temporizador
       document.querySelectorAll(".slide").forEach(s => s.classList.add("on"));
       if(mnus.length) abreModulo(0);
       observar();
