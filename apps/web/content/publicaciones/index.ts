@@ -1,6 +1,7 @@
 import type { Seccion } from "@/lib/secciones";
 import type { Publicacion } from "../tipos";
 import { colaboracionComercialLorena } from "./colaboracion-comercial-lorena";
+import { presentacionComercial } from "./presentacion-comercial";
 import { reporteVentasPrototipo } from "./reporte-ventas-prototipo";
 import { toolSitioQeb } from "./tool-sitio-qeb";
 
@@ -19,6 +20,7 @@ import { toolSitioQeb } from "./tool-sitio-qeb";
  */
 const PUBLICACIONES: Publicacion[] = [
   colaboracionComercialLorena,
+  presentacionComercial,
   reporteVentasPrototipo,
   toolSitioQeb,
 ];
