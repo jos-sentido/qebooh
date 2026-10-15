@@ -783,9 +783,196 @@ h3{font-family:var(--disp);font-weight:700;letter-spacing:-.01em}
 #sEnd .sign b{color:#fff;font-weight:500}
 
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ===================== MODO MOVIL =====================
+   La version de PC es un escenario fijo de 1600x900 escalado; la movil es el
+   mismo contenido en vertical, lamina tras lamina, con scroll normal. No es
+   responsivo: son dos modos y el selector de arriba cambia entre ellos.
+   Las piezas que solo existen a lo ancho (el nudo, la matriz de ocupacion, el
+   comparativo) se deslizan en horizontal dentro de su lamina. */
+#mswitch{position:fixed;top:14px;right:14px;z-index:90;display:none;
+  gap:4px;padding:4px;border-radius:999px;background:rgba(23,15,34,.94);border:1px solid var(--line2);
+  box-shadow:0 8px 28px rgba(0,0,0,.55);backdrop-filter:blur(10px)}
+#mswitch button{display:flex;align-items:center;gap:7px;padding:9px 16px;border:0;border-radius:999px;
+  background:transparent;font-family:"Barlow",sans-serif;font-size:13px;font-weight:600;color:var(--mu);
+  line-height:1;cursor:pointer;transition:background .2s,color .2s}
+#mswitch button[aria-pressed="true"]{background:var(--grad);color:#fff}
+#mswitch svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linejoin:round}
+.tiene-modos #mswitch{display:flex}
+
+html.m,html.m body{height:auto;overflow:visible auto;-webkit-text-size-adjust:100%}
+body.m #viewport{position:static;display:block}
+body.m #stage{width:100%;height:auto;transform:none !important;overflow:visible}
+body.m #stage::after{position:fixed}
+body.m #chrome{display:none}
+body.m #ticks{position:fixed;top:0;height:3px}
+body.m .slide{position:static;inset:auto;display:block;opacity:1;visibility:visible;transition:none;
+  padding:52px 20px 60px;border-top:1px solid var(--line)}
+body.m .slide:first-of-type{border-top:0}
+body.m .cuerpo{margin:0}
+body.m .cuerpo ~ .foot{padding-top:22px}
+body.m #mswitch{top:auto;right:50%;bottom:14px;transform:translateX(50%)}
+
+/* Tipografia */
+body.m h1{font-size:33px;line-height:1.05}
+body.m h2{font-size:24px;max-width:none}
+body.m h3{font-size:18px !important}
+body.m .lead{font-size:16px;line-height:1.5;max-width:none;margin-top:14px}
+body.m .foot{font-size:15px;padding-top:20px;margin-top:22px}
+body.m .kicker{font-size:11.5px;letter-spacing:.2em;margin-bottom:11px;gap:9px}
+body.m .kicker::before{width:20px;height:4px}
+body.m .bart{font-size:11px;padding:3px 9px}
+body.m .icirc{width:40px;height:40px}
+body.m .icirc.lg{width:48px;height:48px}
+
+/* Rejillas: todo a una columna */
+body.m .sino,body.m .mods,body.m .feats,body.m .lvls,body.m .three,body.m .peso,
+body.m .lanes,body.m .pipe,body.m .pu-rejilla,body.m .sk-split,body.m .sk-split2,
+body.m .bu-split,body.m .bu-geo,body.m .sk-kanban{grid-template-columns:minmax(0,1fr) !important}
+body.m .sk-kpi{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+body.m .sk-est,body.m .sk-sap,body.m .bu-top{grid-template-columns:minmax(0,1fr) !important}
+body.m .arw{display:none}
+
+/* Piezas anchas: se deslizan en horizontal dentro de su lamina */
+body.m .desliza{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;
+  margin:0 -20px;padding:0 20px;scrollbar-width:thin}
+body.m .desliza > *{flex:none}
+body.m .desliza::after{content:"";display:block;width:4px;flex:none}
+body.m .nota-desliza{margin-top:10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--mu2)}
+body.m .nota-desliza::before{content:"\2194";margin-right:7px}
+
+/* 1 portada */
+body.m #s1{padding:46px 20px 56px}
+body.m #s1 .wrap{position:static}
+body.m #s1 .logo-big{height:52px}
+body.m #s1 .ekick{margin-top:30px;font-size:11.5px;letter-spacing:.17em;gap:10px}
+body.m #s1 .ekick i{width:22px;height:4px}
+body.m #s1 h1{font-size:38px;max-width:none;margin-top:16px}
+body.m #s1 .meta{position:static;margin-top:30px;font-size:12px}
+body.m #s1cruces,body.m #s1glow{display:none}
+body.m #link{position:static;height:auto;margin-top:34px}
+body.m #cover{position:static;width:100%;height:120px}
+body.m .sysc{position:static;transform:none;opacity:1;margin-top:14px;padding:13px 16px;border-radius:15px}
+body.m .sysc b{font-size:17px}
+body.m .sysc .d{font-size:12.5px}
+body.m .rt{position:static;transform:none;justify-content:center;margin-top:18px;opacity:1}
+
+/* 2 la semana: el mazo se vuelve lista */
+body.m .semana{display:block}
+body.m .sem-izq h2{font-size:24px;max-width:none}
+body.m .sem-izq .lead{max-width:none}
+body.m .cont,body.m .onda-chica{display:none}
+body.m .mazo{position:static;height:auto;display:flex;flex-direction:column;gap:14px;margin-top:22px}
+body.m .carta{position:static;opacity:1 !important;transform:none !important;filter:none !important;transition:none}
+body.m .carta article{grid-template-columns:minmax(0,1fr);height:auto;border-radius:18px}
+body.m .carta .oscuro{padding:18px 18px 20px;gap:14px}
+body.m .carta .oscuro::after{inset:auto 0 0 0;width:auto;height:4px;
+  background:linear-gradient(to right,var(--brand),var(--brand2),var(--mag))}
+body.m .carta .oscuro h3{font-size:21px !important}
+body.m .carta .claro{padding:18px;gap:14px}
+body.m .carta .hist{font-size:15px}
+body.m .carta .sol b{font-size:15px}
+body.m .carta .sol i{width:34px;height:34px;font-size:16px}
+
+/* 3 el nudo */
+body.m #board{height:auto;padding:16px 0 18px}
+body.m #status{position:static;margin:0 16px 10px}
+body.m .chip{position:static;font-size:14px;padding:7px 14px}
+body.m #chipQeb{position:absolute}
+body.m #wave{width:980px;height:320px}
+body.m #replay{position:static;margin:12px 16px 0}
+
+/* 5 matriz de ocupacion */
+body.m .oc-marco{height:auto}
+body.m .oc-tabla{height:auto;width:1120px;padding:12px}
+body.m .oc-pasos{width:1120px}
+body.m .oc-fila{grid-template-columns:230px repeat(4,minmax(0,1fr))}
+
+/* 6 modulos: el menu pasa a una tira de fichas arriba */
+body.m .app{display:block;height:auto}
+body.m .app-nav{flex-direction:row;border-radius:16px;padding:10px;gap:7px;overflow-x:auto}
+body.m .app-marca,body.m .app-nav li.sep{display:none}
+body.m .app-nav ul{flex-direction:row;gap:7px}
+body.m .mnu{white-space:nowrap;padding:8px 13px;font-size:12.5px;border-radius:999px}
+body.m .app-main{margin-top:18px;min-height:0}
+body.m .pane{position:static;display:none;opacity:1;visibility:visible;transition:none}
+body.m .pane.on{display:block}
+body.m .pane-h h3{font-size:20px !important}
+body.m .pane-h p{font-size:14.5px;max-width:none}
+body.m .pane-chips li{font-size:11.5px;padding:4px 10px}
+body.m .marco{flex:none;margin-top:14px}
+body.m .marco-b{display:block;height:auto;padding:12px}
+body.m .marco-pie{font-size:9.5px}
+body.m .sk-rows li{grid-template-columns:minmax(0,1fr) auto;gap:8px;font-size:12.5px}
+body.m .sk-rows li .c2,body.m .sk-rows li .c3{display:none}
+body.m .sk-bars li{grid-template-columns:96px minmax(0,1fr) 48px;font-size:11.5px}
+body.m .sk-filtros span:nth-child(n+6){display:none}
+body.m .sk-mapa,body.m .sk-mini{min-height:150px}
+body.m .bu-lista,body.m .bu-mapa{min-height:160px}
+body.m .bu-h,body.m .bu-r{grid-template-columns:minmax(0,1fr) 68px;gap:8px}
+body.m .bu-h span:nth-child(n+3),body.m .bu-r span:nth-child(n+3){display:none}
+body.m .sk-chat .m{max-width:92%;font-size:13px}
+body.m .sk-ficha .f{font-size:11.5px}
+
+/* 8 dos sistemas: los tres bloques en vertical y sin la ruta */
+body.m .conex{display:block}
+body.m #ruta{display:none}
+body.m .nodo-s{padding:18px;border-radius:18px}
+body.m .nodo-s + .puente,body.m .puente + .nodo-s{margin-top:14px}
+body.m .nodo-s h3{font-size:22px !important;margin-top:16px}
+body.m .ns-caps{margin-top:14px}
+body.m .ns-caps li{font-size:12px;padding:5px 10px}
+body.m .puente{padding:18px;border-radius:18px}
+body.m .pu-t{font-size:14px}
+body.m .fl{opacity:1 !important;transform:none !important;font-size:12.5px;padding:11px 12px;border-radius:13px}
+
+/* 4 que si / que no */
+body.m .sbox{padding:20px 20px 24px;border-radius:17px}
+body.m .sbox h3{font-size:18px !important;margin-bottom:4px}
+body.m .sbox .sub{font-size:13px;margin-bottom:13px}
+body.m .sbox li{font-size:14.5px;padding:6px 0 6px 22px;line-height:1.4}
+body.m .sbox.pos li::before{top:14px;width:7px;height:7px}
+body.m .sbox.neg li::before{top:16px;width:10px}
+body.m .sino-foot{margin:22px 0 0;font-size:15px}
+
+/* 11 comparativo y 12 licencias: tablas deslizables */
+body.m .mtx,body.m .lic{width:760px;margin-top:14px}
+body.m .mtx{font-size:13px}
+body.m .mtx th,body.m .mtx td{padding:5px 10px}
+body.m .mtx th:first-child,body.m .mtx td:first-child{width:30%}
+body.m .mtx thead th{font-size:14.5px}
+body.m .mtx thead th small{font-size:10.5px}
+body.m .lic{font-size:13px}
+body.m .lic th,body.m .lic td{padding:7px 11px}
+body.m .lic th:first-child,body.m .lic td:first-child{width:30%}
+body.m .lic thead th{font-size:16px}
+body.m .lic tr.price td{font-size:19px}
+body.m .lic tr.price td:first-child{font-size:13px}
+body.m .lic tr.last td{font-size:11.5px}
+body.m .mtx-foot,body.m .peso-foot,body.m .three-foot{font-size:13.5px}
+body.m .incl{display:block}
+body.m .incl .chips span{font-size:12px}
+body.m .incl .t{font-size:14px}
+
+/* 13, 14, 15 */
+body.m .pcard .big{font-size:40px}
+body.m .lane-lbl{font-size:12px}
+body.m #sEnd{padding:20px}
+body.m .cta{padding:34px 22px;border-radius:24px;min-height:62vh}
+body.m .onda-cta{right:-400px;top:auto;bottom:-40px;transform:none;width:560px;height:230px;opacity:.5}
+body.m #sEnd .logo-big{height:46px;margin-bottom:26px}
+body.m #sEnd h1{font-size:32px}
+body.m #sEnd h1 br{display:none}
+body.m #sEnd .lead{font-size:16px;margin-top:16px}
+body.m #sEnd .sign{margin-top:26px;font-size:13px}
 </style>
 </head>
 <body>
+<div id="mswitch" role="group" aria-label="Modo de visualización">
+  <button data-m="pc" aria-pressed="true"><svg viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="13" rx="2"/><path d="M8 21h8"/></svg>PC</button>
+  <button data-m="movil" aria-pressed="false"><svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>Móvil</button>
+</div>
 <div id="viewport">
 <main id="stage" aria-live="polite">
 <div id="ticks" aria-hidden="true"></div>
@@ -1366,6 +1553,7 @@ function go(i){
 document.getElementById("prev").onclick = ()=>go(cur-1);
 document.getElementById("next").onclick = ()=>go(cur+1);
 addEventListener("keydown", e=>{
+  if(document.body.classList.contains("m")) return;   // en movil el scroll es del navegador
   if(["ArrowRight","PageDown"].includes(e.key) || e.key===" "){ e.preventDefault(); go(cur+1); }
   else if(["ArrowLeft","PageUp"].includes(e.key)){ e.preventDefault(); go(cur-1); }
   else if(e.key==="Home") go(0);
@@ -1787,9 +1975,97 @@ function runMorph(){
 }
 document.getElementById("replay").addEventListener("click", e => { e.stopPropagation(); runMorph(); });
 
+
+/* ---------- selector PC / movil ----------
+   Dos modos del mismo documento, no un responsivo: en PC es el escenario fijo
+   de 1600x900 y en movil las mismas laminas una tras otra con scroll. Arranca
+   en el modo que corresponde al ancho de la pantalla y se puede cambiar. */
+(function(){
+  const sw = document.getElementById("mswitch");
+  if(!sw) return;
+  document.documentElement.classList.add("tiene-modos");
+  let envuelto = false, vigia = null;
+
+  /* Las piezas que solo existen a lo ancho (el nudo, la matriz de ocupacion y
+     las dos tablas) se meten en un contenedor que se desliza en horizontal.
+     Se envuelven una sola vez, la primera vez que se entra a movil. */
+  function envolver(){
+    if(envuelto) return;
+    envuelto = true;
+    const anchas = [
+      [document.getElementById("wave"), "Desliza para ver el proceso completo", document.getElementById("board")],
+      [document.querySelector("#s5 .marco"), "Desliza para ver las cuatro catorcenas"],
+      [document.querySelector(".mtx"), "Desliza para ver todas las columnas"],
+      [document.querySelector(".lic"), "Desliza para comparar las tres licencias"],
+    ];
+    anchas.forEach(([el, nota, tras]) => {
+      if(!el || el.parentElement.classList.contains("desliza")) return;
+      const caja = document.createElement("div");
+      caja.className = "desliza";
+      el.parentNode.insertBefore(caja, el);
+      caja.appendChild(el);
+      const pie = document.createElement("p");
+      pie.className = "nota-desliza";
+      pie.textContent = nota;
+      // La nota va despues del bloque entero cuando se indica, para no quedar
+      // entre el dibujo y lo que lo acompana.
+      const ancla = tras || caja;
+      ancla.parentNode.insertBefore(pie, ancla.nextSibling);
+    });
+  }
+
+  /* En movil todas las laminas estan a la vista, asi que cada animacion
+     arranca cuando su lamina entra en pantalla, no al cambiar de lamina. */
+  function observar(){
+    if(vigia || !("IntersectionObserver" in window)) return;
+    const arranques = {
+      s1: () => drawCover(),
+      s3: () => runMorph(),
+      s5: () => runOcupa(),
+      sCon: () => runConex(),
+    };
+    vigia = new IntersectionObserver((entradas) => {
+      entradas.forEach(e => {
+        if(!e.isIntersecting) return;
+        const f = arranques[e.target.id];
+        if(f){ f(); vigia.unobserve(e.target); }
+      });
+    }, { threshold: .25 });
+    Object.keys(arranques).forEach(id => {
+      const el = document.getElementById(id);
+      if(el) vigia.observe(el);
+    });
+  }
+
+  function modo(m, porClic){
+    const movil = m === "movil";
+    document.body.classList.toggle("m", movil);
+    document.documentElement.classList.toggle("m", movil);
+    sw.querySelectorAll("button").forEach(b =>
+      b.setAttribute("aria-pressed", String(b.dataset.m === m)));
+    if(movil){
+      envolver();
+      clearTimeout(semT);                 // el mazo se vuelve lista: sin temporizador
+      document.querySelectorAll(".slide").forEach(s => s.classList.add("on"));
+      if(mnus.length) abreModulo(0);
+      observar();
+      drawCover();
+    } else {
+      if(vigia){ vigia.disconnect(); vigia = null; }
+      fit();
+      go(cur);                            // vuelve a la lamina en la que iba
+    }
+    if(porClic) window.scrollTo(0, 0);
+  }
+
+  sw.querySelectorAll("button").forEach(b =>
+    b.addEventListener("click", () => modo(b.dataset.m, true)));
+  modo(matchMedia("(max-width: 860px)").matches ? "movil" : "pc");
+})();
+
 /* ---------- arranque ---------- */
 const start = parseInt(location.hash.slice(1),10);
-go(isNaN(start) ? 0 : start-1);
+if(!document.body.classList.contains("m")) go(isNaN(start) ? 0 : start-1);
 })();
 </script>
 </body>
