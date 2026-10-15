@@ -813,6 +813,15 @@ body.m .cuerpo{margin:0}
 body.m .cuerpo ~ .foot{padding-top:22px}
 body.m #mswitch{top:auto;right:50%;bottom:14px;transform:translateX(50%)}
 
+/* Movil elegido desde una pantalla ancha: la columna se queda del ancho de un
+   telefono, centrada, en vez de estirar la version vertical a lo ancho. */
+@media (min-width:861px){
+  html.m,html.m body{background:#07040b}
+  body.m #stage{max-width:430px;margin:28px auto 96px;border:1px solid var(--line2);border-radius:30px;
+    box-shadow:0 30px 90px rgba(0,0,0,.6),0 0 0 8px rgba(23,15,34,.6)}
+  body.m #ticks{left:50%;right:auto;width:400px;top:6px;transform:translateX(-50%);border-radius:3px;overflow:hidden}
+}
+
 /* Tipografia */
 body.m h1{font-size:33px;line-height:1.05}
 body.m h2{font-size:24px;max-width:none}
