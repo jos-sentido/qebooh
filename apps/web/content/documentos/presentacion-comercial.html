@@ -785,6 +785,52 @@ h3{font-family:var(--disp);font-weight:700;letter-spacing:-.01em}
 
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
+
+/* Inventarios: como la pantalla real (indicadores, barra de herramientas, tabla
+   con actividad y estatus, e historial de campanas de la cara seleccionada). */
+.iv-top{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:8px}
+.iv-k{padding:7px 13px;border-radius:11px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)}
+.iv-k span{display:block;font-size:10.5px;color:var(--mu)}
+.iv-k b{display:block;margin-top:2px;font-size:22px;font-weight:300;color:#fff}
+.iv-k b em{font-style:normal;font-size:10px;color:#f0809f}
+.iv-k.nd b{color:#f0809f}
+.iv-k u{display:inline-block;margin-top:4px;font-size:9.5px;text-decoration:none;color:var(--mu2)}
+.iv-k:first-child u{padding:1px 8px;border-radius:999px;border:1px solid var(--line2)}
+.iv-k .sk-prog{margin-top:6px;height:4px}
+.iv-tool{display:flex;gap:6px;align-items:center;margin-bottom:8px}
+.iv-tool span{flex:none;padding:5px 10px;border-radius:8px;font-size:10.5px;color:var(--tx);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);white-space:nowrap}
+.iv-tool .q{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;color:var(--mu2)}
+.iv-tool .on{background:rgba(120,96,240,.22);border-color:rgba(120,96,240,.5)}
+.iv-tool .cm{background:rgba(240,156,48,.9);border-color:transparent;color:#1b1206;font-weight:600}
+.iv-tool .nv{background:var(--grad);border-color:transparent;color:#fff;font-weight:600}
+.iv-split{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:10px;flex:1;min-height:0}
+.iv-tabla{display:flex;flex-direction:column;min-width:0;border-radius:11px;border:1px solid rgba(255,255,255,.06);overflow:hidden}
+.iv-r{display:grid;grid-template-columns:92px 54px minmax(0,1.4fr) 70px 70px 72px 76px 76px;gap:8px;align-items:center;padding:4px 11px;font-size:10.5px;color:var(--tx);border-top:1px solid rgba(255,255,255,.05)}
+.iv-r span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.iv-r .k{font-family:var(--mono);font-size:10.5px}
+.iv-r .u{color:var(--mu)}
+.iv-hd{border-top:0;background:rgba(120,96,240,.10);font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}
+.iv-r.sel{background:rgba(120,96,240,.10);box-shadow:inset 3px 0 0 var(--brand)}
+.iv-r.off{opacity:.42}
+.iv-p{justify-self:start;padding:1px 8px;border-radius:999px;font-size:9.5px;border:1px solid}
+.iv-p.disp{color:#7ee0a6;border-color:rgba(126,224,166,.4);background:rgba(126,224,166,.08)}
+.iv-p.ocu{color:#8fb4ff;border-color:rgba(143,180,255,.45);background:rgba(143,180,255,.10)}
+.iv-p.act{color:#7ee0a6;border-color:rgba(126,224,166,.3)}
+.iv-p.blo{color:#f0809f;border-color:rgba(240,128,159,.45);background:rgba(240,128,159,.10)}
+.iv-hist{display:flex;flex-direction:column;gap:5px;min-width:0;padding:8px 10px;overflow:hidden;border-radius:11px;background:rgba(120,96,240,.07);border:1px solid rgba(120,96,240,.3)}
+.iv-hh b{display:block;font-size:12px;color:#fff}
+.iv-hh span{display:block;margin-top:1px;font-family:var(--mono);font-size:9.5px;color:var(--mu)}
+.iv-tabs{display:flex;gap:12px;font-size:10.5px;color:var(--mu2);border-bottom:1px solid rgba(255,255,255,.07);padding-bottom:4px}
+.iv-tabs .on{color:var(--lilac);box-shadow:0 5px 0 -3px var(--lilac)}
+.iv-c{padding:5px 9px;border-radius:9px;background:rgba(13,8,20,.5);border:1px solid rgba(255,255,255,.06)}
+.iv-c .h{display:flex;align-items:center;gap:7px}
+.iv-c .h b{font-family:var(--mono);font-size:10px;color:var(--lilac)}
+.iv-c p{margin-top:2px;font-size:11px;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.iv-c em{display:inline-block;margin-top:1px;font-style:normal;font-family:var(--mono);font-size:9.5px;color:var(--cyan)}
+.iv-t{padding:0 7px;border-radius:999px;font-size:9px;border:1px solid}
+.iv-t.v{color:#7ee0a6;border-color:rgba(126,224,166,.4)}
+.iv-t.a{color:var(--mu);border-color:var(--line2)}
+
 /* ===================== MODO MOVIL =====================
    La version de PC es un escenario fijo de 1600x900 escalado; la movil es el
    mismo contenido en vertical, lamina tras lamina, con scroll normal. No es
@@ -948,6 +994,19 @@ body.m .bu-h,body.m .bu-r{grid-template-columns:minmax(0,1fr) 68px;gap:8px}
 body.m .bu-h span:nth-child(n+3),body.m .bu-r span:nth-child(n+3){display:none}
 body.m .sk-chat .m{max-width:92%;font-size:13px}
 body.m .sk-ficha .f{font-size:11.5px}
+
+
+/* Inventarios en movil: indicadores lado a lado, herramientas en fila corta,
+   tabla con codigo, cara y estados, e historial debajo */
+body.m .iv-top{grid-template-columns:1fr 1fr !important}
+body.m .iv-k b{font-size:18px}
+body.m .iv-tool{flex-wrap:wrap}
+body.m .iv-tool span:not(.q):not(.cm):not(.nv){display:none}
+body.m .iv-tool .q{flex-basis:100%}
+body.m .iv-split{display:block}
+body.m .iv-r{grid-template-columns:minmax(0,1fr) 78px 70px;gap:6px;padding:6px 9px}
+body.m .iv-r > span:nth-child(2),body.m .iv-r > span:nth-child(3),body.m .iv-r > span:nth-child(4),body.m .iv-r > span:nth-child(5),body.m .iv-r > span:nth-child(6){display:none}
+body.m .iv-hist{margin-top:10px}
 
 /* 8 dos sistemas: los tres bloques en vertical y sin la ruta */
 body.m .conex{display:block}
@@ -1389,9 +1448,9 @@ body.m #sEnd .sign{margin-top:26px;font-size:13px}
       <p class="marco-pie">Ilustraci&oacute;n con datos de ejemplo</p>
     </div>
     <div class="pane" data-p="6">
-      <div class="pane-h"><h3>Inventarios</h3><p>Cada cara con su código, su plaza y su estado. Lo que se aparta aquí, se aparta para todos.</p><ul class="pane-chips"><li>Flujo y contraflujo</li><li>Cortesías y reservas</li><li>Carga y descarga por CSV</li></ul></div>
-      <figure class="marco"><div class="marco-h"><i></i><i></i><i></i><span>QEB &middot; Inventarios / Buscar inventario</span></div>
-        <div class="marco-b"><div class="sk-ubi"><b>Columna · Zona Centro</b><div class="sk-cort"><div class="d"><span>Distribución</span><b>50</b><u>50 / 50</u></div><div class="c"><span><i></i>Cortesía flujo</span><b>0 / 6</b><div class="sk-prog"><i style="width:0"></i></div><u>6 restantes</u></div><div class="c"><span><i></i>Cortesía contraflujo</span><b>0 / 5</b><div class="sk-prog"><i style="width:0"></i></div><u>5 restantes</u></div><div class="s"><b>0</b><span>seleccionados</span></div></div></div><div class="sk-tabs"><span class="on">Buscar disponibles</span><span class="">Mis reservados</span></div><div class="sk-filtros"><span class="az">Todos</span><span>Flujo</span><span>Contraflujo</span><span class="sep"></span><span>Completos</span><span>Únicos</span><span>Agrupar</span><span>Subir CSV</span></div><ul class="sk-rows"><li><span class="c1">Columna033A</span><span class="c2">Zona Centro</span><span class="c3">Flujo · 1.21 × 1.77 m</span><span class="pill p-ok">Libre</span></li><li><span class="c1">Columna033B</span><span class="c2">Zona Centro</span><span class="c3">Contraflujo</span><span class="pill p-ok">Libre</span></li><li><span class="c1">Columna047A</span><span class="c2">Zona Centro</span><span class="c3">Flujo</span><span class="pill p-esp">Reservado</span></li></ul></div></figure>
+      <div class="pane-h"><h3>Inventarios</h3><p>Cada cara con su código, su plaza y su estado. Lo que se aparta aquí, se aparta para todos.</p><ul class="pane-chips"><li>Historial de campañas por cara</li><li>Bloqueo y ocultos</li><li>Carga masiva por CSV</li></ul></div>
+      <figure class="marco"><div class="marco-h"><i></i><i></i><i></i><span>QEB &middot; Inventarios</span></div>
+        <div class="marco-b"><div class="iv-top"><div class="iv-k"><span>Total inventarios</span><b class="num">12,480</b><u>Todos</u></div><div class="iv-k nd"><span>No disponibles</span><b class="num">26 <em>ocultos</em></b><div class="sk-prog"><i style="width:.2%"></i></div><u>Activos: 12,454</u></div></div><div class="iv-tool"><span class="q">Buscar código, ubicación, municipio…</span><span>Filtros</span><span class="on">Tabla</span><span>Descargar CSV</span><span>Análisis ▾</span><span>Bloqueo ▾</span><span class="cm">Carga masiva</span><span class="nv">+ Nuevo inventario</span></div><div class="iv-split"><div class="iv-tabla"><div class="iv-r iv-hd"><span>Código</span><span>Mueble</span><span class="u">Ubicación</span><span>Plaza</span><span>Cara</span><span>Medidas</span><span>Actividad</span><span>Estatus</span></div><div class="iv-r"><span class="k">Parabus042A</span><span>Parabús</span><span class="u">Av. Central · Esq. Hidalgo</span><span>Monterrey</span><span>Flujo</span><span class="num">1.21×1.77 m</span><span class="iv-p disp">Disponible</span><span class="iv-p act">Activo</span></div><div class="iv-r sel"><span class="k">Parabus042B</span><span>Parabús</span><span class="u">Av. Central · Esq. Hidalgo</span><span>Monterrey</span><span>Contraflujo</span><span class="num">1.21×1.77 m</span><span class="iv-p ocu">Ocupado</span><span class="iv-p act">Activo</span></div><div class="iv-r"><span class="k">Parabus088A</span><span>Parabús</span><span class="u">Blvd. Norte · Glorieta Juárez</span><span>Monterrey</span><span>Flujo</span><span class="num">1.21×1.77 m</span><span class="iv-p disp">Disponible</span><span class="iv-p act">Activo</span></div><div class="iv-r"><span class="k">Parabus114A</span><span>Parabús</span><span class="u">Av. del Parque · Fte. Universidad</span><span>Monterrey</span><span>Flujo</span><span class="num">1.21×1.77 m</span><span class="iv-p ocu">Ocupado</span><span class="iv-p act">Activo</span></div><div class="iv-r off"><span class="k">Parabus114B</span><span>Parabús</span><span class="u">Av. del Parque · Fte. Universidad</span><span>Monterrey</span><span>Contraflujo</span><span class="num">1.21×1.77 m</span><span class="iv-p disp">Disponible</span><span class="iv-p blo">Bloqueado</span></div><div class="iv-r"><span class="k">Parabus126A</span><span>Parabús</span><span class="u">Calz. Independencia · Mercado</span><span>Monterrey</span><span>Flujo</span><span class="num">1.21×1.77 m</span><span class="iv-p disp">Disponible</span><span class="iv-p act">Activo</span></div></div><div class="iv-hist"><div class="iv-hh"><b>Historial de la cara</b><span>Parabus042B · Contraflujo</span></div><div class="iv-tabs"><span class="on">Campañas</span><span>Acciones</span></div><div class="iv-c"><div class="h"><b>#104218</b><span class="iv-t v">Vendido</span></div><p>Hidratación Verano</p><em>09-nov — 22-nov</em></div><div class="iv-c"><div class="h"><b>#103960</b><span class="iv-t a">Con arte</span></div><p>Lanzamiento Occidente</p><em>26-oct — 08-nov</em></div><div class="iv-c"><div class="h"><b>#103802</b><span class="iv-t v">Vendido</span></div><p>Cobertura anual</p><em>12-oct — 25-oct</em></div></div></div></div></figure>
       <p class="marco-pie">Ilustraci&oacute;n con datos de ejemplo</p>
     </div>
     <div class="pane" data-p="7">
