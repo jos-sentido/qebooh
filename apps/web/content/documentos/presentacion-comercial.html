@@ -103,12 +103,28 @@ h3{font-family:var(--disp);font-weight:700;letter-spacing:-.01em}
 #chrome{position:absolute;left:110px;right:110px;bottom:36px;display:flex;align-items:center;justify-content:space-between;z-index:6;pointer-events:none}
 #chrome .logo{height:28px;opacity:.8;transition:opacity .3s}
 #chrome.bare .logo{opacity:0}
-#nav{display:flex;align-items:center;gap:13px;pointer-events:auto}
-#nav button{width:42px;height:42px;border-radius:50%;border:1px solid var(--line2);background:transparent;cursor:pointer;display:grid;place-items:center;transition:background .2s,border-color .2s}
+#nav{display:flex;align-items:center;gap:16px;pointer-events:auto}
+#nav button{width:60px;height:60px;border-radius:50%;border:1.5px solid var(--line2);background:rgba(23,15,34,.55);cursor:pointer;display:grid;place-items:center;transition:background .2s,border-color .2s,transform .15s}
+#nav button:active{transform:scale(.94)}
 #nav button:hover{background:var(--surf2);border-color:var(--lilac)}
 #nav button:focus-visible{outline:2px solid var(--lilac);outline-offset:3px}
-#nav svg{width:17px;height:17px;stroke:var(--tx);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-#count{font-family:var(--mono);font-size:14px;color:var(--mu);min-width:62px;text-align:center}
+#nav svg{width:24px;height:24px;stroke:var(--tx);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#count{font-family:var(--mono);font-size:19px;color:var(--tx);min-width:86px;text-align:center}
+
+/* Flechas laterales: fuera del escenario, del tamano de la ventana, para
+   avanzar o regresar con un clic desde cualquier lado. Translucidas hasta
+   que el cursor se acerca. Solo en PC. */
+.lado{position:fixed;top:50%;z-index:80;width:64px;height:64px;margin-top:-32px;border-radius:50%;
+  border:1px solid rgba(185,166,255,.28);background:rgba(23,15,34,.38);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  display:grid;place-items:center;cursor:pointer;opacity:.4;transition:opacity .25s,background .2s,border-color .2s,transform .15s}
+.lado svg{width:28px;height:28px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lado:hover,.lado:focus-visible{opacity:1;background:rgba(120,96,240,.45);border-color:var(--lilac);outline:none}
+.lado:active{transform:scale(.94)}
+#ladoIzq{left:18px}
+#ladoDer{right:18px}
+.lado.fuera{opacity:0;pointer-events:none}
+body.m .lado{display:none}
+@media (hover:none){.lado{opacity:.55}}
 #ticks{position:absolute;left:0;right:0;top:0;height:3px;display:flex;gap:3px;z-index:6}
 #ticks i{flex:1;background:rgba(185,166,255,.12);transition:background .3s}
 #ticks i.done{background:var(--brand)}
@@ -1142,6 +1158,8 @@ body.m #sEnd .sign{margin-top:26px;font-size:13px}
   <button data-m="pc" aria-pressed="true"><svg viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="13" rx="2"/><path d="M8 21h8"/></svg>PC</button>
   <button data-m="movil" aria-pressed="false"><svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>Móvil</button>
 </div>
+<button class="lado" id="ladoIzq" type="button" aria-label="Lámina anterior"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+<button class="lado" id="ladoDer" type="button" aria-label="Lámina siguiente"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
 <div id="viewport">
 <main id="stage" aria-live="polite">
 <div id="ticks" aria-hidden="true"></div>
@@ -1711,6 +1729,8 @@ function go(i){
   document.getElementById("count").textContent = (cur+1)+" / "+slides.length;
   const id = slides[cur].id;
   chrome.classList.toggle("bare", id==="s1" || id==="sEnd");
+  document.getElementById("ladoIzq").classList.toggle("fuera", cur === 0);
+  document.getElementById("ladoDer").classList.toggle("fuera", cur === slides.length - 1);
   history.replaceState(null,"","#"+(cur+1));
   if(typeof semT !== "undefined") clearTimeout(semT);
   if(id==="s1") drawCover();
@@ -1722,6 +1742,34 @@ function go(i){
 }
 document.getElementById("prev").onclick = ()=>go(cur-1);
 document.getElementById("next").onclick = ()=>go(cur+1);
+document.getElementById("ladoIzq").onclick = e=>{ e.stopPropagation(); go(cur-1); };
+document.getElementById("ladoDer").onclick = e=>{ e.stopPropagation(); go(cur+1); };
+
+/* ---------- swipe ----------
+   En PC (pantallas tactiles) un swipe lateral cambia de lamina. En movil el
+   scroll vertical sigue siendo del navegador y el swipe lateral salta a la
+   lamina siguiente o anterior. No se toma el gesto si empieza dentro de algo
+   que ya se desliza de lado (la tira de modulos) o sobre un boton. */
+(function(){
+  let x0 = 0, y0 = 0, t0 = 0, activo = false;
+  const ignora = el => el.closest && el.closest(".app-nav, .desliza, button, a, input, #mswitch");
+  addEventListener("touchstart", e => {
+    if(e.touches.length !== 1 || ignora(e.target)) { activo = false; return; }
+    activo = true; x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; t0 = Date.now();
+  }, { passive: true });
+  addEventListener("touchend", e => {
+    if(!activo) return; activo = false;
+    const t = e.changedTouches[0], dx = t.clientX - x0, dy = t.clientY - y0;
+    if(Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy) * 1.5 || Date.now() - t0 > 900) return;
+    const paso = dx < 0 ? 1 : -1;
+    if(!document.body.classList.contains("m")) { go(cur + paso); return; }
+    // movil: la lamina actual es la que ocupa la parte alta de la pantalla
+    const tops = slides.map(s => s.getBoundingClientRect().top);
+    let i = 0; tops.forEach((y, k) => { if(y <= innerHeight * .35) i = k; });
+    const j = Math.max(0, Math.min(slides.length - 1, i + paso));
+    if(j !== i) slides[j].scrollIntoView({ behavior: "smooth", block: "start" });
+  }, { passive: true });
+})();
 addEventListener("keydown", e=>{
   if(document.body.classList.contains("m")) return;   // en movil el scroll es del navegador
   if(["ArrowRight","PageDown"].includes(e.key) || e.key===" "){ e.preventDefault(); go(cur+1); }
