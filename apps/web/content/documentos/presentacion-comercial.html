@@ -175,7 +175,7 @@ body.m .lado{display:none}
 .sem-izq h2{font-size:46px;max-width:400px}
 .sem-izq .lead{font-size:19px;line-height:1.55;max-width:395px;margin-top:20px}
 
-.cont{margin-top:36px;max-width:330px}
+.cont{margin-top:36px;max-width:400px}
 .cont-n{display:flex;align-items:center;gap:10px;font-family:var(--disp);font-weight:800;text-transform:uppercase;color:#fff}
 .cont-n #semN{font-size:30px;line-height:1}
 .cont-n .tot{font-size:15px;color:var(--mu)}
@@ -183,6 +183,12 @@ body.m .lado{display:none}
   border:1px solid var(--line2);background:transparent;font-family:"Barlow",sans-serif;font-size:11.5px;font-weight:600;
   letter-spacing:.14em;text-transform:uppercase;color:#fff;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .3s,border-color .2s,background .2s}
 #semReplay.on{opacity:1;pointer-events:auto}
+/* anterior / siguiente del mazo */
+.sem-nav{display:inline-flex;gap:8px;margin-left:14px}
+.sem-nav button{width:36px;height:36px;border-radius:50%;border:1px solid var(--line2);background:rgba(23,15,34,.6);cursor:pointer;display:grid;place-items:center;transition:background .2s,border-color .2s,opacity .2s}
+.sem-nav button:hover{background:var(--surf2);border-color:var(--lilac)}
+.sem-nav button:disabled{opacity:.3;cursor:default}
+.sem-nav svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 #semReplay:hover{border-color:var(--brand2);background:var(--surf2)}
 .cont .barra{display:block;height:4px;background:rgba(255,255,255,.1);margin-top:15px}
 .cont .barra i{display:block;height:100%;background:var(--grad);width:16.6%;transition:width .5s ease}
@@ -1211,7 +1217,8 @@ body.m #sEnd .sign{margin-top:26px;font-size:13px}
       <h2>Una semana cualquiera.</h2>
       <p class="lead">La publicidad exterior se vende r&aacute;pido y se opera en la calle. Pero detr&aacute;s, casi siempre, hay hojas de c&aacute;lculo, correos y la memoria de alguien.</p>
       <div class="cont">
-        <div class="cont-n"><span class="num" id="semN">01</span><span class="num tot">/ 06</span>
+        <div class="cont-n"><span class="num" id="semN">01</span><span class="num tot">/ 07</span>
+          <span class="sem-nav"><button id="semPrev" type="button" aria-label="Tarjeta anterior"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button><button id="semNext" type="button" aria-label="Tarjeta siguiente"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button></span>
           <button id="semReplay" type="button" aria-label="Volver a la primera">&uarr; A la 1</button>
         </div>
         <span class="barra"><i id="semBar"></i></span>
@@ -1311,6 +1318,21 @@ body.m #sEnd .sign{margin-top:26px;font-size:13px}
             <div class="res">
               <span class="bart">QEB Inteligencia</span>
               <span class="sol"><b>Ocupación estratégica</b><i>&rarr;</i></span>
+            </div>
+          </div>
+        </article>
+      </li>
+      <li class="carta" style="--k:6">
+        <article>
+          <div class="oscuro">
+            <div class="quien"><span class="icirc sm"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4M12 13.5v2.5l1.8 1"/></svg></span><p>Un mes después<br><span>Dirección</span></p></div>
+            <h3>&ldquo;¿Cómo vamos de ocupación?&rdquo;</h3>
+          </div>
+          <div class="claro">
+            <p class="hist">La respuesta tarda casi 30 días en llegar, cuando por fin cuadra el reporte. Para entonces ya es tarde para accionar.</p>
+            <div class="res">
+              <span class="bart">QEB Inteligencia</span>
+              <span class="sol"><b>Ocupación al momento</b><i>&rarr;</i></span>
             </div>
           </div>
         </article>
@@ -1751,17 +1773,19 @@ document.getElementById("ladoDer").onclick = e=>{ e.stopPropagation(); go(cur+1)
    lamina siguiente o anterior. No se toma el gesto si empieza dentro de algo
    que ya se desliza de lado (la tira de modulos) o sobre un boton. */
 (function(){
-  let x0 = 0, y0 = 0, t0 = 0, activo = false;
+  let x0 = 0, y0 = 0, t0 = 0, activo = false, enMazo = false;
   const ignora = el => el.closest && el.closest(".app-nav, .desliza, button, a, input, #mswitch");
   addEventListener("touchstart", e => {
     if(e.touches.length !== 1 || ignora(e.target)) { activo = false; return; }
     activo = true; x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; t0 = Date.now();
+    enMazo = !!(e.target.closest && e.target.closest("#mazo"));
   }, { passive: true });
   addEventListener("touchend", e => {
     if(!activo) return; activo = false;
     const t = e.changedTouches[0], dx = t.clientX - x0, dy = t.clientY - y0;
     if(Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy) * 1.5 || Date.now() - t0 > 900) return;
     const paso = dx < 0 ? 1 : -1;
+    if(enMazo) { semIr(paso); return; }                 // sobre el mazo, el swipe mueve las tarjetas
     if(!document.body.classList.contains("m")) { go(cur + paso); return; }
     // movil: la lamina actual es la que ocupa la parte alta de la pantalla
     const tops = slides.map(s => s.getBoundingClientRect().top);
@@ -2037,6 +2061,8 @@ function pintaSemana(){
     c.inert = i !== semI;
   });
   semN.textContent = String(semI + 1).padStart(2, "0");
+  document.getElementById("semPrev").disabled = semI === 0;
+  document.getElementById("semNext").disabled = semI === cartas.length - 1;
   semBar.style.width = ((semI + 1) / cartas.length * 100) + "%";
   semReplay.classList.toggle("on", semI > 0);
 }
@@ -2057,8 +2083,18 @@ function runSemana(){
   pintaSemana();
   programaSemana();
 }
+/* Navegacion a mano: en cuanto la persona mueve el mazo, el avance
+   automatico se detiene para no quitarle la tarjeta que esta leyendo. */
+function semIr(paso){
+  clearTimeout(semT);
+  const j = Math.max(0, Math.min(cartas.length - 1, semI + paso));
+  if(j === semI) return;
+  semI = j; pintaSemana();
+}
 if(mazo){
-  mazo.addEventListener("click", e => { e.stopPropagation(); avanzaSemana(); });
+  mazo.addEventListener("click", e => { e.stopPropagation(); semIr(1); });
+  document.getElementById("semPrev").addEventListener("click", e => { e.stopPropagation(); semIr(-1); });
+  document.getElementById("semNext").addEventListener("click", e => { e.stopPropagation(); semIr(1); });
   semReplay.addEventListener("click", e => { e.stopPropagation(); runSemana(); });
 }
 
