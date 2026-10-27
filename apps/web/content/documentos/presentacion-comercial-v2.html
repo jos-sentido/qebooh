@@ -838,20 +838,31 @@ body.m .lado{display:none}
 .bq-lista button[aria-pressed="true"] .cx{background:var(--cyan);border-color:var(--cyan)}
 .bq-lista button[aria-pressed="true"] .cx::after{content:"";position:absolute;left:7px;top:2.5px;width:6px;height:11px;
   border:solid #0d0814;border-width:0 2.6px 2.6px 0;transform:rotate(45deg)}
-.bq-res{border-radius:22px;padding:30px 32px;background:linear-gradient(160deg,rgba(120,96,240,.24),rgba(120,96,240,.06));
-  border:1px solid var(--brand);min-height:100%;display:flex;flex-direction:column}
+.bq-res{border-radius:22px;padding:26px 30px;background:linear-gradient(160deg,rgba(120,96,240,.24),rgba(120,96,240,.06));
+  border:1px solid var(--brand);display:flex;flex-direction:column}
 .bq-t{font-family:var(--mono);font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--lilac)}
-.bq-n{display:flex;align-items:baseline;gap:10px;margin-top:8px;color:var(--mu);font-size:16px}
-.bq-n b{font-family:var(--disp);font-size:40px;font-weight:800;color:#fff}
-#bqSol{list-style:none;display:grid;gap:9px;margin-top:14px}
-#bqSol li{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:16.5px;font-weight:500;
-  padding:10px 14px;border-radius:12px;background:rgba(13,8,20,.45);animation:bqIn .35s ease both}
-#bqSol li span{flex:none;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;border-radius:999px}
-#bqSol li span.op{background:rgba(90,204,234,.14);color:var(--cyan)}
-#bqSol li span.in{background:rgba(192,69,216,.16);color:var(--mag)}
+.bq-score{display:grid;grid-template-columns:118px minmax(0,1fr);align-items:center;gap:22px;margin-top:14px;position:relative}
+.bq-anillo{width:118px;height:118px;transform:rotate(-90deg)}
+.bq-anillo circle{fill:none;stroke-width:11}
+.bq-anillo .bg{stroke:rgba(255,255,255,.08)}
+.bq-anillo .arc{stroke:url(#bqG);stroke-linecap:round;stroke-dasharray:314.16;stroke-dashoffset:314.16;transition:stroke-dashoffset .8s cubic-bezier(.2,.8,.2,1)}
+#bqPct{position:absolute;left:0;top:50%;width:118px;transform:translateY(-50%);text-align:center;font-family:var(--disp);font-size:34px;font-weight:800;color:#fff}
+#bqPct small{font-size:18px;margin-left:1px;color:var(--lilac)}
+.bq-nivel b{display:block;font-family:var(--disp);font-size:21px;font-weight:800;text-transform:uppercase;color:#fff;line-height:1.1}
+.bq-nivel span{display:block;margin-top:6px;font-size:14.5px;font-weight:300;line-height:1.42;color:var(--mu)}
+.bq-perfil{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.bq-perfil p{padding:10px 13px;border-radius:12px;background:rgba(13,8,20,.45);border:1px solid rgba(255,255,255,.06)}
+.bq-perfil span{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mu2)}
+.bq-perfil b{display:block;margin-top:4px;font-size:14.5px;font-weight:500;color:#fff;line-height:1.3}
+.bq-st{margin-top:16px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mu2)}
+#bqSol{list-style:none;display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+#bqSol li{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:500;padding:6px 11px;border-radius:999px;
+  background:rgba(13,8,20,.45);border:1px solid rgba(255,255,255,.07);animation:bqIn .35s ease both}
+#bqSol li i{width:7px;height:7px;border-radius:50%}
+#bqSol li i.op{background:var(--cyan)}#bqSol li i.in{background:var(--mag)}
+#bqSol li.vacio{font-weight:300;color:var(--mu2);border-style:dashed}
 @keyframes bqIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.bq-vacio{margin-top:14px;font-size:16px;font-weight:300;color:var(--mu);line-height:1.45}
-.bq-pie{margin-top:auto;padding-top:16px;font-size:14.5px;font-weight:300;color:var(--mu);line-height:1.45}
+.bq-pie{margin-top:auto;padding-top:16px;font-size:14px;font-weight:300;color:var(--mu);line-height:1.45}
 
 body.m .cov-sub{font-size:15px;margin-top:12px}
 body.m .t30{flex-direction:column;align-items:flex-start;gap:12px;margin:22px 0 0}
@@ -874,9 +885,16 @@ body.m .bq-lista button{font-size:14px;padding:12px 14px;gap:12px;border-radius:
 body.m .bq-lista button .cx{width:22px;height:22px;border-radius:7px}
 body.m .bq-lista button[aria-pressed="true"] .cx::after{left:5.5px;top:1.5px}
 body.m .bq-res{padding:18px;border-radius:18px}
-body.m .bq-n b{font-size:30px}
-body.m #bqSol li{font-size:13.5px;padding:8px 11px}
-body.m .bq-vacio,body.m .bq-pie{font-size:13px}
+body.m .bq-score{grid-template-columns:92px minmax(0,1fr);gap:14px}
+body.m .bq-anillo{width:92px;height:92px}
+body.m #bqPct{width:92px;font-size:26px}
+body.m #bqPct small{font-size:14px}
+body.m .bq-nivel b{font-size:16px}
+body.m .bq-nivel span{font-size:12.5px}
+body.m .bq-perfil{grid-template-columns:minmax(0,1fr)}
+body.m .bq-perfil b{font-size:13px}
+body.m #bqSol li{font-size:12px;padding:5px 10px}
+body.m .bq-pie{font-size:12.5px}
 
 
 /* ============ 8 · QEB Inteligencia como sistema ============ */
@@ -1800,11 +1818,22 @@ body.m #sEnd .sign{margin-top:26px;font-size:13px}
       <ul class="bq-lista" id="bqLista"></ul>
     </div>
     <aside class="bq-res" aria-live="polite">
-      <p class="bq-t">Tu punto de partida</p>
-      <p class="bq-n"><b class="num" id="bqN">0</b><span id="bqNl">dolores marcados</span></p>
-      <ul id="bqSol"></ul>
-      <p class="bq-vacio" id="bqVacio">Marca lo que te pasa y aquí aparece qué resuelve QEB en tu caso.</p>
-      <p class="bq-pie">Lo revisamos a fondo en una sesión de 45 minutos, antes del demo con tu propio inventario.</p>
+      <p class="bq-t">Índice de ajuste con QEB</p>
+      <div class="bq-score">
+        <svg class="bq-anillo" viewBox="0 0 120 120" aria-hidden="true">
+          <defs><linearGradient id="bqG" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#5accea"/><stop offset=".55" stop-color="#9c60f0"/><stop offset="1" stop-color="#c045d8"/></linearGradient></defs>
+          <circle class="bg" cx="60" cy="60" r="50"/><circle class="arc" id="bqArc" cx="60" cy="60" r="50"/>
+        </svg>
+        <b class="num" id="bqPct">0<small>%</small></b>
+        <div class="bq-nivel"><b id="bqNivel">Empecemos</b><span id="bqDesc">Marca lo que hoy te pasa y aquí vemos qué tanto se ajusta QEB a tu operación.</span></div>
+      </div>
+      <div class="bq-perfil" id="bqPerfil">
+        <p><span>Tu propuesta parte de</span><b id="bqLic">&mdash;</b></p>
+        <p><span>Áreas a personalizar</span><b id="bqAreas">&mdash;</b></p>
+      </div>
+      <p class="bq-st">Lo que resolvemos primero</p>
+      <ul id="bqSol"><li class="vacio">Aparece conforme marcas</li></ul>
+      <p class="bq-pie">Con esto ya empezamos a armar tu propuesta: lo afinamos en una sesión de 45 minutos y después lo vemos con tu propio inventario.</p>
     </aside>
   </div>
 </section>
@@ -2636,25 +2665,52 @@ const BUSCA = [
     });
     tabs.forEach((t, k) => { t.classList.toggle("on", k === area); t.setAttribute("aria-selected", String(k === area)); });
   }
+  /* El indice no es un conteo: crece rapido con los primeros dolores y suma
+     cuando el dolor toca a varias areas, porque ahi es donde un solo sistema
+     cambia la operacion. Nunca llega a 100. */
+  const AREAS_N = ["Comercial", "Operación", "Administración", "Dirección"];
+  const NIVELES = [
+    [0,  "Empecemos", "Marca lo que hoy te pasa y aquí vemos qué tanto se ajusta QEB a tu operación."],
+    [1,  "Ajuste puntual", "Lo que marcaste QEB lo resuelve desde el primer día."],
+    [45, "Ajuste alto", "Varias áreas ganan con un mismo dato. Aquí QEB cambia cómo operas."],
+    [75, "Ajuste total", "Lo que hoy te duele es justo lo que QEB resuelve, de punta a punta."],
+  ];
+  let pctVisto = 0, pctRaf = null;
   function pintaRes(){
     const n = marcado.filter(Boolean).length;
-    document.getElementById("bqN").textContent = n;
-    document.getElementById("bqNl").textContent = n === 1 ? "dolor marcado" : "dolores marcados";
-    document.getElementById("bqVacio").style.display = n ? "none" : "";
+    const areas = AREAS_N.filter((a, k) => marcado.slice(k * 3, k * 3 + 3).some(Boolean));
+    const x = n * .22 + Math.max(0, areas.length - 1) * .12;
+    const pct = n ? Math.min(98, Math.round(100 * (1 - Math.exp(-x)))) : 0;
+    document.getElementById("bqArc").style.strokeDashoffset = (314.16 * (1 - pct / 100)).toFixed(1);
+    const el = document.getElementById("bqPct"), de = pctVisto, t0 = performance.now();
+    cancelAnimationFrame(pctRaf);
+    pctRaf = requestAnimationFrame(function paso(now){
+      const k = Math.min(1, (now - t0) / 700), v = Math.round(de + (pct - de) * (1 - Math.pow(1 - k, 3)));
+      el.innerHTML = v + "<small>%</small>";
+      if(k < 1) pctRaf = requestAnimationFrame(paso);
+    });
+    pctVisto = pct;
+    const nv = NIVELES.filter(l => pct >= l[0]).pop();
+    document.getElementById("bqNivel").textContent = nv[1];
+    document.getElementById("bqDesc").textContent = nv[2];
+    const conInt = BUSCA.some((q, i) => marcado[i] && q[2] === "in");
+    document.getElementById("bqLic").textContent = !n ? "\u2014" :
+      conInt ? "Operación + Inteligencia · desde Professional" : "QEB Operación · desde Starter";
+    document.getElementById("bqAreas").textContent = areas.length ? areas.join(", ") : "\u2014";
     const ul = document.getElementById("bqSol");
     const ya = new Set([...ul.children].map(li => li.dataset.s));
     const sols = [];
     BUSCA.forEach((q, i) => { if(marcado[i] && !sols.some(x => x[1] === q[1])) sols.push(q); });
-    ul.innerHTML = "";
+    ul.innerHTML = sols.length ? "" : '<li class="vacio">Aparece conforme marcas</li>';
     sols.forEach(q => {
       const li = document.createElement("li");
       li.dataset.s = q[1];
       if(ya.has(q[1])) li.style.animation = "none";
-      li.textContent = q[1];
-      const t = document.createElement("span");
+      const t = document.createElement("i");
       t.className = q[2];
-      t.textContent = q[2] === "op" ? "Operación" : "Inteligencia";
-      li.appendChild(t); ul.appendChild(li);
+      t.title = q[2] === "op" ? "QEB Operación" : "QEB Inteligencia";
+      li.appendChild(t); li.appendChild(document.createTextNode(q[1]));
+      ul.appendChild(li);
     });
     tabs.forEach((t, k) => {
       const c = marcado.slice(k * 3, k * 3 + 3).filter(Boolean).length;
