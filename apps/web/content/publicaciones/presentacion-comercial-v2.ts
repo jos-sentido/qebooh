@@ -8,8 +8,8 @@ import type { Publicacion } from "../tipos";
  *
  * Cambios frente a la primera: los dos sistemas antes de los módulos, una
  * lámina interactiva de "¿Qué estás buscando?" por área antes del precio,
- * licencias con precio base "desde", personalización en tres capas con el
- * compromiso de 30 días, comunicación interna entre las funciones y un cierre
+ * licencias con precio base "desde", personalización en tres capas con un
+ * plan de trabajo de hasta 90 días, comunicación interna entre las funciones y un cierre
  * hacia 2027.
  *
  * El comparativo contra la competencia es una lámina oculta: sólo aparece con
