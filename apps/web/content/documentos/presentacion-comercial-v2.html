@@ -2307,14 +2307,14 @@ bmnus.forEach((b, i) => b.addEventListener("click", e => { e.stopPropagation(); 
 if(bmnus.length) abreSeccion(0);
 /* ---------- lamina 2: la semana como mazo de cartas ----------
    Mismo comportamiento que historia-apilada.tsx del sitio, pero en vez de
-   scroll avanza sola cada 3.6 s; un clic en el mazo adelanta y el boton
+   scroll se navega a mano (flechas, clic o swipe); un clic en el mazo adelanta y el boton
    regresa a la primera. */
 const mazo = document.getElementById("mazo");
 const cartas = mazo ? [...mazo.children] : [];
 const semN = document.getElementById("semN");
 const semBar = document.getElementById("semBar");
 const semReplay = document.getElementById("semReplay");
-const SEM_PAUSA = 3600, ASOMAN = 3;
+const ASOMAN = 3;
 let semI = 0, semT = null;
 
 function pintaSemana(){
@@ -2342,22 +2342,12 @@ function pintaSemana(){
   semBar.style.width = ((semI + 1) / cartas.length * 100) + "%";
   semReplay.classList.toggle("on", semI > 0);
 }
-function avanzaSemana(){
-  if(semI >= cartas.length - 1){ clearTimeout(semT); return; }
-  semI++;
-  pintaSemana();
-  programaSemana();
-}
-function programaSemana(){
-  clearTimeout(semT);
-  if(semI < cartas.length - 1 && !matchMedia("(prefers-reduced-motion: reduce)").matches)
-    semT = setTimeout(avanzaSemana, SEM_PAUSA);
-}
+/* El mazo no avanza solo: quien presenta lo mueve con las flechas, un clic o
+   un swipe, para quedarse en cada tarjeta el tiempo que haga falta. */
 function runSemana(){
   clearTimeout(semT);
   semI = 0;
   pintaSemana();
-  programaSemana();
 }
 /* Navegacion a mano: en cuanto la persona mueve el mazo, el avance
    automatico se detiene para no quitarle la tarjeta que esta leyendo. */
