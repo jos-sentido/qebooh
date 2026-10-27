@@ -13,7 +13,8 @@ import type { Publicacion } from "../tipos";
  * hacia 2027.
  *
  * El comparativo contra la competencia es una lámina oculta: sólo aparece con
- * `?comparativo` en la URL (la liga de trabajo) o con la tecla C. La liga sin
+ * `?comparativo` en la URL (la liga de trabajo), con la tecla C o
+ * manteniendo presionado el logo 2 segundos (así se activa en móvil). La liga sin
  * parámetro es la que se entrega.
  *
  * Igual que la primera, es un HTML autocontenido —tipografías, logotipo y
