@@ -963,6 +963,26 @@ body.m .bi-ed .c3{display:none}
 body.m .bi-ley{display:none}
 body.m .app.bi .app-pie,body.m .app.bi .app-marca{display:none}
 
+
+/* ============ inventario: el dinero que se va de cada cara libre ============
+   Cuando la matriz ya entro, de cada celda disponible sube un "-$" que se
+   desvanece, en bucle y a destiempo: la cara libre es dinero que se pierde. */
+.oc-c.libre{position:relative}
+.oc-c.libre::before{content:"-$";position:absolute;right:16px;top:50%;pointer-events:none;opacity:0;
+  font-family:var(--mono);font-size:15px;font-weight:700;letter-spacing:.02em;color:#ff7a93;
+  text-shadow:0 0 12px rgba(255,90,120,.55);transform:translateY(-30%)}
+#ocupa.viva .oc-c.libre::before{animation:ocFuga 2.8s ease-out infinite;
+  animation-delay:calc(var(--c)*.26s + var(--r)*.035s + 1.5s + var(--r)*.53s + var(--c)*.31s)}
+#ocupa.viva .oc-c.libre{animation:ocPierde 2.8s ease-in-out infinite;
+  animation-delay:calc(var(--c)*.26s + var(--r)*.035s + 1.5s + var(--r)*.53s + var(--c)*.31s)}
+@keyframes ocFuga{0%{opacity:0;transform:translateY(-10%) scale(.8)}
+  18%{opacity:1;transform:translateY(-45%) scale(1)}
+  70%{opacity:.6}
+  100%{opacity:0;transform:translateY(-150%) scale(.95)}}
+@keyframes ocPierde{0%,100%{box-shadow:none}20%{box-shadow:inset 0 0 0 1px rgba(255,122,147,.45),0 0 18px -6px rgba(255,90,120,.6)}}
+body.m .oc-c.libre::before{font-size:11px;right:50%;margin-right:-8px;top:8px}
+@media (prefers-reduced-motion: reduce){#ocupa.viva .oc-c.libre::before,#ocupa.viva .oc-c.libre{animation:none}}
+
 /* ============ 15 · cierre ============ */
 /* Cierre: la banda de vidrio iridiscente del sitio (LlamadoFinal), con la
    onda del logo como tubo saliendo por el borde derecho. */
