@@ -125,6 +125,54 @@ h3{font-family:var(--disp);font-weight:700;letter-spacing:-.01em}
 .lado.fuera{opacity:0;pointer-events:none}
 body.m .lado{display:none}
 @media (hover:none){.lado{opacity:.55}}
+/* ============ indice: menu lateral de vidrio ============
+   Boton fijo arriba a la izquierda (fuera del escenario, funciona en PC y en
+   movil). El panel crece como circulo desde el boton, encima de la lamina. */
+#menuBtn{position:fixed;top:16px;left:16px;z-index:97;width:52px;height:52px;border-radius:16px;cursor:pointer;
+  border:1px solid rgba(185,166,255,.32);background:rgba(40,24,64,.42);backdrop-filter:blur(12px) saturate(1.4);-webkit-backdrop-filter:blur(12px) saturate(1.4);
+  display:grid;place-items:center;opacity:.85;transition:opacity .25s,background .25s,border-color .25s,transform .15s;
+  box-shadow:0 10px 30px -12px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.08)}
+#menuBtn:hover,#menuBtn:focus-visible,#menuBtn[aria-expanded="true"]{opacity:1;background:rgba(120,96,240,.42);border-color:var(--lilac);outline:none}
+#menuBtn:active{transform:scale(.94)}
+#menuBtn span{grid-area:1/1;width:20px;height:2px;border-radius:2px;background:#fff;transition:transform .35s cubic-bezier(.6,0,.2,1),opacity .2s}
+#menuBtn span:nth-child(1){transform:translateY(-6px)}
+#menuBtn span:nth-child(3){transform:translateY(6px)}
+#menuBtn[aria-expanded="true"] span:nth-child(1){transform:rotate(45deg)}
+#menuBtn[aria-expanded="true"] span:nth-child(2){opacity:0}
+#menuBtn[aria-expanded="true"] span:nth-child(3){transform:rotate(-45deg)}
+#menuVelo{position:fixed;inset:0;z-index:95;background:rgba(8,4,14,.35);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+  opacity:0;pointer-events:none;transition:opacity .45s}
+#menu{position:fixed;top:0;left:0;bottom:0;z-index:96;width:min(440px,88vw);display:flex;flex-direction:column;
+  padding:88px 22px 22px;color:var(--tx);
+  background:linear-gradient(165deg,rgba(120,96,240,.34) 0%,rgba(99,42,148,.30) 55%,rgba(135,40,107,.26) 100%);
+  backdrop-filter:blur(26px) saturate(1.5);-webkit-backdrop-filter:blur(26px) saturate(1.5);
+  border-right:1px solid rgba(185,166,255,.30);box-shadow:30px 0 80px -30px rgba(120,96,240,.55),inset -1px 0 0 rgba(255,255,255,.06);
+  clip-path:circle(0px at 42px 42px);visibility:hidden;
+  transition:clip-path .65s cubic-bezier(.7,0,.2,1),visibility 0s linear .65s}
+#menu::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 60% at 0% 0%,rgba(220,156,246,.20),transparent 60%)}
+body.menu-on #menu{clip-path:circle(160% at 42px 42px);visibility:visible;transition:clip-path .7s cubic-bezier(.7,0,.2,1),visibility 0s}
+body.menu-on #menuVelo{opacity:1;pointer-events:auto}
+#menu .mn-k{position:relative;font-family:var(--mono);font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--lilac);margin:0 12px 14px}
+#menuLista{position:relative;list-style:none;overflow:auto;flex:1;margin:0 -6px;padding:0 6px;scrollbar-width:thin;scrollbar-color:rgba(185,166,255,.3) transparent}
+#menuLista button{width:100%;display:grid;grid-template-columns:34px minmax(0,1fr);column-gap:10px;align-items:baseline;text-align:left;
+  padding:10px 12px;border:1px solid transparent;border-radius:14px;background:transparent;cursor:pointer;
+  opacity:0;transform:translateX(-18px);transition:opacity .35s,transform .45s cubic-bezier(.2,.8,.2,1),background .2s,border-color .2s}
+body.menu-on #menuLista button{opacity:1;transform:none;transition-delay:calc(.18s + var(--i) * .03s),calc(.18s + var(--i) * .03s),0s,0s}
+#menuLista button:hover,#menuLista button:focus-visible{background:rgba(255,255,255,.07);border-color:rgba(185,166,255,.22);outline:none}
+#menuLista .n{font-family:var(--mono);font-size:13px;color:var(--mu)}
+#menuLista .t{font-size:17px;font-weight:600;color:#fff;line-height:1.25}
+#menuLista .d{grid-column:2;font-size:13.5px;color:var(--mu);line-height:1.35;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#menuLista button.cur{background:linear-gradient(100deg,rgba(120,96,240,.55),rgba(192,69,216,.32));border-color:rgba(185,166,255,.5);
+  box-shadow:0 10px 30px -14px rgba(156,96,240,.9)}
+#menuLista button.cur .n{color:#fff}
+#menuLista button.cur .d{color:rgba(255,255,255,.75)}
+#menu .mn-pie{position:relative;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mu2);margin:14px 12px 0}
+body.m #menuBtn{top:12px;left:12px;width:46px;height:46px;border-radius:14px;opacity:.9}
+body.m #menu{padding-top:76px}
+body.m #menu .mn-pie{display:none}
+@media (hover:none){#menuBtn{opacity:.9}}
+@media (prefers-reduced-motion:reduce){#menu,body.menu-on #menu{transition:visibility 0s}#menuLista button{transition:none}}
 #ticks{position:absolute;left:0;right:0;top:0;height:3px;display:flex;gap:3px;z-index:6}
 #ticks i{flex:1;background:rgba(185,166,255,.12);transition:background .3s}
 #ticks i.done{background:var(--brand)}
@@ -268,42 +316,55 @@ body.m .lado{display:none}
    columna por columna para que la lista "cobre vida" al entrar a la lamina. */
 #s5 .lead{margin-top:14px;font-size:19px;line-height:1.45;max-width:1180px}
 #s5 .foot{font-size:18px}
-.oc-marco{margin-top:18px}
-.oc-pasos{display:flex;align-items:center;gap:9px;padding:10px 18px;border-bottom:1px solid rgba(255,255,255,.06)}
-.oc-pasos span{padding:4px 13px;border-radius:999px;font-size:12.5px;color:var(--mu)}
-.oc-pasos .oc-ok{display:inline-block;width:auto;height:auto;background:none;color:var(--e-act);border:1px solid rgba(195,164,240,.35)}
-.oc-pasos .oc-ok::before{content:"\2713";margin-right:7px;font-size:11px}
-.oc-pasos .oc-ok::after{content:none}
-.oc-pasos .oc-on{background:var(--grad);color:#fff;font-weight:600}
-.oc-pasos i{font-style:normal;color:var(--mu2);font-size:15px}
-.oc-pasos .oc-filtro{margin-left:auto;border:1px solid var(--line2);color:var(--tx);font-size:12px}
-.oc-pasos .oc-filtro::before{content:"\25BC";margin-right:8px;font-size:8px;color:var(--mu2)}
-
-.oc-tabla{display:flex;flex-direction:column;gap:5px;height:calc(100% - 85px);padding:11px 14px 13px;overflow:hidden}
-.oc-fila{display:grid;grid-template-columns:300px repeat(4,minmax(0,1fr));gap:7px;align-items:stretch}
-.oc-cab{align-items:center;padding-bottom:7px;border-bottom:1px solid rgba(255,255,255,.07)}
-.oc-cab span{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;color:var(--mu2)}
-.oc-cab .oc-inv{color:var(--mu)}
-
-.oc-inv{display:flex;flex-direction:column;justify-content:center;padding-right:10px;min-width:0}
-.oc-inv b{font-family:var(--mono);font-size:12.5px;font-weight:500;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.oc-inv em{margin-top:3px;font-style:normal;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--mu2)}
-
-/* Las celdas entran columna por columna: la lista se vuelve informacion. */
-.oc-c{display:flex;flex-direction:column;justify-content:center;padding:8px 11px;border-radius:9px;border:1px solid;
-  opacity:0;transform:translateY(6px);transition:opacity .4s ease,transform .4s ease}
-#ocupa.viva .oc-c{opacity:1;transform:none;transition-delay:calc(var(--c)*.26s + var(--r)*.035s + .35s)}
-.oc-c.libre{align-items:flex-start;border-color:rgba(90,204,234,.3);background:rgba(90,204,234,.07);
-  font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:#7fd4ec}
-.oc-c.vend{gap:3px;border-color:rgba(216,69,110,.45);background:rgba(216,69,110,.12)}
-.oc-c.vend b{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#f0809f}
-.oc-c.vend b i{font-style:normal;font-size:9px}
-.oc-c.vend u{font-size:12.5px;font-weight:500;color:#fff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.3);
-  align-self:flex-start;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.oc-c.vend s{display:flex;align-items:baseline;gap:8px;text-decoration:none;min-width:0}
-.oc-c.vend em{font-style:normal;font-size:9.5px;letter-spacing:.07em;color:var(--mu2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.oc-c.vend q{margin-left:auto;font-family:var(--mono);font-size:9.5px;color:var(--mu2);white-space:nowrap}
-.oc-c.vend q::before,.oc-c.vend q::after{content:none}
+.oc-marco{margin-top:18px;display:flex;flex-direction:column}
+.oc-top{display:flex;align-items:center;gap:12px;padding:10px 18px;border-bottom:1px solid rgba(255,255,255,.06);
+  background:linear-gradient(100deg,rgba(120,96,240,.16),rgba(135,40,107,.08))}
+.oc-ico{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:rgba(156,96,240,.28)}
+.oc-ico svg,.oc-bar svg{width:17px;height:17px;fill:none;stroke:var(--lilac);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.oc-tt b{display:block;font-size:15px;font-weight:600;color:#fff}
+.oc-tt u{text-decoration:none;font-size:11px;color:var(--mu2)}
+.oc-pasos{display:flex;align-items:center;gap:8px;margin-left:auto}
+.oc-pasos span{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--mu)}
+.oc-pasos .oc-ok::before{content:"\2713";width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:10px;color:#5fe0a8;background:rgba(95,224,168,.14);border:1px solid rgba(95,224,168,.4)}
+.oc-pasos .oc-on{color:#fff}
+.oc-pasos .oc-on em{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:10px;font-weight:600;background:#9c60f0}
+.oc-pasos i{font-style:normal;color:var(--mu2);font-size:14px}
+.oc-bar{display:flex;align-items:center;gap:10px;padding:9px 18px 4px;font-size:11.5px;color:var(--mu)}
+.oc-filtro,.oc-csv{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:8px;border:1px solid var(--line2);color:var(--tx)}
+.oc-filtro svg,.oc-csv svg{width:13px;height:13px;stroke:var(--tx)}
+.oc-seg{display:inline-flex;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
+.oc-seg i{font-style:normal;padding:5px 10px;color:var(--mu)}
+.oc-seg i + i{border-left:1px solid var(--line2)}
+.oc-rango{color:var(--lilac);font-size:11px}
+.oc-ley{display:inline-flex;align-items:center;gap:6px;font-size:11px}
+.oc-ley i{width:10px;height:10px;border-radius:3px;margin-left:6px}
+.oc-csv{margin-left:auto}
+/* La matriz: una columna por dia; hoy marcado y el fin de semana mas tenue. */
+.oc-tabla{flex:1;min-height:0;display:grid;grid-template-columns:212px repeat(30,minmax(0,1fr));
+  grid-template-rows:16px 30px repeat(8,minmax(0,1fr));column-gap:4px;row-gap:5px;padding:6px 18px 14px;overflow:hidden}
+.oc-mes{grid-row:1;font-size:11px;color:var(--mu);border-left:1px solid rgba(255,255,255,.08);padding-left:4px}
+.oc-ih{grid-row:2;grid-column:1;align-self:end;font-size:12.5px;color:var(--lilac);padding-bottom:4px}
+.oc-dia{grid-row:2;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:6px;line-height:1.05}
+.oc-dia b{font-size:11px;font-weight:500;color:var(--tx)}
+.oc-dia i{font-style:normal;font-size:8.5px;color:var(--mu2)}
+.oc-dia.fin b{color:var(--mu2)}
+.oc-dia.hoy{background:rgba(156,96,240,.35)}
+.oc-dia.hoy b,.oc-dia.hoy i{color:#fff}
+.oc-inv{grid-column:1;display:flex;flex-direction:column;justify-content:center;min-width:0;padding-right:8px;border-bottom:1px solid rgba(255,255,255,.04)}
+.oc-inv b{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:12px;font-weight:500;color:var(--tx);white-space:nowrap}
+.oc-inv b span{font-family:"Barlow",sans-serif;font-size:9px;font-weight:500;padding:1px 7px;border-radius:999px}
+.oc-inv b .tr{color:#f0809f;background:rgba(216,69,110,.16);border:1px solid rgba(216,69,110,.4)}
+.oc-inv b .dg{color:#7fd4ec;background:rgba(90,204,234,.12);border:1px solid rgba(90,204,234,.4)}
+.oc-inv em{margin-top:2px;font-style:normal;font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--mu2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* Las celdas entran dia por dia: la lista se vuelve informacion. */
+.od{position:relative;display:grid;place-items:center;border-radius:5px;border:1px solid;font-family:var(--mono);font-size:10.5px;font-weight:600;cursor:default;
+  opacity:0;transform:translateY(5px);transition:opacity .35s ease,transform .35s ease}
+#ocupa.viva .od{opacity:1;transform:none;transition-delay:calc(var(--c)*.045s + var(--r)*.03s + .3s)}
+.od.d,.oc-ley .d{background:#12241f;border-color:#1c3a31}
+.od.r,.oc-ley .r{background:#4a3416;border-color:#b57a2a;color:#f6c77a}
+.od.v,.oc-ley .v{background:#4a1a26;border-color:#c0445f;color:#ff9db0}
+.od.x,.oc-ley .x{background:rgba(240,156,48,.12);border-color:#f09c30;border-width:2px;color:#f6c77a}
+.od:hover{filter:brightness(1.35)}
 
 /* ============ 6 · el menu lateral de la plataforma ============
    La lamina emula el menu de modulos de QEB Operacion: se hace clic en un
@@ -573,6 +634,130 @@ body.m .lado{display:none}
 .bu-pie b{color:var(--lilac);font-weight:600}
 .bu-btn{padding:7px 20px;border-radius:9px;background:var(--grad);font-size:12.5px;font-weight:600;color:#fff}
 
+/* ---- Propuestas: armar, compartir y la vista que recibe el cliente ---- */
+.pv-fila{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:11px}
+.pv-fila .pane-chips{margin-top:0}
+.pv-tabs{display:flex;gap:3px;padding:3px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid var(--line2);flex:none}
+.pv-tabs button{font:inherit;font-size:13px;font-weight:500;color:var(--mu);padding:6px 14px;border:0;border-radius:999px;background:transparent;cursor:pointer;transition:background .2s,color .2s}
+.pv-tabs button:hover{color:#fff}
+.pv-tabs button.on{background:var(--grad);color:#fff}
+.marco.pv:not(.on){display:none}
+.marco.pv.on{animation:pvEntra .4s ease both}
+@keyframes pvEntra{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+/* compartir (vista interna) */
+.cm-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:11px;margin-bottom:9px;
+  background:linear-gradient(110deg,rgba(120,96,240,.28),rgba(135,40,107,.18));border:1px solid rgba(185,166,255,.2)}
+.cm-tit b{font-size:15px;font-weight:600;color:#fff}
+.cm-badge{margin-left:8px;padding:2px 9px;border-radius:999px;font-size:10px;color:#f5c66b;border:1px solid rgba(240,156,48,.5);background:rgba(240,156,48,.1)}
+.cm-tit u{display:block;margin-top:4px;text-decoration:none;font-size:11px;color:var(--mu)}
+.cm-acc{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.cm-b{display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:8px;border:0;font:inherit;font-size:11px;font-weight:500;color:#fff;cursor:pointer;white-space:nowrap}
+.cm-b svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.cm-b.rosa{background:linear-gradient(100deg,#e5487f,#c045d8)}
+.cm-b.azul{background:linear-gradient(100deg,#3b82f6,#22b8e6)}
+.cm-b.mor{background:linear-gradient(100deg,#7860f0,#9c60f0)}
+.cm-b.gh{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:var(--tx);cursor:default}
+.cm-b:not(.gh):hover{filter:brightness(1.12)}
+.cm-split{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:11px;flex:1;min-height:0;overflow:hidden}
+.cm-tabla{display:flex;flex-direction:column;min-width:0;min-height:0;overflow:hidden}
+.cm-h,.cm-r{display:grid;grid-template-columns:18px minmax(0,1.1fr) 70px 78px minmax(0,1.8fr) 62px;gap:9px;align-items:center}
+.cm-h{padding:0 8px 6px;border-bottom:1px solid rgba(255,255,255,.08)}
+.cm-h span{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mu2)}
+.cm-h span:last-child,.cm-r .pr{text-align:right}
+.cm-r{flex:1;width:100%;padding:0 8px;border:0;border-bottom:1px solid rgba(255,255,255,.04);background:transparent;font:inherit;font-size:11.5px;color:var(--mu);text-align:left;cursor:pointer;transition:background .2s,opacity .2s}
+.cm-r:hover{background:rgba(255,255,255,.03)}
+.cm-r .ck{width:14px;height:14px;border-radius:4px;border:1.5px solid rgba(185,166,255,.5);display:grid;place-items:center;background:var(--brand)}
+.cm-r .ck::after{content:"";width:6px;height:3px;border:solid #fff;border-width:0 0 1.6px 1.6px;transform:translate(0,-1px) rotate(-45deg)}
+.cm-r.off{opacity:.42}
+.cm-r.off .ck{background:transparent}.cm-r.off .ck::after{display:none}
+.cm-r .k{font-family:var(--mono);font-size:11px;color:var(--tx)}
+.cm-r .ca{justify-self:start;padding:2px 7px;border-radius:999px;font-size:9.5px;border:1px solid}
+.cm-r .ca.f{color:var(--cyan);border-color:rgba(90,204,234,.4)}
+.cm-r .ca.c{color:var(--lilac);border-color:rgba(185,166,255,.35)}
+.cm-r .u{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cm-r .pr{color:#f5c66b;font-variant-numeric:tabular-nums}
+.cm-tot{display:flex;justify-content:space-between;gap:10px;padding:8px 8px 0;font-size:11.5px;color:var(--mu)}
+.cm-tot b{color:#3fd9a0;font-weight:600}
+.cm-panel{display:flex;flex-direction:column;gap:6px;padding:10px 11px;border-radius:11px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);min-height:0;overflow:hidden}
+.cm-panel .t{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mu2);margin-top:2px}
+.cm-panel .t ~ .t{margin-top:8px}
+.cm-tg{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 8px;border-radius:8px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font:inherit;font-size:11.5px;color:var(--mu);cursor:pointer}
+.cm-tg i{position:relative;width:26px;height:15px;border-radius:999px;background:rgba(255,255,255,.14);transition:background .2s;flex:none}
+.cm-tg i::after{content:"";position:absolute;top:2px;left:2px;width:11px;height:11px;border-radius:50%;background:#fff;transition:transform .2s}
+.cm-tg.on{color:var(--tx)}
+.cm-tg.on i{background:var(--brand)}
+.cm-tg.on i::after{transform:translateX(11px)}
+.cm-link{position:relative;display:flex;align-items:center;gap:6px;padding:7px 9px;border-radius:8px;background:rgba(120,96,240,.14);border:1px dashed rgba(185,166,255,.45);font-family:var(--mono);font-size:10.5px;color:var(--lilac);overflow:hidden}
+.cm-link svg,.marco.claro .marco-h svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:2;flex:none}
+.cm-link span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cm-link i{position:absolute;right:6px;padding:2px 7px;border-radius:999px;background:#3fd9a0;color:#0d2a20;font-style:normal;font-size:9.5px;font-weight:600;opacity:0;transform:translateY(6px);transition:opacity .25s,transform .25s}
+.cm-link.ok i{opacity:1;transform:none}
+.cm-nota{margin-top:auto;font-size:11px;line-height:1.4;color:var(--mu)}
+/* vista del cliente: clara, con la marca de quien vende */
+.marco.claro{background:#f7f6fb;border-color:rgba(255,255,255,.25);box-shadow:0 40px 120px -30px rgba(120,96,240,.55)}
+.marco.claro .marco-h{background:#ecebf3;border-bottom-color:#dedbe9}
+.marco.claro .marco-h i{background:#cfcbdc}
+.marco.claro .marco-h span{display:flex;align-items:center;gap:6px;padding:3px 12px;border-radius:999px;background:#fff;border:1px solid #dedbe9;color:#5b5670}
+.marco.claro .marco-b{color:#2a2537}
+.cl-top{display:flex;align-items:center;gap:14px;padding:4px 4px 10px;border-bottom:1px solid #e6e3ef}
+.cl-logo{display:flex;align-items:center;gap:7px;font-weight:800;font-size:14px;letter-spacing:.06em;color:#2a2537}
+.cl-logo i{width:24px;height:24px;border-radius:7px;background:conic-gradient(from 200deg,#0f766e,#14b8a6,#0f766e)}
+.cl-tit{padding-left:14px;border-left:1px solid #e6e3ef}
+.cl-tit b{display:block;font-size:14px;font-weight:600;color:#0f766e}
+.cl-tit u{text-decoration:none;font-size:10.5px;color:#8b86a0}
+.cl-meta{display:flex;gap:16px;margin-left:auto}
+.cl-meta span{font-size:9.5px;color:#8b86a0;text-align:right}
+.cl-meta b{display:block;font-size:11.5px;font-weight:500;color:#2a2537}
+.cl-badge{padding:3px 10px;border-radius:999px;font-size:10px;color:#9a6512;background:#fdf1d8;border:1px solid #f3d79b}
+.cl-acc{display:flex;gap:5px}
+.cl-acc span{padding:5px 11px;border-radius:7px;font-size:10.5px;font-weight:600;color:#fff}
+.cl-acc .x{background:#0f9a6c}.cl-acc .k{background:#0f766e}
+.cl-split{display:grid;grid-template-columns:250px minmax(0,1fr);gap:10px;flex:1;min-height:0;margin-top:10px;overflow:hidden}
+.cl-lista{display:flex;flex-direction:column;min-height:0;padding:8px;border-radius:10px;background:#fff;border:1px solid #e6e3ef;box-shadow:0 6px 18px -10px rgba(40,30,70,.25)}
+.cl-lh{font-size:12px;font-weight:600;color:#0f766e;padding:0 4px 6px}
+.cl-lh i{font-style:normal;font-weight:400;color:#a29db5;margin-left:4px}
+.cl-lista ol{list-style:none;flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.cl-i{display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:7px;align-items:center;padding:4px;border-bottom:1px solid #f0eef5;flex:1;transition:opacity .25s}
+.cl-i b{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:9.5px;font-weight:600;color:#fff;background:#0f766e}
+.cl-i .k{display:block;font-size:10.5px;font-weight:600;color:#2a2537}
+.cl-i .u{display:block;font-size:9.5px;color:#8b86a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cl-i .pr{font-style:normal;font-size:10px;color:#2a2537;font-variant-numeric:tabular-nums}
+.cl-tot{padding:7px 4px 0;font-size:11px;color:#5b5670}
+.cl-tot b{color:#0f766e}.cl-tot span{color:#a29db5}
+.cl-mapa{position:relative;min-height:0;border-radius:10px;overflow:hidden;border:1px solid #dedbe9;background:#eef1ee;
+  background-image:
+    linear-gradient(118deg,transparent 47.6%,#fff 47.6% 49.4%,transparent 49.4%),
+    linear-gradient(64deg,transparent 31%,#fff 31% 32.3%,transparent 32.3%),
+    linear-gradient(0deg,transparent 58%,#fff 58% 59.4%,transparent 59.4%),
+    linear-gradient(90deg,transparent 41%,#fff 41% 42%,transparent 42%),
+    radial-gradient(circle at 80% 82%,#cfe6d2 0 7%,transparent 7.4%),
+    radial-gradient(circle at 10% 14%,#d6e9f2 0 6%,transparent 6.4%),
+    linear-gradient(#e3e6e2 1px,transparent 1px),linear-gradient(90deg,#e3e6e2 1px,transparent 1px);
+  background-size:100% 100%,100% 100%,100% 100%,100% 100%,100% 100%,100% 100%,26px 26px,26px 26px}
+.cl-pin{position:absolute;width:22px;height:22px;border-radius:50% 50% 50% 0;transform:translate(-50%,-100%) rotate(-45deg);
+  background:#0f766e;box-shadow:0 4px 10px rgba(15,118,110,.35),0 0 0 2px #fff;display:grid;place-items:center;transition:opacity .25s,transform .25s}
+.cl-pin b{transform:rotate(45deg);font-size:9.5px;font-weight:700;color:#fff}
+.cl-i.fuera,.cl-pin.fuera{display:none}
+.cl-zoom{position:absolute;right:8px;bottom:8px;display:flex;flex-direction:column;border-radius:7px;overflow:hidden;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.cl-zoom i{width:22px;height:22px;display:grid;place-items:center;font-style:normal;font-size:13px;color:#5b5670;border-bottom:1px solid #eee}
+.pv-sin-tarifas .marco.claro .pr,.pv-sin-tarifas .cl-tot{visibility:hidden}
+.pv-sin-mapa .cl-split{grid-template-columns:minmax(0,1fr)}
+.pv-sin-mapa .cl-mapa{display:none}
+.pv-sin-lista .cl-split{grid-template-columns:minmax(0,1fr)}
+.pv-sin-lista .cl-lista{display:none}
+.pv-sin-desc .cl-acc{display:none}
+body.m .pv-fila{flex-direction:column;align-items:flex-start;gap:10px}
+body.m .pv-tabs button{font-size:11.5px;padding:6px 10px}
+body.m .cm-top,body.m .cl-top{flex-wrap:wrap}
+body.m .cm-acc{justify-content:flex-start}
+body.m .cm-split,body.m .cl-split{grid-template-columns:minmax(0,1fr) !important}
+body.m .cm-h,body.m .cm-r{grid-template-columns:18px minmax(0,1fr) 62px;min-height:32px}
+body.m .cm-h span:nth-child(3),body.m .cm-h span:nth-child(4),body.m .cm-h span:nth-child(5),
+body.m .cm-r span:nth-child(3),body.m .cm-r span:nth-child(4),body.m .cm-r span:nth-child(5){display:none}
+body.m .cl-meta{margin-left:0}
+body.m .cl-tit{padding-left:0;border-left:0}
+body.m .cl-mapa{min-height:200px}
+body.m .cl-i{min-height:34px}
 .sk-chat{display:flex;flex-direction:column;justify-content:center;gap:11px;height:100%;padding:0 2px}
 .sk-chat .m{max-width:74%;padding:12px 15px;border-radius:14px;font-size:14px;line-height:1.5}
 .sk-chat .yo{align-self:flex-end;border-bottom-right-radius:5px;background:var(--grad);color:#fff}
@@ -971,23 +1156,21 @@ body.m .app.bi .app-pie,body.m .app.bi .app-marca{display:none}
 
 
 /* ============ inventario: el dinero que se va de cada cara libre ============
-   Cuando la matriz ya entro, de cada celda disponible sube un "-$" que se
-   desvanece, en bucle y a destiempo: la cara libre es dinero que se pierde. */
-.oc-c.libre{position:relative}
-.oc-c.libre::before{content:"-$";position:absolute;right:16px;top:50%;pointer-events:none;opacity:0;
-  font-family:var(--mono);font-size:15px;font-weight:700;letter-spacing:.02em;color:#ff7a93;
-  text-shadow:0 0 12px rgba(255,90,120,.55);transform:translateY(-30%)}
-#ocupa.viva .oc-c.libre::before{animation:ocFuga 2.8s ease-out infinite;
-  animation-delay:calc(var(--c)*.26s + var(--r)*.035s + 1.5s + var(--r)*.53s + var(--c)*.31s)}
-#ocupa.viva .oc-c.libre{animation:ocPierde 2.8s ease-in-out infinite;
-  animation-delay:calc(var(--c)*.26s + var(--r)*.035s + 1.5s + var(--r)*.53s + var(--c)*.31s)}
-@keyframes ocFuga{0%{opacity:0;transform:translateY(-10%) scale(.8)}
-  18%{opacity:1;transform:translateY(-45%) scale(1)}
+   Cuando la matriz ya entro, de algunos dias libres sube un "-$" que se
+   desvanece, en bucle y a destiempo: el dia sin vender es dinero que se pierde. */
+.od.fuga::before{content:"-$";position:absolute;left:50%;top:50%;pointer-events:none;opacity:0;
+  font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.02em;color:#ff7a93;
+  text-shadow:0 0 10px rgba(255,90,120,.6);transform:translate(-50%,-30%);z-index:2}
+#ocupa.viva .od.fuga::before{animation:ocFuga 2.8s ease-out infinite;
+  animation-delay:calc(var(--c)*.045s + 1.9s + var(--r)*.47s + var(--c)*.13s)}
+#ocupa.viva .od.fuga{animation:ocPierde 2.8s ease-in-out infinite;
+  animation-delay:calc(var(--c)*.045s + 1.9s + var(--r)*.47s + var(--c)*.13s)}
+@keyframes ocFuga{0%{opacity:0;transform:translate(-50%,-20%) scale(.8)}
+  18%{opacity:1;transform:translate(-50%,-75%) scale(1)}
   70%{opacity:.6}
-  100%{opacity:0;transform:translateY(-150%) scale(.95)}}
-@keyframes ocPierde{0%,100%{box-shadow:none}20%{box-shadow:inset 0 0 0 1px rgba(255,122,147,.45),0 0 18px -6px rgba(255,90,120,.6)}}
-body.m .oc-c.libre::before{font-size:11px;right:50%;margin-right:-8px;top:8px}
-@media (prefers-reduced-motion: reduce){#ocupa.viva .oc-c.libre::before,#ocupa.viva .oc-c.libre{animation:none}}
+  100%{opacity:0;transform:translate(-50%,-190%) scale(.95)}}
+@keyframes ocPierde{0%,100%{box-shadow:none}20%{box-shadow:inset 0 0 0 1px rgba(255,122,147,.5),0 0 14px -4px rgba(255,90,120,.65)}}
+@media (prefers-reduced-motion: reduce){#ocupa.viva .od.fuga::before,#ocupa.viva .od.fuga{animation:none}}
 
 /* Logos: mantener presionado 2 s alterna el comparativo (sin menu de imagen). */
 .logo-big,#chrome .logo{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;-webkit-user-drag:none;touch-action:manipulation}
@@ -1230,27 +1413,22 @@ body.m #wave{width:100%;height:auto;aspect-ratio:460/820}
 body.m #replay{position:static;margin:6px 14px 0}
 
 /* 5 matriz de ocupacion */
-/* La matriz cabe en la pantalla: el nombre de la cara va en su propio
-   renglon y debajo los cuatro periodos, cada celda con lo esencial. */
+/* Treinta dias no caben a lo ancho de un telefono: la matriz se desliza de
+   lado y la columna del inventario se queda fija. */
 body.m .oc-marco{height:auto}
-body.m .oc-pasos{flex-wrap:wrap;gap:6px;padding:9px 12px}
-body.m .oc-pasos span{font-size:11px;padding:3px 10px}
-body.m .oc-pasos .oc-filtro{display:none}
-body.m .oc-tabla{height:auto;padding:10px;gap:10px}
-body.m .oc-fila{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
-body.m .oc-fila .oc-inv{grid-column:1/-1;flex-direction:row;justify-content:flex-start;align-items:baseline;gap:8px;padding:0}
-body.m .oc-inv b{font-size:12px}
-body.m .oc-inv em{margin:0;font-size:9px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-body.m .oc-cab{padding-bottom:5px}
-body.m .oc-cab .oc-inv{display:none}
-body.m .oc-cab span{font-size:9.5px;letter-spacing:.02em}
-body.m .oc-c{padding:6px 7px;border-radius:7px;min-height:44px;justify-content:flex-start}
-body.m .oc-c.libre{font-size:0;justify-content:center}
-body.m .oc-c.libre::after{content:"Libre";font-size:10px;letter-spacing:.08em}
-body.m .oc-c.vend b{font-size:8.5px;letter-spacing:.06em}
-body.m .oc-c.vend u{font-size:10.5px;line-height:1.2;border:0;white-space:normal;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-body.m .oc-c.vend s{display:none}
+body.m .oc-top{flex-wrap:wrap;padding:10px 12px;gap:10px}
+body.m .oc-pasos{margin-left:0;width:100%}
+body.m .oc-pasos span{font-size:11px}
+body.m .oc-bar{flex-wrap:wrap;padding:9px 12px 6px;gap:7px}
+body.m .oc-seg,body.m .oc-csv,body.m .oc-filtro{display:none}
+body.m .oc-ley{flex-wrap:wrap;font-size:10px}
+body.m .oc-tabla{overflow-x:auto;padding:6px 12px 14px;grid-template-columns:118px repeat(30,26px);
+  grid-template-rows:16px 30px repeat(8,34px);-webkit-overflow-scrolling:touch}
+body.m .oc-inv,body.m .oc-ih{position:sticky;left:0;z-index:3;background:#180c24}
+body.m .oc-inv b{font-size:10.5px;gap:4px}
+body.m .oc-inv b span{display:none}
+body.m .oc-inv em{font-size:8.5px}
+body.m .od.fuga::before{font-size:10px}
 
 /* 6 modulos: el menu pasa a una tira de fichas arriba */
 body.m .app{display:block;height:auto}
@@ -1421,6 +1599,13 @@ body.m #sEnd .sign{margin-top:26px;font-size:13px}
 </style>
 </head>
 <body>
+<button id="menuBtn" type="button" aria-label="Abrir índice de láminas" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
+<div id="menuVelo"></div>
+<nav id="menu" aria-label="Índice de láminas" aria-hidden="true">
+  <p class="mn-k">Índice</p>
+  <ol id="menuLista"></ol>
+  <p class="mn-pie">M abre · Esc cierra</p>
+</nav>
 <div id="mswitch" role="group" aria-label="Modo de visualización">
   <img class="sw-logo" src="data:image/png;base64,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" alt="">
   <button data-m="pc" aria-pressed="true"><svg viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="13" rx="2"/><path d="M8 21h8"/></svg>PC</button>
@@ -1713,21 +1898,303 @@ body.m #sEnd .sign{margin-top:26px;font-size:13px}
 <section class="slide" id="s5" aria-label="Análisis de ocupación">
   <div class="kicker">El inventario, en vivo</div>
   <h2>Cada cara libre es dinero en juego.</h2>
-  <p class="lead">Tu inventario deja de ser una lista. Cada cara cruzada con cada periodo de venta: lo verde está libre, lo rojo ya está vendido y dice con quién, desde cuándo y hasta cuándo.</p>
+  <p class="lead">Tu inventario deja de ser una lista. Cada cara cruzada con cada día, semana o mes que elijas: lo verde está libre, lo ámbar reservado, lo rojo vendido, y cada celda dice con quién, desde cuándo y hasta cuándo.</p>
   <figure class="marco oc-marco">
     <div class="marco-h"><i></i><i></i><i></i><span>QEB &middot; Inventarios / Análisis de ocupación</span></div>
-    <div class="oc-pasos">
-      <span class="oc-ok">Inventarios</span><i>&rsaquo;</i><span class="oc-ok">Periodos</span><i>&rsaquo;</i><span class="oc-on">Resultado</span>
-      <span class="oc-filtro">Filtrar campañas (4)</span>
+    <div class="oc-top">
+      <span class="oc-ico"><svg viewBox="0 0 24 24"><path d="M4 20h16M7 16v-5M11 16V7M15 16v-3M19 16V9"/></svg></span>
+      <div class="oc-tt"><b>Análisis de Ocupación</b><u>Paso 3 de 3 &middot; Matriz</u></div>
+      <div class="oc-pasos"><span class="oc-ok">Inventarios</span><i>&rsaquo;</i><span class="oc-ok">Periodo</span><i>&rsaquo;</i><span class="oc-on"><em>3</em>Resultado</span></div>
+    </div>
+    <div class="oc-bar">
+      <span class="oc-filtro"><svg viewBox="0 0 24 24"><path d="M4 5h16l-6 7.5V19l-4-2v-4.5L4 5z"/></svg>Filtrar campañas (4)</span>
+      <span class="oc-seg"><i>Reservado</i><i>Vendido</i><i>Disponible</i></span>
+      <span class="oc-rango">19 nov – 18 dic 2026 &middot; por día &middot; 30 días</span>
+      <span class="oc-ley"><i class="d"></i>Disponible<i class="r"></i>Reservado<i class="v"></i>Vendido<i class="x"></i>Conflicto</span>
+      <span class="oc-csv"><svg viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Descargar CSV</span>
     </div>
     <div class="oc-tabla" id="ocupa">
-<div class="oc-fila oc-cab"><span class="oc-inv">Inventario</span><span>C21-2026</span><span>C22-2026</span><span>C23-2026</span><span>C24-2026</span></div>
-<div class="oc-fila"><span class="oc-inv" style="--r:0"><b>Parabus042A</b><em>Monterrey &middot; Parabús &middot; Flujo</em></span><span class="oc-c libre" style="--c:0;--r:0">Disponible</span><span class="oc-c libre" style="--c:1;--r:0">Disponible</span><span class="oc-c libre" style="--c:2;--r:0">Disponible</span><span class="oc-c libre" style="--c:3;--r:0">Disponible</span></div>
-<div class="oc-fila"><span class="oc-inv" style="--r:1"><b>Parabus042B</b><em>Monterrey &middot; Parabús &middot; Contraflujo</em></span><span class="oc-c libre" style="--c:0;--r:1">Disponible</span><span class="oc-c libre" style="--c:1;--r:1">Disponible</span><span class="oc-c vend" style="--c:2;--r:1"><b>Vendido <i>&#8599;</i></b><u>Hidratación Verano</u><s><em>BEBIDAS DEL NORTE</em><q>09-nov — 22-nov &middot; #104218</q></s></span><span class="oc-c libre" style="--c:3;--r:1">Disponible</span></div>
-<div class="oc-fila"><span class="oc-inv" style="--r:2"><b>Parabus088A</b><em>Monterrey &middot; Parabús &middot; Flujo</em></span><span class="oc-c libre" style="--c:0;--r:2">Disponible</span><span class="oc-c vend" style="--c:1;--r:2"><b>Vendido <i>&#8599;</i></b><u>Lanzamiento Occidente</u><s><em>MARCA OCCIDENTE</em><q>26-oct — 08-nov &middot; #103960</q></s></span><span class="oc-c libre" style="--c:2;--r:2">Disponible</span><span class="oc-c libre" style="--c:3;--r:2">Disponible</span></div>
-<div class="oc-fila"><span class="oc-inv" style="--r:3"><b>Parabus114A</b><em>Monterrey &middot; Parabús &middot; Flujo</em></span><span class="oc-c vend" style="--c:0;--r:3"><b>Vendido <i>&#8599;</i></b><u>Temporada Retail 2026</u><s><em>RETAIL CENTRO</em><q>12-oct — 25-oct &middot; #103744</q></s></span><span class="oc-c libre" style="--c:1;--r:3">Disponible</span><span class="oc-c libre" style="--c:2;--r:3">Disponible</span><span class="oc-c libre" style="--c:3;--r:3">Disponible</span></div>
-<div class="oc-fila"><span class="oc-inv" style="--r:4"><b>Parabus114B</b><em>Monterrey &middot; Parabús &middot; Contraflujo</em></span><span class="oc-c vend" style="--c:0;--r:4"><b>Vendido <i>&#8599;</i></b><u>Cobertura anual</u><s><em>MOVILIDAD NORTE</em><q>12-oct — 25-oct &middot; #103802</q></s></span><span class="oc-c vend" style="--c:1;--r:4"><b>Vendido <i>&#8599;</i></b><u>Cobertura anual</u><s><em>MOVILIDAD NORTE</em><q>26-oct — 08-nov &middot; #104055</q></s></span><span class="oc-c vend" style="--c:2;--r:4"><b>Vendido <i>&#8599;</i></b><u>Cobertura anual</u><s><em>MOVILIDAD NORTE</em><q>09-nov — 22-nov &middot; #104377</q></s></span><span class="oc-c vend" style="--c:3;--r:4"><b>Vendido <i>&#8599;</i></b><u>Cobertura anual</u><s><em>MOVILIDAD NORTE</em><q>23-nov — 06-dic &middot; #104611</q></s></span></div>
-<div class="oc-fila"><span class="oc-inv" style="--r:5"><b>Parabus126A</b><em>Monterrey &middot; Parabús &middot; Flujo</em></span><span class="oc-c libre" style="--c:0;--r:5">Disponible</span><span class="oc-c libre" style="--c:1;--r:5">Disponible</span><span class="oc-c vend" style="--c:2;--r:5"><b>Vendido <i>&#8599;</i></b><u>Hidratación Verano</u><s><em>BEBIDAS DEL NORTE</em><q>09-nov — 22-nov &middot; #104219</q></s></span><span class="oc-c libre" style="--c:3;--r:5">Disponible</span></div>
+<div class="oc-mes" style="grid-column:2/span 12">Nov 2026</div>
+<div class="oc-mes" style="grid-column:14/span 18">Dic 2026</div>
+<div class="oc-ih">Inventario</div>
+<div class="oc-dia hoy" style="grid-column:2"><b>19</b><i>Ju</i></div>
+<div class="oc-dia" style="grid-column:3"><b>20</b><i>Vi</i></div>
+<div class="oc-dia fin" style="grid-column:4"><b>21</b><i>Sá</i></div>
+<div class="oc-dia fin" style="grid-column:5"><b>22</b><i>Do</i></div>
+<div class="oc-dia" style="grid-column:6"><b>23</b><i>Lu</i></div>
+<div class="oc-dia" style="grid-column:7"><b>24</b><i>Ma</i></div>
+<div class="oc-dia" style="grid-column:8"><b>25</b><i>Mi</i></div>
+<div class="oc-dia" style="grid-column:9"><b>26</b><i>Ju</i></div>
+<div class="oc-dia" style="grid-column:10"><b>27</b><i>Vi</i></div>
+<div class="oc-dia fin" style="grid-column:11"><b>28</b><i>Sá</i></div>
+<div class="oc-dia fin" style="grid-column:12"><b>29</b><i>Do</i></div>
+<div class="oc-dia" style="grid-column:13"><b>30</b><i>Lu</i></div>
+<div class="oc-dia" style="grid-column:14"><b>1</b><i>Ma</i></div>
+<div class="oc-dia" style="grid-column:15"><b>2</b><i>Mi</i></div>
+<div class="oc-dia" style="grid-column:16"><b>3</b><i>Ju</i></div>
+<div class="oc-dia" style="grid-column:17"><b>4</b><i>Vi</i></div>
+<div class="oc-dia fin" style="grid-column:18"><b>5</b><i>Sá</i></div>
+<div class="oc-dia fin" style="grid-column:19"><b>6</b><i>Do</i></div>
+<div class="oc-dia" style="grid-column:20"><b>7</b><i>Lu</i></div>
+<div class="oc-dia" style="grid-column:21"><b>8</b><i>Ma</i></div>
+<div class="oc-dia" style="grid-column:22"><b>9</b><i>Mi</i></div>
+<div class="oc-dia" style="grid-column:23"><b>10</b><i>Ju</i></div>
+<div class="oc-dia" style="grid-column:24"><b>11</b><i>Vi</i></div>
+<div class="oc-dia fin" style="grid-column:25"><b>12</b><i>Sá</i></div>
+<div class="oc-dia fin" style="grid-column:26"><b>13</b><i>Do</i></div>
+<div class="oc-dia" style="grid-column:27"><b>14</b><i>Lu</i></div>
+<div class="oc-dia" style="grid-column:28"><b>15</b><i>Ma</i></div>
+<div class="oc-dia" style="grid-column:29"><b>16</b><i>Mi</i></div>
+<div class="oc-dia" style="grid-column:30"><b>17</b><i>Ju</i></div>
+<div class="oc-dia" style="grid-column:31"><b>18</b><i>Vi</i></div>
+<div class="oc-inv" style="grid-row:3"><b>Parabus042A<span class="tr">Tradicional</span></b><em>Monterrey · Parabús</em></div>
+<span class="od r" style="--c:0;--r:0;grid-area:3/2" title="Reservado · Café Altura · 19 nov – 30 nov">1</span>
+<span class="od r" style="--c:1;--r:0;grid-area:3/3" title="Reservado · Café Altura · 19 nov – 30 nov">1</span>
+<span class="od r" style="--c:2;--r:0;grid-area:3/4" title="Reservado · Café Altura · 19 nov – 30 nov">1</span>
+<span class="od r" style="--c:3;--r:0;grid-area:3/5" title="Reservado · Café Altura · 19 nov – 30 nov">1</span>
+<span class="od r" style="--c:4;--r:0;grid-area:3/6" title="Reservado · Café Altura · 19 nov – 30 nov">1</span>
+<span class="od r" style="--c:5;--r:0;grid-area:3/7" title="Reservado · Café Altura · 19 nov – 30 nov">1</span>
+<span class="od r" style="--c:6;--r:0;grid-area:3/8" title="Reservado · Café Altura · 19 nov – 30 nov">1</span>
+<span class="od r" style="--c:7;--r:0;grid-area:3/9" title="Reservado · Café Altura · 19 nov – 30 nov">1</span>
+<span class="od r" style="--c:8;--r:0;grid-area:3/10" title="Reservado · Café Altura · 19 nov – 30 nov">1</span>
+<span class="od r" style="--c:9;--r:0;grid-area:3/11" title="Reservado · Café Altura · 19 nov – 30 nov">1</span>
+<span class="od r" style="--c:10;--r:0;grid-area:3/12" title="Reservado · Café Altura · 19 nov – 30 nov">1</span>
+<span class="od r" style="--c:11;--r:0;grid-area:3/13" title="Reservado · Café Altura · 19 nov – 30 nov">1</span>
+<span class="od d" style="--c:12;--r:0;grid-area:3/14" title="Disponible · 1 dic"></span>
+<span class="od d" style="--c:13;--r:0;grid-area:3/15" title="Disponible · 2 dic"></span>
+<span class="od d" style="--c:14;--r:0;grid-area:3/16" title="Disponible · 3 dic"></span>
+<span class="od d" style="--c:15;--r:0;grid-area:3/17" title="Disponible · 4 dic"></span>
+<span class="od d" style="--c:16;--r:0;grid-area:3/18" title="Disponible · 5 dic"></span>
+<span class="od d" style="--c:17;--r:0;grid-area:3/19" title="Disponible · 6 dic"></span>
+<span class="od d fuga" style="--c:18;--r:0;grid-area:3/20" title="Disponible · 7 dic"></span>
+<span class="od d" style="--c:19;--r:0;grid-area:3/21" title="Disponible · 8 dic"></span>
+<span class="od d" style="--c:20;--r:0;grid-area:3/22" title="Disponible · 9 dic"></span>
+<span class="od d" style="--c:21;--r:0;grid-area:3/23" title="Disponible · 10 dic"></span>
+<span class="od d" style="--c:22;--r:0;grid-area:3/24" title="Disponible · 11 dic"></span>
+<span class="od d" style="--c:23;--r:0;grid-area:3/25" title="Disponible · 12 dic"></span>
+<span class="od d" style="--c:24;--r:0;grid-area:3/26" title="Disponible · 13 dic"></span>
+<span class="od d" style="--c:25;--r:0;grid-area:3/27" title="Disponible · 14 dic"></span>
+<span class="od d" style="--c:26;--r:0;grid-area:3/28" title="Disponible · 15 dic"></span>
+<span class="od d fuga" style="--c:27;--r:0;grid-area:3/29" title="Disponible · 16 dic"></span>
+<span class="od d" style="--c:28;--r:0;grid-area:3/30" title="Disponible · 17 dic"></span>
+<span class="od d" style="--c:29;--r:0;grid-area:3/31" title="Disponible · 18 dic"></span>
+<div class="oc-inv" style="grid-row:4"><b>Parabus042B<span class="tr">Tradicional</span></b><em>Monterrey · Parabús</em></div>
+<span class="od d" style="--c:0;--r:1;grid-area:4/2" title="Disponible · 19 nov"></span>
+<span class="od d" style="--c:1;--r:1;grid-area:4/3" title="Disponible · 20 nov"></span>
+<span class="od d" style="--c:2;--r:1;grid-area:4/4" title="Disponible · 21 nov"></span>
+<span class="od d" style="--c:3;--r:1;grid-area:4/5" title="Disponible · 22 nov"></span>
+<span class="od v" style="--c:4;--r:1;grid-area:4/6" title="Vendido · Bebidas del Norte · 23 nov – 6 dic">1</span>
+<span class="od v" style="--c:5;--r:1;grid-area:4/7" title="Vendido · Bebidas del Norte · 23 nov – 6 dic">1</span>
+<span class="od v" style="--c:6;--r:1;grid-area:4/8" title="Vendido · Bebidas del Norte · 23 nov – 6 dic">1</span>
+<span class="od v" style="--c:7;--r:1;grid-area:4/9" title="Vendido · Bebidas del Norte · 23 nov – 6 dic">1</span>
+<span class="od v" style="--c:8;--r:1;grid-area:4/10" title="Vendido · Bebidas del Norte · 23 nov – 6 dic">1</span>
+<span class="od v" style="--c:9;--r:1;grid-area:4/11" title="Vendido · Bebidas del Norte · 23 nov – 6 dic">1</span>
+<span class="od v" style="--c:10;--r:1;grid-area:4/12" title="Vendido · Bebidas del Norte · 23 nov – 6 dic">1</span>
+<span class="od v" style="--c:11;--r:1;grid-area:4/13" title="Vendido · Bebidas del Norte · 23 nov – 6 dic">1</span>
+<span class="od v" style="--c:12;--r:1;grid-area:4/14" title="Vendido · Bebidas del Norte · 23 nov – 6 dic">1</span>
+<span class="od v" style="--c:13;--r:1;grid-area:4/15" title="Vendido · Bebidas del Norte · 23 nov – 6 dic">1</span>
+<span class="od v" style="--c:14;--r:1;grid-area:4/16" title="Vendido · Bebidas del Norte · 23 nov – 6 dic">1</span>
+<span class="od v" style="--c:15;--r:1;grid-area:4/17" title="Vendido · Bebidas del Norte · 23 nov – 6 dic">1</span>
+<span class="od v" style="--c:16;--r:1;grid-area:4/18" title="Vendido · Bebidas del Norte · 23 nov – 6 dic">1</span>
+<span class="od v" style="--c:17;--r:1;grid-area:4/19" title="Vendido · Bebidas del Norte · 23 nov – 6 dic">1</span>
+<span class="od d" style="--c:18;--r:1;grid-area:4/20" title="Disponible · 7 dic"></span>
+<span class="od d" style="--c:19;--r:1;grid-area:4/21" title="Disponible · 8 dic"></span>
+<span class="od d" style="--c:20;--r:1;grid-area:4/22" title="Disponible · 9 dic"></span>
+<span class="od d" style="--c:21;--r:1;grid-area:4/23" title="Disponible · 10 dic"></span>
+<span class="od d" style="--c:22;--r:1;grid-area:4/24" title="Disponible · 11 dic"></span>
+<span class="od d" style="--c:23;--r:1;grid-area:4/25" title="Disponible · 12 dic"></span>
+<span class="od d" style="--c:24;--r:1;grid-area:4/26" title="Disponible · 13 dic"></span>
+<span class="od d fuga" style="--c:25;--r:1;grid-area:4/27" title="Disponible · 14 dic"></span>
+<span class="od d" style="--c:26;--r:1;grid-area:4/28" title="Disponible · 15 dic"></span>
+<span class="od d" style="--c:27;--r:1;grid-area:4/29" title="Disponible · 16 dic"></span>
+<span class="od d" style="--c:28;--r:1;grid-area:4/30" title="Disponible · 17 dic"></span>
+<span class="od d" style="--c:29;--r:1;grid-area:4/31" title="Disponible · 18 dic"></span>
+<div class="oc-inv" style="grid-row:5"><b>Digital014<span class="dg">Digital</span></b><em>Monterrey · Pantalla LED</em></div>
+<span class="od v" style="--c:0;--r:2;grid-area:5/2" title="Vendido · Movilidad Norte · 19 nov – 28 nov">2</span>
+<span class="od v" style="--c:1;--r:2;grid-area:5/3" title="Vendido · Movilidad Norte · 19 nov – 28 nov">2</span>
+<span class="od v" style="--c:2;--r:2;grid-area:5/4" title="Vendido · Movilidad Norte · 19 nov – 28 nov">2</span>
+<span class="od v" style="--c:3;--r:2;grid-area:5/5" title="Vendido · Movilidad Norte · 19 nov – 28 nov">2</span>
+<span class="od v" style="--c:4;--r:2;grid-area:5/6" title="Vendido · Movilidad Norte · 19 nov – 28 nov">2</span>
+<span class="od v" style="--c:5;--r:2;grid-area:5/7" title="Vendido · Movilidad Norte · 19 nov – 28 nov">2</span>
+<span class="od v" style="--c:6;--r:2;grid-area:5/8" title="Vendido · Movilidad Norte · 19 nov – 28 nov">2</span>
+<span class="od v" style="--c:7;--r:2;grid-area:5/9" title="Vendido · Movilidad Norte · 19 nov – 28 nov">2</span>
+<span class="od v" style="--c:8;--r:2;grid-area:5/10" title="Vendido · Movilidad Norte · 19 nov – 28 nov">2</span>
+<span class="od v" style="--c:9;--r:2;grid-area:5/11" title="Vendido · Movilidad Norte · 19 nov – 28 nov">2</span>
+<span class="od v" style="--c:10;--r:2;grid-area:5/12" title="Vendido · Retail Centro · 29 nov – 10 dic">3</span>
+<span class="od v" style="--c:11;--r:2;grid-area:5/13" title="Vendido · Retail Centro · 29 nov – 10 dic">3</span>
+<span class="od v" style="--c:12;--r:2;grid-area:5/14" title="Vendido · Retail Centro · 29 nov – 10 dic">3</span>
+<span class="od v" style="--c:13;--r:2;grid-area:5/15" title="Vendido · Retail Centro · 29 nov – 10 dic">3</span>
+<span class="od v" style="--c:14;--r:2;grid-area:5/16" title="Vendido · Retail Centro · 29 nov – 10 dic">3</span>
+<span class="od v" style="--c:15;--r:2;grid-area:5/17" title="Vendido · Retail Centro · 29 nov – 10 dic">3</span>
+<span class="od v" style="--c:16;--r:2;grid-area:5/18" title="Vendido · Retail Centro · 29 nov – 10 dic">3</span>
+<span class="od v" style="--c:17;--r:2;grid-area:5/19" title="Vendido · Retail Centro · 29 nov – 10 dic">3</span>
+<span class="od v" style="--c:18;--r:2;grid-area:5/20" title="Vendido · Retail Centro · 29 nov – 10 dic">3</span>
+<span class="od v" style="--c:19;--r:2;grid-area:5/21" title="Vendido · Retail Centro · 29 nov – 10 dic">3</span>
+<span class="od v" style="--c:20;--r:2;grid-area:5/22" title="Vendido · Retail Centro · 29 nov – 10 dic">3</span>
+<span class="od v" style="--c:21;--r:2;grid-area:5/23" title="Vendido · Retail Centro · 29 nov – 10 dic">3</span>
+<span class="od d" style="--c:22;--r:2;grid-area:5/24" title="Disponible · 11 dic"></span>
+<span class="od d fuga" style="--c:23;--r:2;grid-area:5/25" title="Disponible · 12 dic"></span>
+<span class="od d" style="--c:24;--r:2;grid-area:5/26" title="Disponible · 13 dic"></span>
+<span class="od d" style="--c:25;--r:2;grid-area:5/27" title="Disponible · 14 dic"></span>
+<span class="od d" style="--c:26;--r:2;grid-area:5/28" title="Disponible · 15 dic"></span>
+<span class="od d" style="--c:27;--r:2;grid-area:5/29" title="Disponible · 16 dic"></span>
+<span class="od d" style="--c:28;--r:2;grid-area:5/30" title="Disponible · 17 dic"></span>
+<span class="od d" style="--c:29;--r:2;grid-area:5/31" title="Disponible · 18 dic"></span>
+<div class="oc-inv" style="grid-row:6"><b>Espect021<span class="tr">Tradicional</span></b><em>Guadalajara · Espectacular</em></div>
+<span class="od d" style="--c:0;--r:3;grid-area:6/2" title="Disponible · 19 nov"></span>
+<span class="od d" style="--c:1;--r:3;grid-area:6/3" title="Disponible · 20 nov"></span>
+<span class="od d" style="--c:2;--r:3;grid-area:6/4" title="Disponible · 21 nov"></span>
+<span class="od d fuga" style="--c:3;--r:3;grid-area:6/5" title="Disponible · 22 nov"></span>
+<span class="od d" style="--c:4;--r:3;grid-area:6/6" title="Disponible · 23 nov"></span>
+<span class="od d" style="--c:5;--r:3;grid-area:6/7" title="Disponible · 24 nov"></span>
+<span class="od d" style="--c:6;--r:3;grid-area:6/8" title="Disponible · 25 nov"></span>
+<span class="od d" style="--c:7;--r:3;grid-area:6/9" title="Disponible · 26 nov"></span>
+<span class="od d" style="--c:8;--r:3;grid-area:6/10" title="Disponible · 27 nov"></span>
+<span class="od d" style="--c:9;--r:3;grid-area:6/11" title="Disponible · 28 nov"></span>
+<span class="od d" style="--c:10;--r:3;grid-area:6/12" title="Disponible · 29 nov"></span>
+<span class="od d" style="--c:11;--r:3;grid-area:6/13" title="Disponible · 30 nov"></span>
+<span class="od d fuga" style="--c:12;--r:3;grid-area:6/14" title="Disponible · 1 dic"></span>
+<span class="od d" style="--c:13;--r:3;grid-area:6/15" title="Disponible · 2 dic"></span>
+<span class="od d" style="--c:14;--r:3;grid-area:6/16" title="Disponible · 3 dic"></span>
+<span class="od d" style="--c:15;--r:3;grid-area:6/17" title="Disponible · 4 dic"></span>
+<span class="od d" style="--c:16;--r:3;grid-area:6/18" title="Disponible · 5 dic"></span>
+<span class="od d" style="--c:17;--r:3;grid-area:6/19" title="Disponible · 6 dic"></span>
+<span class="od d" style="--c:18;--r:3;grid-area:6/20" title="Disponible · 7 dic"></span>
+<span class="od d" style="--c:19;--r:3;grid-area:6/21" title="Disponible · 8 dic"></span>
+<span class="od d" style="--c:20;--r:3;grid-area:6/22" title="Disponible · 9 dic"></span>
+<span class="od d fuga" style="--c:21;--r:3;grid-area:6/23" title="Disponible · 10 dic"></span>
+<span class="od d" style="--c:22;--r:3;grid-area:6/24" title="Disponible · 11 dic"></span>
+<span class="od d" style="--c:23;--r:3;grid-area:6/25" title="Disponible · 12 dic"></span>
+<span class="od d" style="--c:24;--r:3;grid-area:6/26" title="Disponible · 13 dic"></span>
+<span class="od d" style="--c:25;--r:3;grid-area:6/27" title="Disponible · 14 dic"></span>
+<span class="od d" style="--c:26;--r:3;grid-area:6/28" title="Disponible · 15 dic"></span>
+<span class="od d" style="--c:27;--r:3;grid-area:6/29" title="Disponible · 16 dic"></span>
+<span class="od d" style="--c:28;--r:3;grid-area:6/30" title="Disponible · 17 dic"></span>
+<span class="od d" style="--c:29;--r:3;grid-area:6/31" title="Disponible · 18 dic"></span>
+<div class="oc-inv" style="grid-row:7"><b>Valla007<span class="tr">Tradicional</span></b><em>Guadalajara · Valla</em></div>
+<span class="od d" style="--c:0;--r:4;grid-area:7/2" title="Disponible · 19 nov"></span>
+<span class="od d fuga" style="--c:1;--r:4;grid-area:7/3" title="Disponible · 20 nov"></span>
+<span class="od d" style="--c:2;--r:4;grid-area:7/4" title="Disponible · 21 nov"></span>
+<span class="od d" style="--c:3;--r:4;grid-area:7/5" title="Disponible · 22 nov"></span>
+<span class="od d" style="--c:4;--r:4;grid-area:7/6" title="Disponible · 23 nov"></span>
+<span class="od d" style="--c:5;--r:4;grid-area:7/7" title="Disponible · 24 nov"></span>
+<span class="od d" style="--c:6;--r:4;grid-area:7/8" title="Disponible · 25 nov"></span>
+<span class="od d" style="--c:7;--r:4;grid-area:7/9" title="Disponible · 26 nov"></span>
+<span class="od d" style="--c:8;--r:4;grid-area:7/10" title="Disponible · 27 nov"></span>
+<span class="od d" style="--c:9;--r:4;grid-area:7/11" title="Disponible · 28 nov"></span>
+<span class="od d fuga" style="--c:10;--r:4;grid-area:7/12" title="Disponible · 29 nov"></span>
+<span class="od d" style="--c:11;--r:4;grid-area:7/13" title="Disponible · 30 nov"></span>
+<span class="od d" style="--c:12;--r:4;grid-area:7/14" title="Disponible · 1 dic"></span>
+<span class="od d" style="--c:13;--r:4;grid-area:7/15" title="Disponible · 2 dic"></span>
+<span class="od r" style="--c:14;--r:4;grid-area:7/16" title="Reservado · Temporada Retail · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:15;--r:4;grid-area:7/17" title="Reservado · Temporada Retail · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:16;--r:4;grid-area:7/18" title="Reservado · Temporada Retail · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:17;--r:4;grid-area:7/19" title="Reservado · Temporada Retail · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:18;--r:4;grid-area:7/20" title="Reservado · Temporada Retail · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:19;--r:4;grid-area:7/21" title="Reservado · Temporada Retail · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:20;--r:4;grid-area:7/22" title="Reservado · Temporada Retail · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:21;--r:4;grid-area:7/23" title="Reservado · Temporada Retail · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:22;--r:4;grid-area:7/24" title="Reservado · Temporada Retail · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:23;--r:4;grid-area:7/25" title="Reservado · Temporada Retail · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:24;--r:4;grid-area:7/26" title="Reservado · Temporada Retail · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:25;--r:4;grid-area:7/27" title="Reservado · Temporada Retail · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:26;--r:4;grid-area:7/28" title="Reservado · Temporada Retail · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:27;--r:4;grid-area:7/29" title="Reservado · Temporada Retail · 3 dic – 16 dic">1</span>
+<span class="od d fuga" style="--c:28;--r:4;grid-area:7/30" title="Disponible · 17 dic"></span>
+<span class="od d" style="--c:29;--r:4;grid-area:7/31" title="Disponible · 18 dic"></span>
+<div class="oc-inv" style="grid-row:8"><b>Parabus114A<span class="tr">Tradicional</span></b><em>Puebla · Parabús</em></div>
+<span class="od v" style="--c:0;--r:5;grid-area:8/2" title="Vendido · Lanzamiento Occidente · 19 nov – 2 dic">1</span>
+<span class="od v" style="--c:1;--r:5;grid-area:8/3" title="Vendido · Lanzamiento Occidente · 19 nov – 2 dic">1</span>
+<span class="od v" style="--c:2;--r:5;grid-area:8/4" title="Vendido · Lanzamiento Occidente · 19 nov – 2 dic">1</span>
+<span class="od v" style="--c:3;--r:5;grid-area:8/5" title="Vendido · Lanzamiento Occidente · 19 nov – 2 dic">1</span>
+<span class="od v" style="--c:4;--r:5;grid-area:8/6" title="Vendido · Lanzamiento Occidente · 19 nov – 2 dic">1</span>
+<span class="od v" style="--c:5;--r:5;grid-area:8/7" title="Vendido · Lanzamiento Occidente · 19 nov – 2 dic">1</span>
+<span class="od v" style="--c:6;--r:5;grid-area:8/8" title="Vendido · Lanzamiento Occidente · 19 nov – 2 dic">1</span>
+<span class="od v" style="--c:7;--r:5;grid-area:8/9" title="Vendido · Lanzamiento Occidente · 19 nov – 2 dic">1</span>
+<span class="od v" style="--c:8;--r:5;grid-area:8/10" title="Vendido · Lanzamiento Occidente · 19 nov – 2 dic">1</span>
+<span class="od v" style="--c:9;--r:5;grid-area:8/11" title="Vendido · Lanzamiento Occidente · 19 nov – 2 dic">1</span>
+<span class="od v" style="--c:10;--r:5;grid-area:8/12" title="Vendido · Lanzamiento Occidente · 19 nov – 2 dic">1</span>
+<span class="od v" style="--c:11;--r:5;grid-area:8/13" title="Vendido · Lanzamiento Occidente · 19 nov – 2 dic">1</span>
+<span class="od v" style="--c:12;--r:5;grid-area:8/14" title="Vendido · Lanzamiento Occidente · 19 nov – 2 dic">1</span>
+<span class="od v" style="--c:13;--r:5;grid-area:8/15" title="Vendido · Lanzamiento Occidente · 19 nov – 2 dic">1</span>
+<span class="od r" style="--c:14;--r:5;grid-area:8/16" title="Reservado · Café Altura · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:15;--r:5;grid-area:8/17" title="Reservado · Café Altura · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:16;--r:5;grid-area:8/18" title="Reservado · Café Altura · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:17;--r:5;grid-area:8/19" title="Reservado · Café Altura · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:18;--r:5;grid-area:8/20" title="Reservado · Café Altura · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:19;--r:5;grid-area:8/21" title="Reservado · Café Altura · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:20;--r:5;grid-area:8/22" title="Reservado · Café Altura · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:21;--r:5;grid-area:8/23" title="Reservado · Café Altura · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:22;--r:5;grid-area:8/24" title="Reservado · Café Altura · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:23;--r:5;grid-area:8/25" title="Reservado · Café Altura · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:24;--r:5;grid-area:8/26" title="Reservado · Café Altura · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:25;--r:5;grid-area:8/27" title="Reservado · Café Altura · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:26;--r:5;grid-area:8/28" title="Reservado · Café Altura · 3 dic – 16 dic">1</span>
+<span class="od r" style="--c:27;--r:5;grid-area:8/29" title="Reservado · Café Altura · 3 dic – 16 dic">1</span>
+<span class="od d" style="--c:28;--r:5;grid-area:8/30" title="Disponible · 17 dic"></span>
+<span class="od d" style="--c:29;--r:5;grid-area:8/31" title="Disponible · 18 dic"></span>
+<div class="oc-inv" style="grid-row:9"><b>Kiosko031<span class="tr">Tradicional</span></b><em>Puebla · Kiosko</em></div>
+<span class="od d" style="--c:0;--r:6;grid-area:9/2" title="Disponible · 19 nov"></span>
+<span class="od d" style="--c:1;--r:6;grid-area:9/3" title="Disponible · 20 nov"></span>
+<span class="od d" style="--c:2;--r:6;grid-area:9/4" title="Disponible · 21 nov"></span>
+<span class="od d" style="--c:3;--r:6;grid-area:9/5" title="Disponible · 22 nov"></span>
+<span class="od d" style="--c:4;--r:6;grid-area:9/6" title="Disponible · 23 nov"></span>
+<span class="od d" style="--c:5;--r:6;grid-area:9/7" title="Disponible · 24 nov"></span>
+<span class="od d fuga" style="--c:6;--r:6;grid-area:9/8" title="Disponible · 25 nov"></span>
+<span class="od d" style="--c:7;--r:6;grid-area:9/9" title="Disponible · 26 nov"></span>
+<span class="od x" style="--c:8;--r:6;grid-area:9/10" title="Conflicto · Bebidas del Norte + Retail Centro · 27 nov – 29 nov">2</span>
+<span class="od x" style="--c:9;--r:6;grid-area:9/11" title="Conflicto · Bebidas del Norte + Retail Centro · 27 nov – 29 nov">2</span>
+<span class="od x" style="--c:10;--r:6;grid-area:9/12" title="Conflicto · Bebidas del Norte + Retail Centro · 27 nov – 29 nov">2</span>
+<span class="od d" style="--c:11;--r:6;grid-area:9/13" title="Disponible · 30 nov"></span>
+<span class="od d" style="--c:12;--r:6;grid-area:9/14" title="Disponible · 1 dic"></span>
+<span class="od d" style="--c:13;--r:6;grid-area:9/15" title="Disponible · 2 dic"></span>
+<span class="od d" style="--c:14;--r:6;grid-area:9/16" title="Disponible · 3 dic"></span>
+<span class="od d fuga" style="--c:15;--r:6;grid-area:9/17" title="Disponible · 4 dic"></span>
+<span class="od d" style="--c:16;--r:6;grid-area:9/18" title="Disponible · 5 dic"></span>
+<span class="od d" style="--c:17;--r:6;grid-area:9/19" title="Disponible · 6 dic"></span>
+<span class="od d" style="--c:18;--r:6;grid-area:9/20" title="Disponible · 7 dic"></span>
+<span class="od d" style="--c:19;--r:6;grid-area:9/21" title="Disponible · 8 dic"></span>
+<span class="od d" style="--c:20;--r:6;grid-area:9/22" title="Disponible · 9 dic"></span>
+<span class="od d" style="--c:21;--r:6;grid-area:9/23" title="Disponible · 10 dic"></span>
+<span class="od d" style="--c:22;--r:6;grid-area:9/24" title="Disponible · 11 dic"></span>
+<span class="od d" style="--c:23;--r:6;grid-area:9/25" title="Disponible · 12 dic"></span>
+<span class="od d fuga" style="--c:24;--r:6;grid-area:9/26" title="Disponible · 13 dic"></span>
+<span class="od d" style="--c:25;--r:6;grid-area:9/27" title="Disponible · 14 dic"></span>
+<span class="od d" style="--c:26;--r:6;grid-area:9/28" title="Disponible · 15 dic"></span>
+<span class="od d" style="--c:27;--r:6;grid-area:9/29" title="Disponible · 16 dic"></span>
+<span class="od d" style="--c:28;--r:6;grid-area:9/30" title="Disponible · 17 dic"></span>
+<span class="od d" style="--c:29;--r:6;grid-area:9/31" title="Disponible · 18 dic"></span>
+<div class="oc-inv" style="grid-row:10"><b>Digital022<span class="dg">Digital</span></b><em>Puebla · Pantalla LED</em></div>
+<span class="od d" style="--c:0;--r:7;grid-area:10/2" title="Disponible · 19 nov"></span>
+<span class="od d" style="--c:1;--r:7;grid-area:10/3" title="Disponible · 20 nov"></span>
+<span class="od d" style="--c:2;--r:7;grid-area:10/4" title="Disponible · 21 nov"></span>
+<span class="od d" style="--c:3;--r:7;grid-area:10/5" title="Disponible · 22 nov"></span>
+<span class="od d fuga" style="--c:4;--r:7;grid-area:10/6" title="Disponible · 23 nov"></span>
+<span class="od d" style="--c:5;--r:7;grid-area:10/7" title="Disponible · 24 nov"></span>
+<span class="od v" style="--c:6;--r:7;grid-area:10/8" title="Vendido · Cobertura anual · 25 nov – 18 dic">1</span>
+<span class="od v" style="--c:7;--r:7;grid-area:10/9" title="Vendido · Cobertura anual · 25 nov – 18 dic">1</span>
+<span class="od v" style="--c:8;--r:7;grid-area:10/10" title="Vendido · Cobertura anual · 25 nov – 18 dic">1</span>
+<span class="od v" style="--c:9;--r:7;grid-area:10/11" title="Vendido · Cobertura anual · 25 nov – 18 dic">1</span>
+<span class="od v" style="--c:10;--r:7;grid-area:10/12" title="Vendido · Cobertura anual · 25 nov – 18 dic">1</span>
+<span class="od v" style="--c:11;--r:7;grid-area:10/13" title="Vendido · Cobertura anual · 25 nov – 18 dic">1</span>
+<span class="od v" style="--c:12;--r:7;grid-area:10/14" title="Vendido · Cobertura anual · 25 nov – 18 dic">1</span>
+<span class="od v" style="--c:13;--r:7;grid-area:10/15" title="Vendido · Cobertura anual · 25 nov – 18 dic">1</span>
+<span class="od v" style="--c:14;--r:7;grid-area:10/16" title="Vendido · Cobertura anual · 25 nov – 18 dic">1</span>
+<span class="od v" style="--c:15;--r:7;grid-area:10/17" title="Vendido · Cobertura anual · 25 nov – 18 dic">1</span>
+<span class="od v" style="--c:16;--r:7;grid-area:10/18" title="Vendido · Cobertura anual · 25 nov – 18 dic">1</span>
+<span class="od v" style="--c:17;--r:7;grid-area:10/19" title="Vendido · Cobertura anual · 25 nov – 18 dic">1</span>
+<span class="od v" style="--c:18;--r:7;grid-area:10/20" title="Vendido · Cobertura anual · 25 nov – 18 dic">1</span>
+<span class="od v" style="--c:19;--r:7;grid-area:10/21" title="Vendido · Cobertura anual · 25 nov – 18 dic">1</span>
+<span class="od v" style="--c:20;--r:7;grid-area:10/22" title="Vendido · Cobertura anual · 25 nov – 18 dic">1</span>
+<span class="od v" style="--c:21;--r:7;grid-area:10/23" title="Vendido · Cobertura anual · 25 nov – 18 dic">1</span>
+<span class="od v" style="--c:22;--r:7;grid-area:10/24" title="Vendido · Cobertura anual · 25 nov – 18 dic">1</span>
+<span class="od v" style="--c:23;--r:7;grid-area:10/25" title="Vendido · Cobertura anual · 25 nov – 18 dic">1</span>
+<span class="od v" style="--c:24;--r:7;grid-area:10/26" title="Vendido · Cobertura anual · 25 nov – 18 dic">1</span>
+<span class="od v" style="--c:25;--r:7;grid-area:10/27" title="Vendido · Cobertura anual · 25 nov – 18 dic">1</span>
+<span class="od v" style="--c:26;--r:7;grid-area:10/28" title="Vendido · Cobertura anual · 25 nov – 18 dic">1</span>
+<span class="od v" style="--c:27;--r:7;grid-area:10/29" title="Vendido · Cobertura anual · 25 nov – 18 dic">1</span>
+<span class="od v" style="--c:28;--r:7;grid-area:10/30" title="Vendido · Cobertura anual · 25 nov – 18 dic">1</span>
+<span class="od v" style="--c:29;--r:7;grid-area:10/31" title="Vendido · Cobertura anual · 25 nov – 18 dic">1</span>
     </div>
   </figure>
   <p class="foot">La respuesta a la pregunta de todos los lunes, sin preguntársela a nadie:<b class="remate">&ldquo;¿Esa ubicación está libre el próximo mes?&rdquo;</b></p>
@@ -1782,9 +2249,16 @@ body.m #sEnd .sign{margin-top:26px;font-size:13px}
       <p class="marco-pie">Ilustraci&oacute;n con datos de ejemplo</p>
     </div>
     <div class="pane" data-p="4">
-      <div class="pane-h"><h3>Propuestas</h3><p>Se arman con el inventario que de verdad está libre: en lista, en mapa y por cercanía a puntos de interés.</p><ul class="pane-chips"><li>Disponibilidad en tiempo real</li><li>Mapa, POI y capas compartibles</li><li>Reserva en firme</li></ul></div>
-      <figure class="marco"><div class="marco-h"><i></i><i></i><i></i><span>QEB &middot; Propuestas / Buscar inventario · Parabús · Monterrey</span></div>
+      <div class="pane-h"><h3>Propuestas</h3><p>Se arman con el inventario que de verdad está libre y se comparten por enlace, con tu imagen: tu cliente ve el listado y el mapa sin entrar al sistema.</p><div class="pv-fila"><ul class="pane-chips"><li>Disponibilidad en tiempo real</li><li>Enlace con tu marca</li><li>Mapa, Excel y KML</li></ul><div class="pv-tabs" role="tablist" aria-label="Vistas de la propuesta"><button type="button" class="on" data-v="0">Armar</button><button type="button" data-v="1">Compartir</button><button type="button" data-v="2">Vista del cliente</button></div></div></div>
+      <figure class="marco pv on" data-v="0"><div class="marco-h"><i></i><i></i><i></i><span>QEB &middot; Propuestas / Buscar inventario · Parabús · Monterrey</span></div>
         <div class="marco-b"><div class="bu-top"><div class="bu-c"><span><i class="f"></i>Flujo</span><b>0 / 12</b><div class="sk-prog"><i style="width:0"></i></div><u>12 restantes</u></div><div class="bu-d"><span>Distribución</span><b>50</b><u>50 / 50</u></div><div class="bu-c"><span><i class="c"></i>Contraflujo</span><b>0 / 12</b><div class="sk-prog"><i style="width:0"></i></div><u>12 restantes</u></div><div class="bu-s"><b>0</b><span>seleccionados</span></div></div><div class="sk-tabs"><span class="on">Buscar disponibles</span><span class="">Mis reservados</span><span class="">Historial<i>18</i></span><span class="">Capas</span></div><div class="sk-filtros"><span class="az">Todos</span><span>Flujo</span><span>Contraflujo</span><span class="sep"></span><span>Completos</span><span>Únicos</span><span>Agrupar</span><span>Subir CSV</span><span class="sep"></span><span class="tg">Disponibilidad multi-periodo</span><span class="res">248 resultados</span></div><div class="bu-split"><div class="bu-lista"><div class="bu-h"><span>Código</span><span>Cara</span><span>Sentido</span><span>NSE</span><span>Ubicación</span></div><div class="bu-r"><span class="k">Parabus042A</span><span class="ca f">Flujo</span><span>N–S</span><span>ABC+</span><span class="u">Av. Central · Esq. Hidalgo</span></div><div class="bu-r"><span class="k">Parabus042B</span><span class="ca c">Contraflujo</span><span>S–N</span><span>ABC+</span><span class="u">Av. Central · Esq. Hidalgo</span></div><div class="bu-r"><span class="k">Parabus088A</span><span class="ca f">Flujo</span><span>N–S</span><span>ABC+</span><span class="u">Blvd. Norte · Glorieta Juárez</span></div><div class="bu-r"><span class="k">Parabus114A</span><span class="ca f">Flujo</span><span>O–P</span><span>ABC+</span><span class="u">Av. del Parque · Fte. Universidad</span></div><div class="bu-r"><span class="k">Parabus114B</span><span class="ca c">Contraflujo</span><span>P–O</span><span>ABC+</span><span class="u">Av. del Parque · Fte. Universidad</span></div><div class="bu-r"><span class="k">Parabus126A</span><span class="ca f">Flujo</span><span>P–O</span><span>ABC+</span><span class="u">Calz. Independencia · Mercado</span></div></div><div class="bu-geo"><div class="bu-poi"><span class="t">Filtros de ubicación</span><div class="bu-tabs"><span class="on">POI</span><span>Dirección</span><span>KML</span></div><div class="bu-busq"><em>Tiendas de conveniencia</em><b>Radio 300 m</b></div></div><div class="bu-mapa"><span class="mp-poi" style="left:31%;top:34%"></span><span class="mp-poi" style="left:58%;top:58%"></span><span class="mp-poi" style="left:76%;top:30%"></span><i class="mp-pin fu" style="left:90.0%;top:55.2%"></i><i class="mp-pin fu" style="left:23.4%;top:9.5%"></i><i class="mp-pin en" style="left:63.3%;top:65.2%"></i><i class="mp-pin fu" style="left:57.4%;top:67.8%"></i><i class="mp-pin en" style="left:76.9%;top:31.4%"></i><i class="mp-pin fu" style="left:45.9%;top:68.9%"></i><i class="mp-pin fu" style="left:31.6%;top:11.3%"></i><i class="mp-pin en" style="left:71.3%;top:25.2%"></i><i class="mp-pin en" style="left:49.2%;top:62.7%"></i><i class="mp-pin en" style="left:40.8%;top:33.2%"></i><i class="mp-pin en" style="left:23.1%;top:37.9%"></i><i class="mp-pin en" style="left:86.7%;top:32.0%"></i><i class="mp-pin en" style="left:46.6%;top:58.1%"></i><i class="mp-pin en" style="left:63.6%;top:59.4%"></i><i class="mp-pin en" style="left:68.1%;top:28.8%"></i><i class="mp-pin fu" style="left:69.8%;top:33.3%"></i><i class="mp-pin fu" style="left:27.0%;top:60.7%"></i><i class="mp-pin en" style="left:40.4%;top:35.6%"></i><i class="mp-pin en" style="left:78.5%;top:31.4%"></i><i class="mp-pin en" style="left:19.9%;top:34.9%"></i><i class="mp-pin fu" style="left:44.7%;top:81.9%"></i><i class="mp-pin fu" style="left:44.9%;top:78.8%"></i><i class="mp-pin fu" style="left:26.6%;top:59.4%"></i><i class="mp-pin fu" style="left:32.5%;top:10.8%"></i><i class="mp-pin en" style="left:23.9%;top:27.5%"></i><i class="mp-pin en" style="left:23.0%;top:33.2%"></i><i class="mp-pin en" style="left:83.5%;top:25.8%"></i><i class="mp-pin en" style="left:85.9%;top:26.7%"></i><i class="mp-pin fu" style="left:93.0%;top:91.5%"></i><i class="mp-pin en" style="left:63.8%;top:56.2%"></i><i class="mp-pin fu" style="left:51.3%;top:37.6%"></i><i class="mp-pin en" style="left:63.3%;top:51.8%"></i><i class="mp-pin fu" style="left:69.4%;top:19.2%"></i><i class="mp-pin en" style="left:35.7%;top:32.2%"></i><i class="mp-pin fu" style="left:39.2%;top:85.9%"></i><i class="mp-pin en" style="left:57.0%;top:62.7%"></i><i class="mp-pin fu" style="left:29.0%;top:71.7%"></i><div class="bu-ley"><span><i class="en"></i>En rango <b>41</b></span><span><i class="fu"></i>Fuera <b>207</b></span></div></div></div><div class="bu-pie"><span>248 inventarios · <b>41</b> dentro del radio · 207 fuera</span><span class="bu-btn">Reservar</span></div></div></figure>
+      <figure class="marco pv" data-v="1"><div class="marco-h"><i></i><i></i><i></i><span>QEB &middot; Propuestas / Vista compartir · Propuesta #214</span></div>
+        <div class="marco-b"><div class="cm-top"><div class="cm-tit"><b>Café Altura · Temporada de invierno</b><span class="cm-badge">Parabús Monterrey</span><u>Propuesta #214 · Diciembre 2026</u></div><div class="cm-acc"><button type="button" class="cm-b rosa" data-ir="2"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>Ver en navegador</button><button type="button" class="cm-b azul" data-ir="2"><svg viewBox="0 0 24 24"><path d="M9 4L3 6.5v13.5l6-2.5 6 2.5 6-2.5V4l-6 2.5L9 4zM9 4v13.5M15 6.5V20"/></svg>Ver mapa</button><button type="button" class="cm-b mor" id="cmCopia"><svg viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg><span>Copiar enlace</span></button><span class="cm-b gh">KML</span><span class="cm-b gh">PDF</span></div></div>
+        <div class="cm-split"><div class="cm-tabla"><div class="cm-h"><span></span><span>Código</span><span>Plaza</span><span>Cara</span><span>Ubicación</span><span>Tarifa</span></div><button type="button" class="cm-r" data-k="0" aria-pressed="true"><i class="ck"></i><span class="k">Parabus042A</span><span>Monterrey</span><span class="ca f">Flujo</span><span class="u">Av. Central · Esq. Hidalgo</span><span class="pr">$4,800</span></button><button type="button" class="cm-r" data-k="1" aria-pressed="true"><i class="ck"></i><span class="k">Parabus042B</span><span>Monterrey</span><span class="ca c">Contraflujo</span><span class="u">Av. Central · Esq. Hidalgo</span><span class="pr">$4,800</span></button><button type="button" class="cm-r" data-k="2" aria-pressed="true"><i class="ck"></i><span class="k">Parabus088A</span><span>Monterrey</span><span class="ca f">Flujo</span><span class="u">Blvd. Norte · Glorieta Juárez</span><span class="pr">$5,200</span></button><button type="button" class="cm-r" data-k="3" aria-pressed="true"><i class="ck"></i><span class="k">Parabus114A</span><span>Monterrey</span><span class="ca f">Flujo</span><span class="u">Av. del Parque · Fte. Universidad</span><span class="pr">$5,200</span></button><button type="button" class="cm-r" data-k="4" aria-pressed="true"><i class="ck"></i><span class="k">Parabus114B</span><span>Monterrey</span><span class="ca c">Contraflujo</span><span class="u">Av. del Parque · Fte. Universidad</span><span class="pr">$5,200</span></button><button type="button" class="cm-r" data-k="5" aria-pressed="true"><i class="ck"></i><span class="k">Parabus131A</span><span>Monterrey</span><span class="ca f">Flujo</span><span class="u">Av. Reforma · Parque Central</span><span class="pr">$4,800</span></button><button type="button" class="cm-r off" data-k="6" aria-pressed="false"><i class="ck"></i><span class="k">Parabus156B</span><span>Monterrey</span><span class="ca c">Contraflujo</span><span class="u">Calle 5 de Mayo · Plaza Mayor</span><span class="pr">$4,400</span></button><button type="button" class="cm-r" data-k="7" aria-pressed="true"><i class="ck"></i><span class="k">Parabus172A</span><span>Monterrey</span><span class="ca f">Flujo</span><span class="u">Av. Las Torres · Fte. Hospital</span><span class="pr">$4,400</span></button><div class="cm-tot"><span>Marca lo que entra al enlace</span><span><b id="cmN">7</b> caras · Inversión <b id="cmT">$34,400</b></span></div></div>
+        <div class="cm-panel"><p class="t">Qué ve tu cliente</p><button type="button" class="cm-tg on" data-t="lista" aria-pressed="true"><span>Listado de ubicaciones</span><i></i></button><button type="button" class="cm-tg on" data-t="mapa" aria-pressed="true"><span>Mapa</span><i></i></button><button type="button" class="cm-tg on" data-t="tarifas" aria-pressed="true"><span>Tarifas e inversión</span><i></i></button><button type="button" class="cm-tg on" data-t="desc" aria-pressed="true"><span>Descarga Excel y KML</span><i></i></button><p class="t">Enlace</p><div class="cm-link"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span>propuestas.tumarca.mx/p/8f2k9</span><i>Copiado</i></div><p class="cm-nota">Con tu logo y tus colores. Tu cliente no entra al sistema: abre el enlace.</p></div></div></div></figure>
+      <figure class="marco pv claro" data-v="2"><div class="marco-h"><i></i><i></i><i></i><span><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>propuestas.tumarca.mx/p/8f2k9</span></div>
+        <div class="marco-b"><div class="cl-top"><span class="cl-logo"><i></i>TU MARCA</span><div class="cl-tit"><b>Propuesta de campaña</b><u>Referencia #214</u></div><div class="cl-meta"><span>Periodo<b>Diciembre 2026</b></span><span>Cliente<b>Café Altura</b></span></div><span class="cl-badge">Parabús Monterrey</span><div class="cl-acc"><span class="x">Excel</span><span class="k">KML</span></div></div>
+        <div class="cl-split"><div class="cl-lista"><p class="cl-lh">Ubicaciones <i id="clN">7</i></p><ol><li class="cl-i" data-k="0"><b>1</b><div><span class="k">Parabus042A</span><span class="u">Av. Central · Esq. Hidalgo</span></div><em class="pr">$4,800</em></li><li class="cl-i" data-k="1"><b>2</b><div><span class="k">Parabus042B</span><span class="u">Av. Central · Esq. Hidalgo</span></div><em class="pr">$4,800</em></li><li class="cl-i" data-k="2"><b>3</b><div><span class="k">Parabus088A</span><span class="u">Blvd. Norte · Glorieta Juárez</span></div><em class="pr">$5,200</em></li><li class="cl-i" data-k="3"><b>4</b><div><span class="k">Parabus114A</span><span class="u">Av. del Parque · Fte. Universidad</span></div><em class="pr">$5,200</em></li><li class="cl-i" data-k="4"><b>5</b><div><span class="k">Parabus114B</span><span class="u">Av. del Parque · Fte. Universidad</span></div><em class="pr">$5,200</em></li><li class="cl-i" data-k="5"><b>6</b><div><span class="k">Parabus131A</span><span class="u">Av. Reforma · Parque Central</span></div><em class="pr">$4,800</em></li><li class="cl-i fuera" data-k="6"><b>7</b><div><span class="k">Parabus156B</span><span class="u">Calle 5 de Mayo · Plaza Mayor</span></div><em class="pr">$4,400</em></li><li class="cl-i" data-k="7"><b>8</b><div><span class="k">Parabus172A</span><span class="u">Av. Las Torres · Fte. Hospital</span></div><em class="pr">$4,400</em></li></ol><p class="cl-tot">Inversión <b id="clT">$34,400</b> <span>+ IVA</span></p></div><div class="cl-mapa"><i class="cl-pin" data-k="0" style="left:30%;top:34%"><b>1</b></i><i class="cl-pin" data-k="1" style="left:33%;top:38%"><b>2</b></i><i class="cl-pin" data-k="2" style="left:55%;top:18%"><b>3</b></i><i class="cl-pin" data-k="3" style="left:72%;top:46%"><b>4</b></i><i class="cl-pin" data-k="4" style="left:75%;top:51%"><b>5</b></i><i class="cl-pin" data-k="5" style="left:46%;top:62%"><b>6</b></i><i class="cl-pin fuera" data-k="6" style="left:22%;top:72%"><b>7</b></i><i class="cl-pin" data-k="7" style="left:84%;top:24%"><b>8</b></i><span class="cl-zoom"><i>+</i><i>&minus;</i></span></div></div></div></figure>
       <p class="marco-pie">Ilustraci&oacute;n con datos de ejemplo</p>
     </div>
     <div class="pane" data-p="5">
@@ -1911,14 +2385,14 @@ body.m #sEnd .sign{margin-top:26px;font-size:13px}
       <ul class="bq-lista" id="bqLista"></ul>
     </div>
     <aside class="bq-res" aria-live="polite">
-      <p class="bq-t">Índice de ajuste con QEB</p>
+      <p class="bq-t">Afinidad con QEB</p>
       <div class="bq-score">
         <svg class="bq-anillo" viewBox="0 0 120 120" aria-hidden="true">
           <defs><linearGradient id="bqG" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#5accea"/><stop offset=".55" stop-color="#9c60f0"/><stop offset="1" stop-color="#c045d8"/></linearGradient></defs>
           <circle class="bg" cx="60" cy="60" r="50"/><circle class="arc" id="bqArc" cx="60" cy="60" r="50"/>
         </svg>
         <b class="num" id="bqPct">0<small>%</small></b>
-        <div class="bq-nivel"><b id="bqNivel">Empecemos</b><span id="bqDesc">Marca lo que hoy te pasa y aquí vemos qué tanto se ajusta QEB a tu operación.</span></div>
+        <div class="bq-nivel"><b id="bqNivel">Empecemos</b><span id="bqDesc">Marca lo que hoy te pasa y aquí vemos qué tanta afinidad tiene QEB con tu operación.</span></div>
       </div>
       <div class="bq-perfil" id="bqPerfil">
         <p><span>Tu propuesta parte de</span><b id="bqLic">&mdash;</b></p>
@@ -2106,7 +2580,7 @@ function go(i){
   if(id==="s3") runMorph();
   if(id==="s5") runOcupa();
   if(id==="sCon") runConex();
-  if(id==="s6" && mnus.length) abreModulo(0);
+  if(id==="s6" && mnus.length){ abreModulo(0); if(typeof pvVista === "function") pvVista(0); }
   if(id==="s7" && typeof abreSeccion === "function") abreSeccion(0);
 }
 document.getElementById("prev").onclick = ()=>go(cur-1);
@@ -2141,7 +2615,52 @@ document.getElementById("ladoDer").onclick = e=>{ e.stopPropagation(); go(cur+1)
     if(j !== i) slides[j].scrollIntoView({ behavior: "smooth", block: "start" });
   }, { passive: true });
 })();
+/* ---------- indice lateral ----------
+   Se arma con las laminas que quedaron en el mazo (sin el comparativo en la
+   liga del cliente). Titulo = nombre de la seccion; abajo, su encabezado. */
+const menuBtn = document.getElementById("menuBtn"), menuLista = document.getElementById("menuLista");
+const menuEl = document.getElementById("menu");
+slides.forEach((s, k) => {
+  const h = s.querySelector("h1, h2");
+  const li = document.createElement("li"), b = document.createElement("button");
+  b.type = "button"; b.style.setProperty("--i", k);
+  b.innerHTML = '<span class="n num">' + String(k + 1).padStart(2, "0") + '</span><span class="t"></span><span class="d"></span>';
+  b.querySelector(".t").textContent = s.getAttribute("aria-label");
+  b.querySelector(".d").textContent = h ? h.textContent.replace(/\s+/g, " ").trim() : "";
+  b.onclick = () => {
+    cierraMenu();
+    if(document.body.classList.contains("m")) slides[k].scrollIntoView({ behavior: "smooth", block: "start" });
+    else go(k);
+  };
+  li.appendChild(b); menuLista.appendChild(li);
+});
+function laminaActual(){
+  if(!document.body.classList.contains("m")) return cur;
+  let i = 0; slides.forEach((s, k) => { if(s.getBoundingClientRect().top <= innerHeight * .35) i = k; });
+  return i;
+}
+function abreMenu(){
+  const a = laminaActual();
+  [...menuLista.querySelectorAll("button")].forEach((b, k) => b.classList.toggle("cur", k === a));
+  document.body.classList.add("menu-on");
+  menuBtn.setAttribute("aria-expanded", "true"); menuBtn.setAttribute("aria-label", "Cerrar índice");
+  menuEl.setAttribute("aria-hidden", "false");
+  const c = menuLista.querySelector(".cur"); if(c) c.scrollIntoView({ block: "center" });
+}
+function cierraMenu(){
+  document.body.classList.remove("menu-on");
+  menuBtn.setAttribute("aria-expanded", "false"); menuBtn.setAttribute("aria-label", "Abrir índice de láminas");
+  menuEl.setAttribute("aria-hidden", "true");
+}
+const menuAbierto = () => document.body.classList.contains("menu-on");
+menuBtn.onclick = e => { e.stopPropagation(); menuAbierto() ? cierraMenu() : abreMenu(); };
+document.getElementById("menuVelo").onclick = cierraMenu;
+addEventListener("keydown", e => {
+  if(e.key === "Escape" && menuAbierto()){ cierraMenu(); menuBtn.focus(); }
+  else if((e.key === "m" || e.key === "M") && !e.metaKey && !e.ctrlKey && !e.target.closest("input, textarea")) menuAbierto() ? cierraMenu() : abreMenu();
+}, true);
 addEventListener("keydown", e=>{
+  if(menuAbierto()) return;                           // con el indice abierto las flechas no cambian de lamina
   if(document.body.classList.contains("m")) return;   // en movil el scroll es del navegador
   if(["ArrowRight","PageDown"].includes(e.key) || e.key===" "){ e.preventDefault(); go(cur+1); }
   else if(["ArrowLeft","PageUp"].includes(e.key)){ e.preventDefault(); go(cur-1); }
@@ -2376,6 +2895,49 @@ function abreModulo(i){
 }
 mnus.forEach((b, i) => b.addEventListener("click", e => { e.stopPropagation(); abreModulo(i); }));
 if(mnus.length) abreModulo(0);
+
+/* ---------- Propuestas: armar, compartir y la vista del cliente ----------
+   Lo que se marca en "Compartir" es lo que aparece en el enlace: las filas
+   apagadas no salen en la vista del cliente y los interruptores quitan
+   tarifas, mapa, listado o descargas. */
+const pvPane = document.querySelector('#s6 .pane[data-p="4"]');
+function pvVista(v){
+  if(!pvPane) return;
+  pvPane.querySelectorAll(".pv-tabs button").forEach(b => b.classList.toggle("on", +b.dataset.v === v));
+  pvPane.querySelectorAll(".marco.pv").forEach(f => f.classList.toggle("on", +f.dataset.v === v));
+}
+if(pvPane){
+  const fmt = n => "$" + n.toLocaleString("en-US");
+  const pvSuma = () => {
+    let n = 0, t = 0;
+    pvPane.querySelectorAll(".cm-r").forEach(r => {
+      const on = !r.classList.contains("off");
+      pvPane.querySelectorAll('[data-k="' + r.dataset.k + '"]:not(.cm-r)').forEach(el => el.classList.toggle("fuera", !on));
+      if(on){ n++; t += +r.querySelector(".pr").textContent.replace(/[^0-9]/g, ""); }
+    });
+    document.getElementById("cmN").textContent = n; document.getElementById("clN").textContent = n;
+    document.getElementById("cmT").textContent = fmt(t); document.getElementById("clT").textContent = fmt(t);
+  };
+  pvPane.querySelectorAll(".pv-tabs button").forEach(b => b.addEventListener("click", e => { e.stopPropagation(); pvVista(+b.dataset.v); }));
+  pvPane.querySelectorAll(".cm-r").forEach(r => r.addEventListener("click", e => {
+    e.stopPropagation();
+    const vivas = pvPane.querySelectorAll(".cm-r:not(.off)").length;
+    if(!r.classList.contains("off") && vivas === 1) return;     // al menos una ubicacion en el enlace
+    r.classList.toggle("off"); r.setAttribute("aria-pressed", !r.classList.contains("off")); pvSuma();
+  }));
+  pvPane.querySelectorAll(".cm-tg").forEach(b => b.addEventListener("click", e => {
+    e.stopPropagation();
+    const on = b.classList.toggle("on"); b.setAttribute("aria-pressed", on);
+    pvPane.classList.toggle("pv-sin-" + b.dataset.t, !on);
+  }));
+  pvPane.querySelectorAll("[data-ir]").forEach(b => b.addEventListener("click", e => { e.stopPropagation(); pvVista(+b.dataset.ir); }));
+  const copia = document.getElementById("cmCopia"), link = pvPane.querySelector(".cm-link");
+  copia.addEventListener("click", e => {
+    e.stopPropagation();
+    link.classList.add("ok"); copia.querySelector("span").textContent = "Enlace copiado";
+    setTimeout(() => { link.classList.remove("ok"); copia.querySelector("span").textContent = "Copiar enlace"; pvVista(2); }, 1100);
+  });
+}
 
 /* ---------- lamina 8: el menu de QEB Inteligencia ----------
    Mismo comportamiento que el de QEB Operacion, con sus propias secciones. */
@@ -2770,10 +3332,10 @@ const BUSCA = [
      cambia la operacion. Nunca llega a 100. */
   const AREAS_N = ["Comercial", "Operación", "Administración", "Dirección"];
   const NIVELES = [
-    [0,  "Empecemos", "Marca lo que hoy te pasa y aquí vemos qué tanto se ajusta QEB a tu operación."],
-    [1,  "Ajuste puntual", "Lo que marcaste QEB lo resuelve desde el primer día."],
-    [45, "Ajuste alto", "Varias áreas ganan con un mismo dato. Aquí QEB cambia cómo operas."],
-    [75, "Ajuste total", "Lo que hoy te duele es justo lo que QEB resuelve, de punta a punta."],
+    [0,  "Empecemos", "Marca lo que hoy te pasa y aquí vemos qué tanta afinidad tiene QEB con tu operación."],
+    [1,  "Afinidad inicial", "Lo que marcaste QEB lo resuelve desde el primer día."],
+    [45, "Afinidad alta", "Varias áreas ganan con un mismo dato. Aquí QEB cambia cómo operas."],
+    [75, "Afinidad total", "Lo que hoy te duele es justo lo que QEB resuelve, de punta a punta."],
   ];
   let pctVisto = 0, pctRaf = null;
   function pintaRes(){
