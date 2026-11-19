@@ -125,6 +125,58 @@ h3{font-family:var(--disp);font-weight:700;letter-spacing:-.01em}
 .lado.fuera{opacity:0;pointer-events:none}
 body.m .lado{display:none}
 @media (hover:none){.lado{opacity:.55}}
+/* ============ prospecto: registro desde la lamina de licencias ============
+   El boton solo aparece si el navegador trae la sesion del indice de
+   propuestas (la API responde 200). El cliente que abre el enlace no lo ve. */
+.pr-btn{display:inline-flex;align-items:center;gap:9px;margin-left:auto;align-self:center;padding:11px 20px;border-radius:12px;cursor:pointer;
+  font:inherit;font-size:16px;font-weight:600;color:#fff;border:1px solid rgba(185,166,255,.45);
+  background:linear-gradient(100deg,rgba(120,96,240,.55),rgba(192,69,216,.4));box-shadow:0 14px 40px -16px rgba(156,96,240,.9);transition:filter .2s,transform .15s}
+.pr-btn:hover{filter:brightness(1.15)}.pr-btn:active{transform:scale(.97)}
+.pr-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pr-btn[hidden]{display:none}
+#prVelo{position:fixed;inset:0;z-index:98;background:rgba(8,4,14,.4);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .4s}
+#prospecto{position:fixed;top:0;right:0;bottom:0;z-index:99;width:min(560px,100vw);display:flex;flex-direction:column;color:var(--tx);
+  font-family:"Barlow",system-ui,sans-serif;
+  background:linear-gradient(200deg,rgba(120,96,240,.34) 0%,rgba(99,42,148,.32) 55%,rgba(135,40,107,.28) 100%),rgba(18,10,28,.72);
+  backdrop-filter:blur(26px) saturate(1.5);-webkit-backdrop-filter:blur(26px) saturate(1.5);
+  border-left:1px solid rgba(185,166,255,.3);box-shadow:-30px 0 80px -30px rgba(120,96,240,.55);
+  clip-path:circle(0px at calc(100% - 60px) calc(100% - 60px));visibility:hidden;
+  transition:clip-path .6s cubic-bezier(.7,0,.2,1),visibility 0s linear .6s}
+body.pr-on #prospecto{clip-path:circle(170% at calc(100% - 60px) calc(100% - 60px));visibility:visible;transition:clip-path .65s cubic-bezier(.7,0,.2,1),visibility 0s}
+body.pr-on #prVelo{opacity:1;pointer-events:auto}
+.pr-h{display:flex;align-items:center;gap:12px;padding:20px 22px 14px;border-bottom:1px solid rgba(255,255,255,.08)}
+.pr-h h3{font-size:20px;color:#fff}
+.pr-h p{font-size:12.5px;color:var(--mu)}
+.pr-x{margin-left:auto;width:38px;height:38px;border-radius:11px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:#fff;font-size:20px;cursor:pointer}
+.pr-sel{display:flex;gap:8px;padding:14px 22px 4px}
+.pr-cuerpo{flex:1;overflow:auto;padding:10px 22px 18px;display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;align-content:start;scrollbar-width:thin;scrollbar-color:rgba(185,166,255,.3) transparent}
+.pr-cuerpo .ancho{grid-column:1/-1}
+.pr-t{grid-column:1/-1;margin-top:8px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--lilac)}
+#prospecto label{display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--mu)}
+#prospecto input,#prospecto select,#prospecto textarea{font:inherit;font-size:15px;color:#fff;padding:9px 12px;border-radius:10px;
+  border:1px solid rgba(185,166,255,.22);background:rgba(13,8,20,.5);outline:none;transition:border-color .2s,background .2s;width:100%}
+#prospecto select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--lilac) 50%),linear-gradient(135deg,var(--lilac) 50%,transparent 50%);
+  background-position:calc(100% - 17px) 50%,calc(100% - 12px) 50%;background-size:5px 5px;background-repeat:no-repeat;padding-right:30px}
+#prospecto select option{background:#1d1229;color:#fff}
+#prospecto input:focus,#prospecto select:focus,#prospecto textarea:focus{border-color:var(--lilac);background:rgba(13,8,20,.7)}
+#prospecto textarea{min-height:84px;resize:vertical}
+#prospecto .req{color:var(--amber)}
+.pr-fmt{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:7px}
+.pr-fmt button{font:inherit;font-size:13px;padding:6px 12px;border-radius:999px;cursor:pointer;color:var(--mu);border:1px solid rgba(185,166,255,.22);background:rgba(13,8,20,.4);transition:all .2s}
+.pr-fmt button.on{color:#fff;border-color:transparent;background:var(--grad)}
+.pr-diag{grid-column:1/-1;display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:12px;border:1px dashed rgba(185,166,255,.35);background:rgba(120,96,240,.1)}
+.pr-diag b{font-family:var(--disp);font-size:26px;font-weight:800;color:#fff;line-height:1}
+.pr-diag span{font-size:13px;color:var(--mu);line-height:1.4}
+.pr-diag span em{font-style:normal;color:#fff}
+.pr-pie{display:flex;align-items:center;gap:12px;padding:14px 22px 20px;border-top:1px solid rgba(255,255,255,.08)}
+.pr-pie .estado{font-size:12.5px;color:var(--mu)}
+.pr-pie .estado.ok{color:#5fe0a8}.pr-pie .estado.mal{color:#ff8fa3}
+.pr-guardar{margin-left:auto;font:inherit;font-size:15px;font-weight:600;color:#fff;padding:11px 22px;border-radius:11px;border:0;cursor:pointer;background:var(--grad);box-shadow:0 12px 30px -12px rgba(156,96,240,.9)}
+.pr-guardar:disabled{opacity:.55;cursor:wait}
+body.m .pr-btn{margin:14px 0 0;font-size:14px}
+body.m .desde{flex-wrap:wrap}
+body.m .pr-cuerpo{grid-template-columns:1fr}
+@media (prefers-reduced-motion:reduce){#prospecto,body.pr-on #prospecto{transition:visibility 0s}}
 /* ============ indice: menu lateral de vidrio ============
    Boton fijo arriba a la izquierda (fuera del escenario, funciona en PC y en
    movil). El panel crece como circulo desde el boton, encima de la lamina. */
@@ -388,6 +440,11 @@ body.m #menu .mn-pie{display:none}
 .app-main{position:relative;min-width:0}
 .pane{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .34s ease,visibility 0s linear .34s}
 .pane.on{opacity:1;visibility:visible;transition:opacity .34s ease}
+/* Un hijo con visibility:visible recibe clics aunque su lamina este oculta:
+   sin esto, el panel activo de la lamina siguiente tapaba los botones de la
+   actual. Fuera de la lamina en pantalla, nada recibe clics (se deja la
+   visibilidad en paz para no cortar el fundido entre laminas). */
+.slide:not(.on),.slide:not(.on) *{pointer-events:none !important}
 .pane-h h3{font-size:25px;color:#fff;line-height:1.1}
 .pane-h p{margin-top:6px;max-width:1080px;font-size:16px;font-weight:300;line-height:1.4;color:var(--mu)}
 .pane-chips{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}
@@ -1599,6 +1656,31 @@ body.m #sEnd .sign{margin-top:26px;font-size:13px}
 </style>
 </head>
 <body>
+<div id="prVelo"></div>
+<aside id="prospecto" aria-label="Registro de prospecto" aria-hidden="true">
+  <div class="pr-h"><div><h3>Prospecto</h3><p>Se guarda en el registro de propuestas, no en este navegador.</p></div><button type="button" class="pr-x" id="prCerrar" aria-label="Cerrar">&times;</button></div>
+  <div class="pr-sel"><label class="ancho" style="flex:1">Trabajar con<select id="prLista"><option value="">Nuevo prospecto</option></select></label></div>
+  <form class="pr-cuerpo" id="prForm" autocomplete="off">
+    <p class="pr-t">Empresa y contacto</p>
+    <label class="ancho"><span>Empresa <b class="req">*</b></span><input name="empresa" required maxlength="160"></label>
+    <label>Contacto<input name="contacto" maxlength="120"></label>
+    <label>Cargo<input name="cargo" maxlength="120"></label>
+    <label>Correo<input name="correo" type="email" maxlength="160"></label>
+    <label>Teléfono<input name="telefono" type="tel" maxlength="40"></label>
+    <p class="pr-t">Su operación</p>
+    <label class="ancho">Plazas<input name="plazas" maxlength="240" placeholder="Monterrey, Guadalajara, CDMX…"></label>
+    <label>Inventario (caras aprox.)<input name="inventario" inputmode="numeric" maxlength="40"></label>
+    <label>Usuarios<input name="usuarios" inputmode="numeric" maxlength="40"></label>
+    <label class="ancho" style="gap:8px">Formatos de su inventario<div class="pr-fmt" id="prFmt"><button type="button" data-f="Espectacular">Espectacular</button><button type="button" data-f="Valla">Valla</button><button type="button" data-f="Parabús">Parabús</button><button type="button" data-f="Kiosko">Kiosko</button><button type="button" data-f="Muro">Muro</button><button type="button" data-f="Puente">Puente</button><button type="button" data-f="Mupi">Mupi</button><button type="button" data-f="Pantalla digital">Pantalla digital</button><button type="button" data-f="Indoor">Indoor</button><button type="button" data-f="Transporte">Transporte</button></div></label>
+    <label class="ancho">Otros formatos<input name="otrosFormatos" maxlength="160"></label>
+    <p class="pr-t">Propuesta</p>
+    <label>Licencia de interés<select name="licencia"><option>Por definir</option><option>Starter</option><option>Professional</option><option>Premium</option></select></label>
+    <label>Asesor QEB<input name="asesor" maxlength="120"></label>
+    <div class="pr-diag" id="prDiag"><b>—</b><span>Lo que marque en <em>¿Qué estás buscando?</em> se guarda con el prospecto.</span></div>
+    <label class="ancho">Notas<textarea name="notas" maxlength="4000"></textarea></label>
+  </form>
+  <div class="pr-pie"><span class="estado" id="prEstado">Sin guardar</span><button type="button" class="pr-guardar" id="prGuardar">Guardar</button></div>
+</aside>
 <button id="menuBtn" type="button" aria-label="Abrir índice de láminas" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
 <div id="menuVelo"></div>
 <nav id="menu" aria-label="Índice de láminas" aria-hidden="true">
@@ -2423,7 +2505,7 @@ body.m #sEnd .sign{margin-top:26px;font-size:13px}
       <tr class="last"><td>Personalización</td><td>capa 1</td><td>capas 1 y 2</td><td class="prem">capas 1, 2 y 3</td></tr>
     </tbody>
   </table>
-  <div class="desde"><span>Desde</span><b class="num">$89,900<sup>*</sup></b><span>al mes</span></div>
+  <div class="desde"><span>Desde</span><b class="num">$89,900<sup>*</sup></b><span>al mes</span><button type="button" class="pr-btn" id="prBtn" hidden><svg viewBox="0 0 24 24"><path d="M15 19c0-2.8-2.7-4.5-6-4.5S3 16.2 3 19"/><circle cx="9" cy="8" r="3.5"/><path d="M19 8v6M16 11h6"/></svg>Registrar prospecto</button></div>
   <p class="foot">*Precio base de referencia, en pesos mexicanos y sin IVA. Cada propuesta se cotiza según la dimensión de tu operación. Contratación mínima de 12 meses.</p>
   <p class="aviso">Tarifas y características de referencia, sujetas a cambio. Las condiciones definitivas se establecen en una cotización formal.</p>
 </section>
@@ -2595,7 +2677,7 @@ document.getElementById("ladoDer").onclick = e=>{ e.stopPropagation(); go(cur+1)
    que ya se desliza de lado (la tira de modulos) o sobre un boton. */
 (function(){
   let x0 = 0, y0 = 0, t0 = 0, activo = false, enMazo = false;
-  const ignora = el => el.closest && el.closest(".app-nav, .desliza, button, a, input, #mswitch");
+  const ignora = el => el.closest && el.closest(".app-nav, .desliza, button, a, input, select, textarea, #mswitch, #prospecto");
   addEventListener("touchstart", e => {
     if(e.touches.length !== 1 || ignora(e.target)) { activo = false; return; }
     activo = true; x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; t0 = Date.now();
@@ -2615,6 +2697,130 @@ document.getElementById("ladoDer").onclick = e=>{ e.stopPropagation(); go(cur+1)
     if(j !== i) slides[j].scrollIntoView({ behavior: "smooth", block: "start" });
   }, { passive: true });
 })();
+/* ---------- registro de prospecto ----------
+   La presentacion es una sola y se usa con muchos prospectos. Lo que se llena
+   aqui se guarda en la API de la seccion (Firestore), con la sesion del indice
+   de propuestas. Sin sesion la API responde 401 y el boton no aparece. Mientras
+   se escribe, un borrador vive en este navegador para no perderlo si se cierra
+   antes de guardar. */
+(function(){
+  const btn = document.getElementById("prBtn"), panel = document.getElementById("prospecto");
+  if(!btn || !panel) return;
+  const API = (location.pathname.startsWith("/propuestas/") ? "/propuestas" : "") + "/api/prospectos";
+  const SLUG = location.pathname.split("/").filter(Boolean).pop() || "";
+  const form = document.getElementById("prForm"), sel = document.getElementById("prLista");
+  const estado = document.getElementById("prEstado"), guardar = document.getElementById("prGuardar");
+  const fmts = [...document.querySelectorAll("#prFmt button")];
+  const BORRADOR = "qeb-prospecto-borrador", ASESOR = "qeb-prospecto-asesor";
+  const mem = { get: k => { try { return localStorage.getItem(k); } catch(e){ return null; } },
+                set: (k, v) => { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch(e){} } };
+  let lista = [], actual = null, sucio = false;
+
+  const pon = (t, c) => { estado.textContent = t; estado.className = "estado" + (c ? " " + c : ""); };
+  function leer(){
+    const d = Object.fromEntries(new FormData(form));
+    d.formatos = fmts.filter(b => b.classList.contains("on")).map(b => b.dataset.f);
+    return d;
+  }
+  function llenar(p){
+    form.reset();
+    ["empresa","contacto","cargo","correo","telefono","plazas","inventario","usuarios","otrosFormatos","licencia","asesor","notas"]
+      .forEach(k => { if(form.elements[k] && p[k] != null) form.elements[k].value = p[k]; });
+    if(!form.elements.licencia.value) form.elements.licencia.value = "Por definir";
+    fmts.forEach(b => b.classList.toggle("on", (p.formatos || []).includes(b.dataset.f)));
+    if(!form.elements.asesor.value) form.elements.asesor.value = mem.get(ASESOR) || "";
+  }
+  function pintaDiag(){
+    const g = window.qebBusca ? window.qebBusca() : null, caja = document.getElementById("prDiag");
+    if(!g || !g.marcados.length){
+      caja.innerHTML = '<b>—</b><span>Lo que marque en <em>¿Qué estás buscando?</em> se guarda con el prospecto.</span>';
+      return;
+    }
+    caja.innerHTML = "<b>" + g.afinidad + "%</b><span><em></em><br></span>";
+    caja.querySelector("em").textContent = g.nivel;
+    caja.querySelector("span").append(g.marcados.length + (g.marcados.length === 1 ? " dolor" : " dolores") +
+      (g.areas.length ? " · " + g.areas.join(", ") : ""));
+  }
+  function pintaLista(){
+    sel.innerHTML = '<option value="">Nuevo prospecto</option>';
+    lista.forEach(p => {
+      const o = document.createElement("option");
+      o.value = p.id; o.textContent = p.empresa + (p.contacto ? " · " + p.contacto : "");
+      sel.appendChild(o);
+    });
+    sel.value = actual ? actual.id : "";
+  }
+  function guardaBorrador(){
+    sucio = true; pon("Cambios sin guardar");
+    mem.set(BORRADOR, JSON.stringify({ id: actual ? actual.id : null, datos: leer() }));
+  }
+
+  function abre(){
+    pintaDiag();
+    document.body.classList.add("pr-on"); panel.setAttribute("aria-hidden", "false");
+    setTimeout(() => form.elements.empresa.focus({ preventScroll: true }), 350);
+  }
+  function cierra(){ document.body.classList.remove("pr-on"); panel.setAttribute("aria-hidden", "true"); btn.focus({ preventScroll: true }); }
+
+  btn.addEventListener("click", e => { e.stopPropagation(); abre(); });
+  document.getElementById("prCerrar").addEventListener("click", cierra);
+  document.getElementById("prVelo").addEventListener("click", cierra);
+  panel.addEventListener("click", e => e.stopPropagation());
+  panel.addEventListener("keydown", e => { e.stopPropagation(); if(e.key === "Escape") cierra(); });
+  form.addEventListener("input", guardaBorrador);
+  form.addEventListener("submit", e => e.preventDefault());
+  fmts.forEach(b => b.addEventListener("click", () => { b.classList.toggle("on"); guardaBorrador(); }));
+
+  sel.addEventListener("change", () => {
+    if(sucio && !confirm("Hay cambios sin guardar en este prospecto. ¿Cambiar de todos modos?")){ pintaLista(); return; }
+    actual = lista.find(p => p.id === sel.value) || null;
+    llenar(actual || {});
+    if(window.qebBuscaFijar) window.qebBuscaFijar(actual && actual.diagnostico ? actual.diagnostico.marcados : []);
+    pintaDiag(); sucio = false; mem.set(BORRADOR, null);
+    pon(actual ? "Guardado el " + new Date(actual.actualizado).toLocaleDateString("es-MX", { day: "numeric", month: "short" }) : "Sin guardar");
+  });
+
+  guardar.addEventListener("click", async () => {
+    if(!form.elements.empresa.value.trim()){ form.elements.empresa.focus(); pon("Falta el nombre de la empresa", "mal"); return; }
+    const d = leer();
+    d.id = actual ? actual.id : undefined;
+    d.presentacion = SLUG;
+    d.diagnostico = window.qebBusca ? window.qebBusca() : null;
+    mem.set(ASESOR, d.asesor || null);
+    guardar.disabled = true; pon("Guardando…");
+    try {
+      const r = await fetch(API, { method: "POST", credentials: "same-origin", headers: { "content-type": "application/json" }, body: JSON.stringify(d) });
+      const j = await r.json().catch(() => ({}));
+      if(!r.ok) throw new Error(j.error || "No se pudo guardar");
+      actual = j.prospecto;
+      lista = [actual, ...lista.filter(p => p.id !== actual.id)];
+      pintaLista(); sucio = false; mem.set(BORRADOR, null);
+      pon("Guardado · " + new Date().toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit" }), "ok");
+    } catch(err){
+      pon(err.message + ". El borrador sigue en este navegador.", "mal");
+    } finally { guardar.disabled = false; }
+  });
+
+  // Solo con sesion: si la API no responde 200 el boton se queda oculto.
+  fetch(API, { credentials: "same-origin", cache: "no-store" })
+    .then(r => r.ok ? r.json() : null)
+    .then(j => {
+      if(!j) return;
+      lista = j.prospectos || [];
+      btn.hidden = false;
+      const b = mem.get(BORRADOR);
+      if(b){
+        try {
+          const { id, datos } = JSON.parse(b);
+          actual = lista.find(p => p.id === id) || null;
+          llenar(datos); sucio = true; pon("Borrador recuperado, sin guardar");
+        } catch(e){ llenar({}); }
+      } else llenar({});
+      pintaLista();
+    })
+    .catch(() => {});
+})();
+
 /* ---------- indice lateral ----------
    Se arma con las laminas que quedaron en el mazo (sin el comparativo en la
    liga del cliente). Titulo = nombre de la seccion; abajo, su encabezado. */
@@ -2657,10 +2863,10 @@ menuBtn.onclick = e => { e.stopPropagation(); menuAbierto() ? cierraMenu() : abr
 document.getElementById("menuVelo").onclick = cierraMenu;
 addEventListener("keydown", e => {
   if(e.key === "Escape" && menuAbierto()){ cierraMenu(); menuBtn.focus(); }
-  else if((e.key === "m" || e.key === "M") && !e.metaKey && !e.ctrlKey && !e.target.closest("input, textarea")) menuAbierto() ? cierraMenu() : abreMenu();
+  else if((e.key === "m" || e.key === "M") && !e.metaKey && !e.ctrlKey && !document.body.classList.contains("pr-on") && !e.target.closest("input, textarea, select")) menuAbierto() ? cierraMenu() : abreMenu();
 }, true);
 addEventListener("keydown", e=>{
-  if(menuAbierto()) return;                           // con el indice abierto las flechas no cambian de lamina
+  if(menuAbierto() || document.body.classList.contains("pr-on")) return;                           // con el indice abierto las flechas no cambian de lamina
   if(document.body.classList.contains("m")) return;   // en movil el scroll es del navegador
   if(["ArrowRight","PageDown"].includes(e.key) || e.key===" "){ e.preventDefault(); go(cur+1); }
   else if(["ArrowLeft","PageUp"].includes(e.key)){ e.preventDefault(); go(cur-1); }
@@ -3382,6 +3588,22 @@ const BUSCA = [
   }
   tabs.forEach((t, k) => t.addEventListener("click", e => { e.stopPropagation(); area = k; pintaLista(); }));
   pintaLista(); pintaRes();
+  /* El registro de prospecto lee el diagnostico y, al cargar uno guardado,
+     vuelve a marcar sus dolores. */
+  window.qebBusca = () => {
+    const idx = marcado.map((m, i) => m ? i : -1).filter(i => i >= 0);
+    return {
+      afinidad: pctVisto,
+      nivel: document.getElementById("bqNivel").textContent,
+      areas: AREAS_N.filter((a, k) => marcado.slice(k * 3, k * 3 + 3).some(Boolean)),
+      marcados: idx,
+      dolores: idx.map(i => BUSCA[i][0]),
+    };
+  };
+  window.qebBuscaFijar = idx => {
+    marcado.fill(false); (idx || []).forEach(i => { if(i < marcado.length) marcado[i] = true; });
+    pintaLista(); pintaRes();
+  };
 })();
 
 /* ---------- portada: frases que rotan ---------- */

@@ -88,7 +88,7 @@ export function firebaseConfigurado(): boolean {
  * La app de firebase-admin se registra por nombre en el proceso, así que
  * inicializarla dos veces lanza. Se reutiliza si ya existe.
  */
-function appAdmin(): App {
+export function appAdmin(): App {
   const existente = getApps()[0];
   if (existente) return existente;
 

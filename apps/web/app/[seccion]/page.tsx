@@ -5,7 +5,9 @@ import { listarPublicaciones } from "@/content/publicaciones";
 import { almacen, almacenPersistente, ESTADO_INICIAL } from "@/lib/almacen";
 import { baseDeSeccion } from "@/lib/base";
 import { CONFIG, esSeccion } from "@/lib/secciones";
+import { prospectos, type Prospecto } from "@/lib/prospectos";
 import { Panel, type Fila } from "./panel";
+import { Prospectos } from "./prospectos";
 
 /**
  * Se arma en cada petición: el índice refleja el estado en base de datos, que
@@ -38,6 +40,17 @@ export default async function IndiceSeccion({ params }: Props) {
     almacen().leerSeccion(seccion),
     baseDeSeccion(seccion),
   ]);
+
+  // Sólo propuestas registra prospectos. Si la base no responde se muestra el
+  // índice sin la lista en vez de tumbar la página entera.
+  let listaProspectos: Prospecto[] | null = null;
+  if (seccion === "propuestas") {
+    try {
+      listaProspectos = await prospectos().listar();
+    } catch (error) {
+      console.error("[qeb] No se pudieron leer los prospectos:", error);
+    }
+  }
 
   const filas: Fila[] = publicaciones.map((publicacion) => {
     const estado = estados.get(publicacion.slug) ?? ESTADO_INICIAL;
@@ -77,6 +90,8 @@ export default async function IndiceSeccion({ params }: Props) {
             persistente={almacenPersistente()}
           />
         </div>
+
+        {listaProspectos && <Prospectos lista={listaProspectos} base={base} />}
       </Container>
     </Section>
   );
