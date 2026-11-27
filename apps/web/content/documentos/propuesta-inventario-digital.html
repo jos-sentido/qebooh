@@ -417,17 +417,18 @@ input[readonly]{color:var(--lila);background:var(--surface)}
 <!-- ================= AGRUPACIÓN ================= -->
 <section id="grupos"><div class="wrap">
   <h2>Herramientas de gestión de reels</h2>
-  <p class="section-intro">El reparto entre campañas viene de la reserva. Aquí se decide cómo se usan los reels de cada campaña para cargar artes, en dos <b>cargas</b>: por ejemplo, de los reels de la campaña A, 60% para rotar el arte 1 y el arte 2 (carga 1) y el 40% restante para un video (carga 2). Las mismas herramientas están en la reserva y en el gestor de artes, con tres alcances: <b>masivas</b> (todo el circuito), <b>por grupo</b> o <b>selectivas</b> (un solo inventario).</p>
+  <p class="section-intro">El reparto entre campañas viene de la reserva. Aquí se decide cómo se usan los reels de cada campaña para cargar artes, en las <b>cargas</b> que se necesiten: por ejemplo, de los reels de la campaña A, 60% para rotar el arte 1 y el arte 2 (carga 1) y el 40% restante para un video (carga 2). Se pueden agregar o quitar cargas y siempre suman 100%. Las mismas herramientas están en la reserva y en el gestor de artes, con tres alcances: <b>masivas</b> (todo el circuito), <b>por grupo</b> o <b>selectivas</b> (un solo inventario).</p>
 
   <div class="sim" id="simGrupos">
     <div class="sim-head"><h3>Circuito con pantallas de distinta duración</h3><span class="tag">Interactivo</span></div>
-    <p class="reel-meta" style="margin-top:0">Elige la campaña y a qué pantallas aplicar la acción, y ajusta qué parte de sus reels va a la carga 1; el resto va a la carga 2. El % es la unidad del circuito y los reels se calculan por inventario, porque el mismo porcentaje equivale a distinto número de reels en cada pantalla. Cálculo sobre 24 h y 14 días. Lo que definas aquí se ve en el calendario y en el gestor de artes.</p>
+    <p class="reel-meta" style="margin-top:0">Elige la campaña y a qué pantallas aplicar la acción, y reparte sus reels entre sus cargas: al mover una, las demás se ajustan en proporción. El % es la unidad del circuito y los reels se calculan por inventario, porque el mismo porcentaje equivale a distinto número de reels en cada pantalla. Cálculo sobre 24 h y 14 días. Lo que definas aquí se ve en el calendario y en el gestor de artes.</p>
     <div class="field-l">Campaña</div>
     <div class="btn-row" id="grpCamps" style="margin-bottom:14px"></div>
     <div class="field-l">Aplicar a</div>
     <div class="btn-row" id="grpBtns" style="margin-bottom:14px"></div>
-    <label class="field" style="max-width:460px"><span><span id="grpCampTxt">Campaña A</span> · carga 1: <b id="grpPctTxt">60%</b> · carga 2: <b id="grpPct2">40%</b></span><input type="range" id="grpPct" min="0" max="100" value="60"></label>
-    <div class="legend" id="grpLeyenda"></div>
+    <div class="field-l">Cargas de la <span id="grpCampTxt">campaña A</span> · suman 100%</div>
+    <div id="grpCargas"></div>
+    <div class="btn-row"><button id="grpAddCarga">+ Agregar carga</button><span class="reel-meta" style="align-self:center">Cada carga nueva trae su propio arte; sus artes y su rotación se definen en el gestor de artes.</span></div>
     <div class="table-scroll" style="margin-top:14px"><table id="grpTable"></table></div>
   </div>
 
@@ -745,15 +746,27 @@ const SCREENS=[
 SCREENS.forEach(s=>{s.reel=s.slots*s.dur; s.porDia=Math.floor(86400/s.reel); s.porHora=Math.floor(3600/s.reel);});
 const DIAS=14;
 let foco=0;
-const nuevaCamp=(pct,cargas,c1)=>({pct,lock:false,c1def:c1??100,c1:{},cargas:cargas||[{pat:[{a:0,w:100}]},{pat:[{a:1,w:100}]}],vers:{}}); // w = % del arte dentro de su carga (suman 100)
-let camps=[nuevaCamp(50,[{pat:[{a:0,w:50},{a:1,w:50}]},{pat:[{a:2,w:100}]}],60),nuevaCamp(50)];
-const c1Of=(c,s)=>camps[c].c1[SCREENS[s].k] ?? camps[c].c1def;
-const cargaCol=(c,j)=>j?`color-mix(in srgb, ${css(COLORS[c])} 50%, #ffffff)`:css(COLORS[c]);
+// cargas[j].pat: artes de la carga y su % (w, suman 100). cpDef: % de la campaña por carga (suman 100);
+// cp[clave]: el mismo reparto pero propio de una pantalla (acciones por grupo o selectivas).
+const nuevaCamp=(pct,cargas,cpDef)=>({pct,lock:false,cargas:cargas||[{pat:[{a:0,w:100}]}],cpDef:cpDef||[100],cp:{},vers:{}});
+let camps=[nuevaCamp(50,[{pat:[{a:0,w:50},{a:1,w:50}]},{pat:[{a:2,w:100}]}],[60,40]),nuevaCamp(50)];
+const cpOf=(c,s)=>camps[c].cp[SCREENS[s].k] || camps[c].cpDef; // % de cada carga en la pantalla s
+const MAX_CARGAS=4;
+const SOMBRA=[100,50,75,32]; // tono de cada carga sobre el color de su campaña
+const cargaCol=(c,j)=>j?`color-mix(in srgb, ${css(COLORS[c])} ${SOMBRA[j]||40}%, #ffffff)`:css(COLORS[c]);
 const artName=(c,a)=>'Arte '+(a+1); // los artes se numeran dentro de cada campaña; siempre se muestran junto a su campaña
 const cargaTxt=(c,j)=>{const P=camps[c].cargas[j].pat; return P.map(p=>'Arte '+(p.a+1)).join(' + ')+(P.length>1?' en rotación':'');};
 function campDia(s,c){ return splitReels(SCREENS[s].porDia)[c]; } // reels diarios de la campaña en la pantalla
-function cargaDia(s,c){ const n=campDia(s,c), n1=Math.round(c1Of(c,s)/100*n); return [n1,n-n1]; }
+function cargaDia(s,c){ return repartoEntero(cpOf(c,s).map(x=>x/100),campDia(s,c)); } // reels diarios de cada carga
+// Cambia el % de la carga j en un reparto y ajusta las demás en proporción (enteros que suman 100).
+function ajustaReparto(arr,j,v){ const a=arr.slice(); if(a.length===1) return [100]; v=Math.max(0,Math.min(100,v));
+  const otros=a.map((_,x)=>x).filter(x=>x!==j), prev=otros.reduce((t,x)=>t+a[x],0);
+  const r=repartoEntero(otros.map(x=>prev>0?a[x]/prev:1/otros.length),100-v); a[j]=v; otros.forEach((x,y)=>a[x]=r[y]); return a; }
+function normalizaReparto(arr){ const t=arr.reduce((a,b)=>a+b,0); return repartoEntero(arr.map(x=>t>0?x/t:1/arr.length),100); }
 
+// % a enteros por residuo mayor (mismo método que el reparto entre campañas).
+function repartoEntero(w,total){ const raw=w.map(x=>x*total), r=raw.map(Math.floor); let left=total-r.reduce((a,b)=>a+b,0);
+  raw.map((v,i)=>[v-Math.floor(v),i]).sort((a,b)=>b[0]-a[0]).slice(0,left).forEach(([,i])=>r[i]++); return r; }
 // Ajusta las campañas no bloqueadas (excepto idx) para que todo sume 100, de forma proporcional.
 function rebalance(idx){
   const lockedSum=camps.reduce((a,c,i)=>a+((c.lock&&i!==idx)?c.pct:0),0);
@@ -815,21 +828,41 @@ function renderGrpBtns(){
   const opts=[['all','Todo el circuito (masiva)'],...durs.map(d=>['d'+d,'Pantallas de '+d+' s (grupo)']),...SCREENS.map(s=>['k'+s.k,s.k+' (selectiva)'])];
   $('#grpBtns').innerHTML=opts.map(([v,l])=>`<button data-g="${v}" class="${v===grpSel?'active':''}">${l}</button>`).join('');
 }
-function syncSlider(){ const i=SCREENS.findIndex(inSel), v=c1Of(grpCamp,i); $('#grpPct').value=v; $('#grpPctTxt').textContent=v+'%'; $('#grpPct2').textContent=(100-v)+'%'; }
+function grpRef(){ return SCREENS.findIndex(inSel); } // pantalla de referencia del alcance elegido
+function grpTabla(){
+  const c=grpCamp, nC=camps[c].cargas.length;
+  const rows=SCREENS.map((s,i)=>{ const n=campDia(i,c), nd=cargaDia(i,c), cp=cpOf(c,i);
+    return `<tr style="${inSel(s)?'background:var(--accent-soft)':''}"><td class="mono">${s.k}</td><td>${s.u}</td><td>${s.dur} s</td><td>${s.reel} s</td><td class="mono">${fmt(s.porDia*DIAS)}</td><td class="mono"><b>${fmt(n*DIAS)}</b></td>${cp.map((p,j)=>`<td class="mono"><b>${p}%</b> · ${fmt(nd[j]*DIAS)}</td>`).join('')}</tr>`; }).join('');
+  $('#grpTable').innerHTML=`<tr><th>Clave</th><th>Ubicación</th><th>Duración slot</th><th>Reel</th><th>Reels del periodo</th><th>Campaña ${NAMES[c]} · ${camps[c].pct.toFixed(0)}%</th>${Array.from({length:nC},(_,j)=>`<th>Carga ${j+1}</th>`).join('')}</tr>`+rows;
+}
 function renderGrp(){
   if(grpCamp>=camps.length) grpCamp=0;
-  const c=grpCamp;
+  const c=grpCamp, C=camps[c], cp=cpOf(c,grpRef());
   $('#grpCamps').innerHTML=camps.map((x,i)=>`<button data-gc="${i}" class="${i===c?'active':''}"><i class="dot" style="background:${css(COLORS[i])};width:10px;height:10px;margin-right:6px;vertical-align:-1px"></i>Campaña ${NAMES[i]} · ${x.pct.toFixed(0)}%</button>`).join('');
-  $('#grpCampTxt').textContent='Campaña '+NAMES[c];
-  $('#grpLeyenda').innerHTML=`<span><i class="dot" style="background:${cargaCol(c,0)}"></i><b>Carga 1</b>: ${cargaTxt(c,0)}</span><span><i class="dot" style="background:${cargaCol(c,1)}"></i><b>Carga 2</b>: ${cargaTxt(c,1)}</span><span>Los artes de cada carga se definen en el gestor de artes.</span>`;
-  syncSlider();
-  const rows=SCREENS.map((s,i)=>{ const n=campDia(i,c), [n1,n2]=cargaDia(i,c), p=c1Of(c,i);
-    return `<tr style="${inSel(s)?'background:var(--accent-soft)':''}"><td class="mono">${s.k}</td><td>${s.u}</td><td>${s.dur} s</td><td>${s.reel} s</td><td class="mono">${fmt(s.porDia*DIAS)}</td><td class="mono"><b>${fmt(n*DIAS)}</b></td><td class="mono"><b>${p}%</b> · ${fmt(n1*DIAS)}</td><td class="mono">${100-p}% · ${fmt(n2*DIAS)}</td></tr>`; }).join('');
-  $('#grpTable').innerHTML=`<tr><th>Clave</th><th>Ubicación</th><th>Duración slot</th><th>Reel</th><th>Reels del periodo</th><th>Campaña ${NAMES[c]} · ${camps[c].pct.toFixed(0)}%</th><th>Carga 1</th><th>Carga 2</th></tr>`+rows;
+  $('#grpCampTxt').textContent='campaña '+NAMES[c];
+  $('#grpCargas').innerHTML=C.cargas.map((_,j)=>`<div class="pat-row"><span class="lab"><span class="chip-a" style="background:${cargaCol(c,j)}">Carga ${j+1}</span></span>
+    <span class="reel-meta share">${cargaTxt(c,j)}</span>
+    <span class="pctctl"><input type="range" min="0" max="100" step="1" value="${cp[j]}" data-cj="${j}" ${C.cargas.length<=1?'disabled':''} aria-label="Carga ${j+1}: % de la campaña"><b data-cpct="${j}">${cp[j]}%</b></span>
+    <button data-cdel="${j}" ${C.cargas.length<=1?'disabled':''} title="Quitar carga">×</button></div>`).join('');
+  $('#grpAddCarga').disabled=C.cargas.length>=MAX_CARGAS||artesDe(c).length>=6;
+  grpTabla();
 }
 $('#grpBtns').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; grpSel=b.dataset.g; renderGrpBtns(); renderGrp(); });
 $('#grpCamps').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; grpCamp=+b.dataset.gc; rotCamp=grpCamp; renderGrp(); renderRot(); });
-$('#grpPct').addEventListener('input',e=>{ const v=+e.target.value; SCREENS.forEach(s=>{ if(inSel(s)) camps[grpCamp].c1[s.k]=v; }); renderGrp(); renderCal(); renderRot(); });
+// Mientras se arrastra se actualizan los % y la tabla; al soltar, el calendario y el gestor de artes.
+$('#grpCargas').addEventListener('input',e=>{ const r=e.target; if(r.type!=='range') return; const C=camps[grpCamp], j=+r.dataset.cj, v=+r.value;
+  if(grpSel==='all'){ C.cpDef=ajustaReparto(C.cpDef,j,v); C.cp={}; }
+  else SCREENS.forEach((s,i)=>{ if(inSel(s)) C.cp[s.k]=ajustaReparto(cpOf(grpCamp,i),j,v); });
+  const cp=cpOf(grpCamp,grpRef()); cp.forEach((x,y)=>{ const el=$(`#grpCargas input[data-cj="${y}"]`); if(el&&el!==r) el.value=x; const t=$(`#grpCargas [data-cpct="${y}"]`); if(t) t.textContent=x+'%'; });
+  grpTabla(); });
+$('#grpCargas').addEventListener('change',e=>{ if(e.target.type==='range'){ renderCal(); renderRot(); } });
+$('#grpCargas').addEventListener('click',e=>{ const b=e.target.closest('[data-cdel]'); if(!b) return; const C=camps[grpCamp], j=+b.dataset.cdel; if(C.cargas.length<=1) return;
+  C.cargas.splice(j,1); C.cpDef=normalizaReparto(C.cpDef.filter((_,x)=>x!==j)); Object.keys(C.cp).forEach(k=>C.cp[k]=normalizaReparto(C.cp[k].filter((_,x)=>x!==j)));
+  renderGrp(); renderCal(); renderRot(); });
+$('#grpAddCarga').addEventListener('click',()=>{ const C=camps[grpCamp]; if(C.cargas.length>=MAX_CARGAS) return; const usadas=artesDe(grpCamp); let a=0; while(usadas.includes(a)) a++;
+  C.cargas.push({pat:[{a,w:100}]}); const n=C.cargas.length, nuevo=arr=>ajustaReparto([...arr,0],n-1,Math.round(100/n));
+  C.cpDef=nuevo(C.cpDef); Object.keys(C.cp).forEach(k=>C.cp[k]=nuevo(C.cp[k]));
+  renderGrp(); renderCal(); renderRot(); });
 
 /* =========================================================
    4) Calendario de reels de una pantalla: periodo → día → hora
@@ -855,9 +888,6 @@ function baseDay(){ const s=SCREENS[foco], t=splitReels(s.porDia), key=foco+(mod
 function dayCells(d){ const b=baseDay(); if(mode!=='manual'||!overrides.size) return b; let out=null;
   overrides.forEach((c,key)=>{const [s,dd,k]=key.split(':').map(Number); if(s===foco&&dd===d&&c<camps.length){ if(!out) out=b.slice(); out[k]=c; }}); return out||b; }
 const excFoco=()=>[...overrides.keys()].filter(k=>k.startsWith(foco+':')).length;
-// % a enteros por residuo mayor (mismo método que el reparto entre campañas).
-function repartoEntero(w,total){ const raw=w.map(x=>x*total), r=raw.map(Math.floor); let left=total-r.reduce((a,b)=>a+b,0);
-  raw.map((v,i)=>[v-Math.floor(v),i]).sort((a,b)=>b[0]-a[0]).slice(0,left).forEach(([,i])=>r[i]++); return r; }
 // Cambia el % de un arte y reparte el resto entre los demás artes de la carga, en proporción.
 function setArtPct(P,i,v){ if(P.length===1){P[0].w=100;return;} v=Math.max(0,Math.min(100,v));
   const others=P.map((_,x)=>x).filter(x=>x!==i), prev=others.reduce((a,x)=>a+P[x].w,0);
@@ -869,8 +899,8 @@ function computeDays(){
   for(let d=0;d<DIAS;d++){
     const cells=dayCells(d), n=cells.length, carga=new Array(n), art=new Array(n), per=camps.map(()=>[]);
     cells.forEach((c,k)=>per[c].push(k));
-    per.forEach((ks,c)=>{ const m=ks.length, n1=Math.round(c1Of(c,foco)/100*m), pos=[[],[]];
-      ks.forEach((k,i)=>{ const j=(Math.ceil((i+1)*n1/m)-Math.ceil(i*n1/m))?0:1; /* la carga 1 abre el día */ carga[k]=j; pos[j].push(k); });
+    per.forEach((ks,c)=>{ const m=ks.length, t=repartoEntero(cpOf(c,foco).map(x=>x/100),m), pos=t.map(()=>[]), cr=t.map(()=>0);
+      ks.forEach(k=>{ t.forEach((v,j)=>cr[j]+=v/m); let b=0; cr.forEach((v,j)=>{if(v>cr[b]+1e-9) b=j;}); cr[b]-=1; carga[k]=b; pos[b].push(k); }); /* las cargas se intercalan; la 1 abre el día */
       camps[c].cargas.forEach((cg,j)=>{ const P=cg.pat, L=pos[j].length; if(!L) return;
         // Reinicio diario: cada día cumple el % exacto (reels enteros) y arranca igual.
         // Continuo: el crédito pasa al día siguiente; el % se cumple sobre el periodo.
@@ -888,10 +918,10 @@ const hh=h=>two(h)+':00';
 const fmtT=s=>[Math.floor(s/3600)%24,Math.floor(s/60)%60,s%60].map(two).join(':');
 function fecha(d,opt){ const v=$('#calIni').value||'2026-12-07', f=new Date(v+'T12:00:00'); f.setDate(f.getDate()+d);
   return f.toLocaleDateString('es-MX',opt||{weekday:'short',day:'numeric',month:'short'}); }
-function countCJ(day,a,b){ const r={}; for(let k=a;k<b;k++){ const key=day.cells[k]*2+day.carga[k]; r[key]=(r[key]||0)+1; } return r; }
+function countCJ(day,a,b){ const r={}; for(let k=a;k<b;k++){ const key=day.cells[k]*8+day.carga[k]; r[key]=(r[key]||0)+1; } return r; }
 const ordenCJ=r=>Object.keys(r).map(Number).sort((x,y)=>x-y);
-const barras=r=>ordenCJ(r).map(key=>`<span style="flex:${r[key]};background:${cargaCol(key>>1,key&1)}"></span>`).join('');
-const resumen=r=>ordenCJ(r).map(key=>`Campaña ${NAMES[key>>1]} carga ${(key&1)+1}: ${r[key]}`).join(' · ')+' reels';
+const barras=r=>ordenCJ(r).map(key=>`<span style="flex:${r[key]};background:${cargaCol(key>>3,key&7)}"></span>`).join('');
+const resumen=r=>ordenCJ(r).map(key=>`Campaña ${NAMES[key>>3]} carga ${(key&7)+1}: ${r[key]}`).join(' · ')+' reels';
 function renderCal(){
   const s=SCREENS[foco], v=$('#calView'), days=computeDays(), t=splitReels(s.porDia);
   $('#calPant').innerHTML=SCREENS.map((x,i)=>`<option value="${i}" ${i===foco?'selected':''}>${x.k} · reel de ${x.reel} s · ${fmt(x.porDia)} reels al día</option>`).join('');
@@ -920,13 +950,13 @@ function renderCal(){
       h+=`<button class="reel-t${exc?' exc':''}" data-k="${k}" style="background:${cargaCol(ci,j)}" title="Reel ${fmt(k+1)} · ${largo} · ${fmtT(k*s.reel)}–${fmtT((k+1)*s.reel)} · Campaña ${NAMES[ci]} · carga ${j+1} · ${artName(ci,a)}${exc?' · excepción manual':''}">Reel ${fmt(k+1)} · ${fmtT(k*s.reel)}<b>${artName(ci,a)}</b>Campaña ${NAMES[ci]} · carga ${j+1}</button>`; }
     v.innerHTML=h+'</div>';
   }
-  $('#calLegend').innerHTML=camps.map((_,i)=>{ const [n1,n2]=cargaDia(foco,i);
-    return `<span><i class="dot" style="background:${cargaCol(i,0)}"></i>Campaña ${NAMES[i]} · carga 1 (${cargaTxt(i,0)})</span>`+(n2?`<span><i class="dot" style="background:${cargaCol(i,1)}"></i>Campaña ${NAMES[i]} · carga 2 (${cargaTxt(i,1)})</span>`:''); }).join('')+
+  $('#calLegend').innerHTML=camps.map((_,i)=>{ const nd=cargaDia(foco,i);
+    return camps[i].cargas.map((_,j)=>nd[j]?`<span><i class="dot" style="background:${cargaCol(i,j)}"></i>Campaña ${NAMES[i]} · carga ${j+1} (${cargaTxt(i,j)})</span>`:'').join(''); }).join('')+
     (calNivel==='hora'?'<span>Cada reel dice qué arte le toca, de qué campaña y de qué carga.</span>':'<span>Toca un día o una hora para acercarte.</span>');
-  const sel=calNivel==='periodo'?days:[days[calDia]], cc=camps.map(()=>0), cj=camps.map(()=>[0,0]);
+  const sel=calNivel==='periodo'?days:[days[calDia]], cc=camps.map(()=>0), cj=camps.map(C=>C.cargas.map(()=>0));
   sel.forEach(day=>day.cells.forEach((ci,k)=>{ cc[ci]++; cj[ci][day.carga[k]]++; }));
   const target=t.map(x=>x*sel.length), ok=cc.every((x,i)=>x===target[i]);
-  $('#modeCheck').innerHTML=`${s.k} · ${calNivel==='periodo'?'Periodo':fecha(calDia)}: `+camps.map((_,i)=>`Campaña ${NAMES[i]} <b>${fmt(cc[i])}</b> de ${fmt(target[i])} (carga 1: ${fmt(cj[i][0])} · carga 2: ${fmt(cj[i][1])})`).join(' · ')+' — '+
+  $('#modeCheck').innerHTML=`${s.k} · ${calNivel==='periodo'?'Periodo':fecha(calDia)}: `+camps.map((_,i)=>`Campaña ${NAMES[i]} <b>${fmt(cc[i])}</b> de ${fmt(target[i])} (${cj[i].map((x,j)=>`carga ${j+1}: ${fmt(x)}`).join(' · ')})`).join(' · ')+' — '+
     (ok?'<span class="tag ok">Cumple el reparto</span>':'<span class="tag bad">No coincide con el reparto</span>')+
     (mode==='manual'?` · Excepciones guardadas: <b>${excFoco()}</b> reels; el resto se calcula con la regla.`:'');
 }
@@ -992,18 +1022,18 @@ const cargaDeArte=(c,a)=>camps[c].cargas.findIndex(cg=>cg.pat.some(p=>p.a===a));
 function renderRot(){
   if(ready) setTimeout(renderCierres,0); // los cierres dependen de todo lo anterior
   if(rotCamp>=camps.length) rotCamp=0;
-  const C=camps[rotCamp], p=c1Of(rotCamp,foco), S0=SCREENS[foco], cn=NAMES[rotCamp];
+  const C=camps[rotCamp], cp=cpOf(rotCamp,foco), S0=SCREENS[foco], cn=NAMES[rotCamp];
   $('#rotCamp').innerHTML=camps.map((c,i)=>`<option value="${i}" ${i===rotCamp?'selected':''}>Campaña ${NAMES[i]} · ${c.pct.toFixed(0)}% del slot</option>`).join('');
   $('#rotPant').innerHTML=SCREENS.map((x,i)=>`<option value="${i}" ${i===foco?'selected':''}>${x.k} · pantalla de ${x.dur} s</option>`).join('');
   $('#rotModo').value=rotContinuo?'continuo':'diario';
-  const [n1,n2]=cargaDia(foco,rotCamp);
-  $('#rotPat').innerHTML=C.cargas.map((cg,j)=>{ const pc=j?100-p:p, nd=j?n2:n1, diarios=repartoEntero(cg.pat.map(q=>q.w/100),nd);
+  const ndC=cargaDia(foco,rotCamp);
+  $('#rotPat').innerHTML=C.cargas.map((cg,j)=>{ const pc=cp[j], nd=ndC[j], diarios=repartoEntero(cg.pat.map(q=>q.w/100),nd);
     return `<div class="carga"><div class="carga-h"><span class="chip-a" style="background:${cargaCol(rotCamp,j)}">Campaña ${cn} · carga ${j+1}</span><span><b>${pc}%</b> de los reels de la campaña en ${S0.k}: ${fmt(nd)} al día</span><span class="reel-meta">El % se ajusta en Herramientas de gestión de reels.</span></div>`+
       cg.pat.map((q,i)=>`<div class="pat-row"><span class="lab"><span class="chip-a" style="background:${cargaCol(rotCamp,j)}">${artName(rotCamp,q.a)}</span></span>
         <span class="reel-meta share">${nd?(diarios[i]?'≈ '+fmt(diarios[i])+' reels al día en esta pantalla':'<span class="tag bad">Sin reels al día</span>'):'—'}</span>
         <span class="pctctl"><input type="range" min="0" max="100" step="1" value="${q.w}" data-j="${j}" data-i="${i}" ${cg.pat.length<=1?'disabled':''} aria-label="${artName(rotCamp,q.a)}: % de la carga ${j+1}"><b data-pct="${j}:${i}">${q.w}%</b></span>
         <button data-j="${j}" data-pdel="${i}" ${cg.pat.length<=1?'disabled':''} title="Quitar de la carga">×</button></div>`).join('')+
-      `<button data-j="${j}" data-add="1" ${artesDe(rotCamp).length>=6?'disabled':''}>+ Agregar arte a la carga ${j+1}</button>${nd?'':'<span class="reel-meta" style="margin-left:10px">Sin reels en esta pantalla: la carga 1 tiene el 100%.</span>'}</div>`; }).join('');
+      `<button data-j="${j}" data-add="1" ${artesDe(rotCamp).length>=6?'disabled':''}>+ Agregar arte a la carga ${j+1}</button>${nd?'':'<span class="reel-meta" style="margin-left:10px">Sin reels en esta pantalla: esta carga tiene 0%.</span>'}</div>`; }).join('');
   // Primeros reels de la campaña en los días 1 y 2
   const days=computeDays();
   $('#rotSeq').innerHTML=[0,1].map(d=>{ const day=days[d], out=[];
