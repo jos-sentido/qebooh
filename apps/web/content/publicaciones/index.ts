@@ -3,6 +3,7 @@ import type { Publicacion } from "../tipos";
 import { colaboracionComercialLorena } from "./colaboracion-comercial-lorena";
 import { presentacionComercial } from "./presentacion-comercial";
 import { presentacionComercialV2 } from "./presentacion-comercial-v2";
+import { propuestaInventarioDigital } from "./propuesta-inventario-digital";
 import { reporteMetricasIndicadores2026 } from "./reporte-metricas-indicadores-2026";
 import { reporteVentasPrototipo } from "./reporte-ventas-prototipo";
 import { toolSitioQeb } from "./tool-sitio-qeb";
@@ -24,6 +25,7 @@ const PUBLICACIONES: Publicacion[] = [
   colaboracionComercialLorena,
   presentacionComercial,
   presentacionComercialV2,
+  propuestaInventarioDigital,
   reporteMetricasIndicadores2026,
   reporteVentasPrototipo,
   toolSitioQeb,
