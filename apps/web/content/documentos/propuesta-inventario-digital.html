@@ -208,6 +208,27 @@ footer{padding:36px 0 52px;color:var(--muted);font-size:13px}
 footer .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:var(--mono);letter-spacing:.04em}
 footer img{height:22px;width:auto}
 .hide{display:none}
+/* Excel */
+.xl{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#11151a}
+.xl-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 12px;background:#173b2a;border-bottom:1px solid #24563d}
+.xl-name{font-family:var(--mono);font-size:12px;color:#cfe9da}
+.xl-scroll{overflow:auto;max-height:440px}
+.xl-grid{border-collapse:collapse;font-family:var(--font);font-size:12.5px;min-width:100%;background:#f7f8f9;color:#1d2125}
+.xl-grid th,.xl-grid td{border:1px solid #d5d9de;padding:5px 8px;white-space:nowrap;text-transform:none;letter-spacing:0;font-family:inherit;font-size:12.5px;background:transparent;color:inherit;vertical-align:middle}
+.xl-grid .xl-cl,.xl-grid .xl-rn{background:#e9ecef;color:#5b6570;text-align:center;font-size:11px;font-weight:400}
+.xl-grid .xl-rn{width:34px;position:sticky;left:0}
+.xl-grid .xl-ol{width:26px;background:#eef1f3;text-align:center;padding:0;border-color:#e3e6e9}
+.xl-ol button{width:18px;height:18px;padding:0;line-height:16px;font-size:13px;border-radius:3px;border:1px solid #9aa4ad;background:#fff;color:#333}
+.xl-ol button:hover{background:#e7f3ec}
+.xl-line{display:block;width:1px;height:26px;margin:0 auto;background:#9aa4ad}
+.xl-grid .xl-h{background:#1f6b45;color:#fff;font-weight:600}
+.xl-grid tr.xl-sum td:not(.xl-rn):not(.xl-ol){font-weight:700;background:#e4f1ea}
+.xl-grid tr.xl-det td:nth-child(3){padding-left:20px}
+.xl-grid .xl-n{text-align:right;font-variant-numeric:tabular-nums}
+.xl-tabs{display:flex;gap:2px;padding:6px 8px 0;background:#e9ecef;overflow-x:auto}
+.xl-tabs button{font-size:12px;padding:6px 12px;border-radius:6px 6px 0 0;background:#d8dde2;color:#333;border:1px solid #c5ccd3;border-bottom:0;white-space:nowrap}
+.xl-tabs button.active{background:#f7f8f9;color:#1f6b45;font-weight:600}
+.xl-tabs button:hover{background:#fff}
 /* QEBI: módulos que ya incluye */
 .bi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
 .bi-mod{position:relative;overflow:hidden;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow)}
@@ -263,7 +284,10 @@ input[readonly]{color:var(--lila);background:var(--surface)}
 .stepper{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px;color:var(--muted)}
 .stepper b{color:var(--text);min-width:12px;text-align:center}
 .stepper button{padding:2px 10px}
-@media(max-width:640px){.pat-row{grid-template-columns:1fr auto auto}.pat-row .share{grid-column:1/-1;grid-row:2}}
+.pctctl{display:flex;align-items:center;gap:10px}
+.pctctl input{width:180px}
+.pctctl b{font-family:var(--mono);min-width:44px;text-align:right}
+@media(max-width:640px){.pat-row{grid-template-columns:1fr auto}.pat-row .share{grid-column:1/-1;grid-row:2}.pat-row .pctctl{grid-column:1/-1;grid-row:3}.pctctl input{flex:1;width:auto}}
 .rot-seq{display:grid;gap:8px;margin:14px 0}
 .rot-line{display:flex;gap:4px;flex-wrap:wrap;align-items:center;font-family:var(--mono);font-size:11px;color:var(--muted)}
 .rot-line .dlab{width:78px}
@@ -426,7 +450,7 @@ input[readonly]{color:var(--lila);background:var(--surface)}
   <div class="grid g2">
     <div class="card"><h3>Validación de duración</h3><p>A las imágenes se les captura la duración y a los videos se les lee del archivo. La asignación no se cierra hasta que cada slot quede completo con su mezcla de medios.</p></div>
     <div class="card"><h3>Datos por arte</h3><p>Cada arte conserva su nombre, nota y estatus, y se le suman el slot, los reels o la franja asignados, la duración y si el slot está completo.</p></div>
-    <div class="card"><h3>Rotación de artes</h3><p>Un patrón en cada carga de la campaña (arte 1 → arte 2, o con pesos 2 : 1) que se repite sobre sus reels en orden de horario. Por defecto se reinicia cada día, para que el orden sea el mismo todos los días; también puede ser continuo. Se aplica masivo, por grupo o selectivo, y se combina con franjas.</p></div>
+    <div class="card"><h3>Rotación de artes</h3><p>En cada carga de la campaña, cada arte lleva un % (por ejemplo, arte 1 60% y arte 2 40%) y se intercalan de forma pareja sobre sus reels en orden de horario. Por defecto se reinicia cada día, para que el orden sea el mismo todos los días; también puede ser continuo. Se aplica masivo, por grupo o selectivo, y se combina con franjas.</p></div>
     <div class="card"><h3>Versiones por duración</h3><p>Cada arte se define una vez con su versión para cada duración del circuito. En una acción masiva, el sistema muestra por categoría de duración si el contenido queda completo, si falta o si excede, y se corrige solo ese grupo.</p></div>
   </div>
 
@@ -456,7 +480,7 @@ input[readonly]{color:var(--lila);background:var(--surface)}
     </div>
     <div class="sub-h">Artes de cada carga</div>
     <div id="rotPat"></div>
-        <p class="reel-meta">Con peso 1 en todos, los artes de la carga se alternan (arte 1, arte 2, arte 1…). Si subes el peso de uno, sale más veces (2 : 1 da arte 1, arte 1, arte 2…). Con reinicio diario el orden es idéntico cada día; con continuo, si los reels diarios de la carga no son múltiplo del patrón, cada día arranca en un arte distinto. Abajo, los primeros reels de la campaña en esta pantalla:</p>
+        <p class="reel-meta">Cada arte tiene un % de su carga y entre todos suman 100%: al mover uno, los demás se ajustan en proporción. Los artes se intercalan de forma pareja según su %. Con reinicio diario, cada día cumple el % exacto y arranca con el mismo orden; con continuo, el orden sigue donde terminó el día anterior y el % se cumple sobre el periodo. Abajo, los primeros reels de la campaña en esta pantalla:</p>
     <div class="rot-seq" id="rotSeq"></div>
     <div class="table-scroll"><table id="rotDays"></table></div>
     <div class="sub-h">Versiones por duración · <span id="verCamp">Campaña A</span></div>
@@ -487,7 +511,7 @@ input[readonly]{color:var(--lila);background:var(--surface)}
 <!-- ================= CIERRES ================= -->
 <section id="cierres"><div class="wrap">
   <h2>Cierres: versionario y orden de montaje</h2>
-  <p class="section-intro">Sustituyen los Excel de programación. Como los nombres no coinciden con los del archivo actual, esta es la equivalencia:</p>
+  <p class="section-intro">Sustituyen los Excel de programación y se arman solos con lo configurado en las secciones anteriores: campañas, cargas, artes y versiones por duración. Como los nombres no coinciden con los del archivo actual, esta es la equivalencia:</p>
   <div class="table-scroll"><table>
     <tr><th>Excel actual</th><th>En QEB</th><th>Una fila por</th></tr>
     <tr><td>Hoja “Orden de montaje”</td><td>Resumen por campaña</td><td>Campaña</td></tr>
@@ -496,47 +520,49 @@ input[readonly]{color:var(--lila);background:var(--surface)}
   </table></div>
 
   <div class="sim">
-    <div class="tabs" id="cTabs">
-      <button data-tab="ver" class="active">Versionario</button>
-      <button data-tab="om">Orden de montaje</button>
-      <button data-tab="mx">Matriz pantalla × anunciante</button>
+    <div class="sim-head" style="margin-bottom:6px">
+      <div class="tabs" id="cTabs" style="margin:0">
+        <button data-tab="ver" class="active">Versionario</button>
+        <button data-tab="om">Orden de montaje</button>
+        <button data-tab="mx">Matriz pantalla × campaña</button>
+        <button data-tab="xl">Exportación a Excel</button>
+      </div>
+      <span class="tag">Responde a todo lo configurado arriba</span>
     </div>
 
     <div data-pane="ver">
-      <p class="reel-meta" style="margin-top:0">Una fila por circuito. La celda agrupada reúne reparto, franjas, grupos y artes. Ábrela para ver el desglose: no se crean filas ni celdas nuevas.</p>
-      <div class="table-scroll"><table>
-        <tr><th>Circuito</th><th>Anunciante</th><th>Periodo</th><th>Inventarios</th><th>Programación y artes</th></tr>
-        <tr><td>DIG GDL Norte</td><td>Anunciante X</td><td>Catorcena 23</td><td>12</td><td>
-          <details class="cellgroup"><summary>3 artes · 2 campañas · 100%</summary>
-            <div class="artline"><b>Arte 1 · “Temporada mañana”</b>Campaña A · 30% · franja 06:00–14:00 · pantallas de 10 s<br>Nota: versión con precio · <span class="tag ok">Aprobado</span></div>
-            <div class="artline"><b>Arte 2 · “Temporada tarde”</b>Campaña A · franja 14:00–24:00 · pantallas de 15 s<br>Nota: sin precio · <span class="tag warn">En revisión</span></div>
-            <div class="artline"><b>Arte 3 · “Institucional”</b>Campaña B · 70% · automático<br>Nota: — · <span class="tag ok">Aprobado</span></div>
-          </details></td></tr>
-        <tr><td>DIG ZAP</td><td>Anunciante Y</td><td>Catorcena 23</td><td>8</td><td>
-          <details class="cellgroup"><summary>1 arte · 1 campaña · 100%</summary>
-            <div class="artline"><b>Arte 1 · “Lanzamiento”</b>Campaña C · 100% · automático<br>Nota: video 10 s · <span class="tag ok">Aprobado</span></div>
-          </details></td></tr>
-      </table></div>
+      <p class="reel-meta">Una fila por circuito. La celda agrupada reúne campañas, cargas, artes y versiones. Ábrela para ver el desglose: no se crean filas ni celdas nuevas.</p>
+      <div class="table-scroll"><table id="cVer"></table></div>
     </div>
-
     <div data-pane="om" class="hide">
-      <p class="reel-meta" style="margin-top:0">Una fila por inventario, con todo desglosado en columnas. Si tiene un solo arte se muestra directo; si tiene varios, en una celda agrupada.</p>
-      <div class="table-scroll"><table>
-        <tr><th>Clave</th><th>Ubicación</th><th>Estatus</th><th>Flujo</th><th>Anunciante / campaña</th><th>Slot</th><th>Reels</th><th>Horario</th><th>Artes</th><th>Asesor</th><th>Observaciones</th></tr>
-        <tr><td class="mono">151001A</td><td>Américas – Brasilia</td><td>Habilitado</td><td>Flujo</td><td>Anunciante X / A</td><td>Slot 3 · 10 s</td><td>18/60</td><td>06:00–14:00</td><td>Arte 1 · “Temporada mañana”</td><td>Asesor 1</td><td>—</td></tr>
-        <tr><td class="mono">161005A</td><td>Mariano Otero – Las Rosas</td><td>Habilitado</td><td>Flujo</td><td>Anunciante X / A + B</td><td>Slot 3 · 15 s</td><td>60/60</td><td>Todo el día</td><td><details class="cellgroup"><summary>2 artes</summary><div class="artline"><b>Arte 2 · “Temporada tarde”</b>A · 14:00–24:00</div><div class="artline"><b>Arte 3 · “Institucional”</b>B · 70%</div></details></td><td>Asesor 1</td><td>Exhibir solo en GDL</td></tr>
-      </table></div>
+      <p class="reel-meta">Una fila por inventario. Si tiene un solo arte se muestra directo; si tiene varios, en una celda agrupada con la versión que le toca a esa pantalla según su duración.</p>
+      <div class="table-scroll"><table id="cOm"></table></div>
     </div>
-
     <div data-pane="mx" class="hide">
-      <p class="reel-meta" style="margin-top:0">La misma vista que hoy da la “Programación general”: spots por anunciante en cada pantalla y total de clientes, generada por el sistema.</p>
-      <div class="table-scroll"><table>
-        <tr><th>Clave</th><th>Anunciante X</th><th>Anunciante Y</th><th>Anunciante Z</th><th>Clientes</th><th>Ocupación</th></tr>
-        <tr><td class="mono">151001A</td><td>Temporada · 2</td><td>Lanzamiento · 1</td><td>—</td><td>2</td><td>3/6 slots</td></tr>
-        <tr><td class="mono">161005A</td><td>Institucional · 1</td><td>—</td><td>Promo · 1</td><td>2</td><td>2/6 slots</td></tr>
-      </table></div>
+      <p class="reel-meta">La vista que hoy da la “Programación general”: qué artes lleva cada campaña en cada pantalla y qué parte del slot ocupa.</p>
+      <div class="table-scroll"><table id="cMx"></table></div>
     </div>
-    <p class="reel-meta" style="margin-top:14px"><b>Exportación:</b> un solo archivo con las tres vistas, más los datos del mueble (estatus, NSE, flujo o contraflujo, código, coordenadas), asesor comercial y observaciones.</p>
+    <div data-pane="xl" class="hide">
+      <p class="reel-meta">Así queda el archivo. Cada vista es una hoja, y la celda agrupada del sistema se convierte en <b>filas agrupadas de Excel</b>: una fila resumen y, debajo, una fila por campaña · carga · arte, que se pliegan y despliegan con el − / + del margen, igual que en Excel.</p>
+      <div class="xl">
+        <div class="xl-bar"><span class="xl-name" id="xlName"></span><button class="primary" id="xlDown">Descargar ejemplo en Excel (.xlsx)</button></div>
+        <div class="xl-scroll"><table class="xl-grid" id="xlGrid"></table></div>
+        <div class="xl-tabs" id="xlTabs"></div>
+      </div>
+      <div class="check" id="xlMsg"></div>
+      <div class="grid g2" style="margin-top:16px">
+        <div class="card"><h3>Cómo se acomoda</h3><ul class="clean">
+          <li><b>Sin celdas combinadas.</b> Cada fila repite el circuito o el inventario, para poder filtrar, ordenar y hacer tablas dinámicas.</li>
+          <li><b>La celda agrupada se vuelve filas agrupadas:</b> el resumen (“3 artes · 2 campañas · 100%”) arriba y el detalle abajo, plegable.</li>
+          <li><b>Versiones por duración en columnas</b> en el versionario (10 s, 15 s, 20 s); en el orden de montaje, solo la que le toca a cada pantalla.</li>
+        </ul></div>
+        <div class="card"><h3>Cómo se leen los porcentajes</h3><ul class="clean">
+          <li>Se exportan como números, en cadena: % del slot de la campaña × % de la campaña de la carga × % de la carga del arte.</li>
+          <li>La columna <b>% del slot</b> es ese resultado y suma 100% por pantalla, junto con los reels del periodo.</li>
+          <li>No se exporta reel por reel (serían cientos de miles de filas): se exporta la regla con sus cifras. El archivo real suma los datos del mueble (estatus, NSE, flujo o contraflujo, código, coordenadas), asesor y observaciones.</li>
+        </ul></div>
+      </div>
+    </div>
   </div>
 </div></section>
 
@@ -565,7 +591,7 @@ input[readonly]{color:var(--lila);background:var(--surface)}
   <p class="section-intro">QEBI ya está construido y el cliente ya tiene acceso. Esto es lo que incluye hoy, en cuatro módulos:</p>
   <div class="bi-grid">
     <article class="bi-mod">
-      <div class="bi-top"><svg class="bi-ico" viewBox="0 0 64 40" aria-hidden="true"><rect x="4" y="14" width="8" height="12" rx="2" fill="var(--c1)"/><rect x="16" y="8" width="8" height="18" rx="2" fill="var(--c1)"/><rect x="28" y="26" width="8" height="10" rx="2" fill="var(--bad)"/><rect x="40" y="4" width="8" height="22" rx="2" fill="var(--c1)"/><rect x="52" y="26" width="8" height="6" rx="2" fill="var(--bad)"/><path d="M2 26H62" stroke="var(--muted)" stroke-width="1.5"/></svg><span class="tag warn">En validación</span></div>
+      <div class="bi-top"><svg class="bi-ico" viewBox="0 0 64 40" aria-hidden="true"><rect x="4" y="14" width="8" height="12" rx="2" fill="var(--c1)"/><rect x="16" y="8" width="8" height="18" rx="2" fill="var(--c1)"/><rect x="28" y="26" width="8" height="10" rx="2" fill="var(--bad)"/><rect x="40" y="4" width="8" height="22" rx="2" fill="var(--c1)"/><rect x="52" y="26" width="8" height="6" rx="2" fill="var(--bad)"/><path d="M2 26H62" stroke="var(--muted)" stroke-width="1.5"/></svg><span class="tag ok">Disponible</span></div>
       <h3>Variaciones e impacto</h3><p class="bi-sub">Qué cambió en las campañas ya cerradas y cuánto movió la inversión.</p>
       <ul class="bi-list"><li>Historial de ediciones: quién cambió caras, tarifa o periodo, y su impacto</li><li>Indicadores: ediciones, variación neta, impacto promedio, alzas y bajas</li><li>Variación de inversión por mes</li><li>Variación por cliente, asesor, plaza, formato y tipo de movimiento</li></ul>
     </article>
@@ -718,8 +744,8 @@ const SCREENS=[
 SCREENS.forEach(s=>{s.reel=s.slots*s.dur; s.porDia=Math.floor(86400/s.reel); s.porHora=Math.floor(3600/s.reel);});
 const DIAS=14;
 let foco=0;
-const nuevaCamp=(pct,cargas,c1)=>({pct,lock:false,c1def:c1??100,c1:{},cargas:cargas||[{pat:[{a:0,w:1}]},{pat:[{a:1,w:1}]}],vers:{}});
-let camps=[nuevaCamp(50,[{pat:[{a:0,w:1},{a:1,w:1}]},{pat:[{a:2,w:1}]}],60),nuevaCamp(50)];
+const nuevaCamp=(pct,cargas,c1)=>({pct,lock:false,c1def:c1??100,c1:{},cargas:cargas||[{pat:[{a:0,w:100}]},{pat:[{a:1,w:100}]}],vers:{}}); // w = % del arte dentro de su carga (suman 100)
+let camps=[nuevaCamp(50,[{pat:[{a:0,w:50},{a:1,w:50}]},{pat:[{a:2,w:100}]}],60),nuevaCamp(50)];
 const c1Of=(c,s)=>camps[c].c1[SCREENS[s].k] ?? camps[c].c1def;
 const cargaCol=(c,j)=>j?`color-mix(in srgb, ${css(COLORS[c])} 50%, #ffffff)`:css(COLORS[c]);
 const artName=(c,a)=>'Arte '+(a+1); // los artes se numeran dentro de cada campaña; siempre se muestran junto a su campaña
@@ -748,7 +774,7 @@ function splitReels(total){
   return r;
 }
 // Vuelve a pintar todo lo que depende del estado.
-function renderTodo(){ renderCamps(); if(ready){ renderGrp(); renderCal(); renderRot(); } }
+function renderTodo(){ renderCamps(); if(ready){ renderGrp(); renderCal(); renderRot(); renderCierres(); } }
 function renderCamps(){
   const dia=splitReels(CALC.porDia), tot=CALC.porDia*CALC.dias, reels=dia.map(x=>x*CALC.dias);
   $('#pTotal').value=`${fmt(CALC.porDia)} por día · ${fmt(tot)} en ${CALC.dias} días`;
@@ -828,17 +854,30 @@ function baseDay(){ const s=SCREENS[foco], t=splitReels(s.porDia), key=foco+(mod
 function dayCells(d){ const b=baseDay(); if(mode!=='manual'||!overrides.size) return b; let out=null;
   overrides.forEach((c,key)=>{const [s,dd,k]=key.split(':').map(Number); if(s===foco&&dd===d&&c<camps.length){ if(!out) out=b.slice(); out[k]=c; }}); return out||b; }
 const excFoco=()=>[...overrides.keys()].filter(k=>k.startsWith(foco+':')).length;
-function rotSeq(pat){ const s=[]; pat.forEach(p=>{for(let i=0;i<p.w;i++) s.push(p.a);}); return s.length?s:[0]; }
+// % a enteros por residuo mayor (mismo método que el reparto entre campañas).
+function repartoEntero(w,total){ const raw=w.map(x=>x*total), r=raw.map(Math.floor); let left=total-r.reduce((a,b)=>a+b,0);
+  raw.map((v,i)=>[v-Math.floor(v),i]).sort((a,b)=>b[0]-a[0]).slice(0,left).forEach(([,i])=>r[i]++); return r; }
+// Cambia el % de un arte y reparte el resto entre los demás artes de la carga, en proporción.
+function setArtPct(P,i,v){ if(P.length===1){P[0].w=100;return;} v=Math.max(0,Math.min(100,v));
+  const others=P.map((_,x)=>x).filter(x=>x!==i), prev=others.reduce((a,x)=>a+P[x].w,0);
+  const r=repartoEntero(others.map(x=>prev>0?P[x].w/prev:1/others.length),100-v); P[i].w=v; others.forEach((x,y)=>P[x].w=r[y]); }
+function normaliza(P){ const t=P.reduce((a,q)=>a+q.w,0); const r=repartoEntero(P.map(q=>t>0?q.w/t:1/P.length),100); P.forEach((q,i)=>q.w=r[i]); }
 // Para cada día de la pantalla en foco: campaña, carga y arte de cada reel.
 function computeDays(){
   const out=[], cnt={};
   for(let d=0;d<DIAS;d++){
     const cells=dayCells(d), n=cells.length, carga=new Array(n), art=new Array(n), per=camps.map(()=>[]);
     cells.forEach((c,k)=>per[c].push(k));
-    per.forEach((ks,c)=>{ const m=ks.length, n1=Math.round(c1Of(c,foco)/100*m), seqs=camps[c].cargas.map(cg=>rotSeq(cg.pat));
-      const idx=rotContinuo?[cnt[c+':0']||0,cnt[c+':1']||0]:[0,0];
-      ks.forEach((k,i)=>{ const j=(Math.ceil((i+1)*n1/m)-Math.ceil(i*n1/m))?0:1; /* la carga 1 abre el día */ carga[k]=j; art[k]=seqs[j][idx[j]++%seqs[j].length]; });
-      cnt[c+':0']=idx[0]; cnt[c+':1']=idx[1]; });
+    per.forEach((ks,c)=>{ const m=ks.length, n1=Math.round(c1Of(c,foco)/100*m), pos=[[],[]];
+      ks.forEach((k,i)=>{ const j=(Math.ceil((i+1)*n1/m)-Math.ceil(i*n1/m))?0:1; /* la carga 1 abre el día */ carga[k]=j; pos[j].push(k); });
+      camps[c].cargas.forEach((cg,j)=>{ const P=cg.pat, L=pos[j].length; if(!L) return;
+        // Reinicio diario: cada día cumple el % exacto (reels enteros) y arranca igual.
+        // Continuo: el crédito pasa al día siguiente; el % se cumple sobre el periodo.
+        let credit, inc;
+        if(rotContinuo){ const key=c+':'+j; if(!cnt[key]||cnt[key].length!==P.length) cnt[key]=P.map(()=>0); credit=cnt[key]; inc=P.map(q=>q.w/100); }
+        else { credit=P.map(()=>0); inc=repartoEntero(P.map(q=>q.w/100),L).map(x=>x/L); }
+        pos[j].forEach(k=>{ inc.forEach((v,x)=>credit[x]+=v); let best=0; credit.forEach((v,x)=>{if(v>credit[best]+1e-9) best=x;}); art[k]=P[best].a; credit[best]-=1; });
+      }); });
     out.push({cells,carga,art});
   }
   return out;
@@ -950,17 +989,18 @@ const usados=m=>m.reduce((x,y)=>x+y.s,0);
 const artesDe=c=>[...new Set(camps[c].cargas.flatMap(cg=>cg.pat.map(p=>p.a)))].sort((x,y)=>x-y);
 const cargaDeArte=(c,a)=>camps[c].cargas.findIndex(cg=>cg.pat.some(p=>p.a===a));
 function renderRot(){
+  if(ready) setTimeout(renderCierres,0); // los cierres dependen de todo lo anterior
   if(rotCamp>=camps.length) rotCamp=0;
   const C=camps[rotCamp], p=c1Of(rotCamp,foco), S0=SCREENS[foco], cn=NAMES[rotCamp];
   $('#rotCamp').innerHTML=camps.map((c,i)=>`<option value="${i}" ${i===rotCamp?'selected':''}>Campaña ${NAMES[i]} · ${c.pct.toFixed(0)}% del slot</option>`).join('');
   $('#rotPant').innerHTML=SCREENS.map((x,i)=>`<option value="${i}" ${i===foco?'selected':''}>${x.k} · pantalla de ${x.dur} s</option>`).join('');
   $('#rotModo').value=rotContinuo?'continuo':'diario';
   const [n1,n2]=cargaDia(foco,rotCamp);
-  $('#rotPat').innerHTML=C.cargas.map((cg,j)=>{ const pc=j?100-p:p, nd=j?n2:n1, W=cg.pat.reduce((x,q)=>x+q.w,0);
+  $('#rotPat').innerHTML=C.cargas.map((cg,j)=>{ const pc=j?100-p:p, nd=j?n2:n1, diarios=repartoEntero(cg.pat.map(q=>q.w/100),nd);
     return `<div class="carga"><div class="carga-h"><span class="chip-a" style="background:${cargaCol(rotCamp,j)}">Campaña ${cn} · carga ${j+1}</span><span><b>${pc}%</b> de los reels de la campaña en ${S0.k}: ${fmt(nd)} al día</span><span class="reel-meta">El % se ajusta en Herramientas de gestión de reels.</span></div>`+
       cg.pat.map((q,i)=>`<div class="pat-row"><span class="lab"><span class="chip-a" style="background:${cargaCol(rotCamp,j)}">${artName(rotCamp,q.a)}</span></span>
-        <span class="reel-meta share">${Math.round(q.w/W*100)}% de la carga${nd?' · '+fmt(Math.round(q.w/W*nd))+' reels al día aprox.':''}</span>
-        <span class="stepper">Peso <button data-j="${j}" data-w="${i}" data-dw="-1" ${q.w<=1?'disabled':''} aria-label="Menos peso">−</button><b>${q.w}</b><button data-j="${j}" data-w="${i}" data-dw="1" ${q.w>=5?'disabled':''} aria-label="Más peso">+</button></span>
+        <span class="reel-meta share">${nd?(diarios[i]?'≈ '+fmt(diarios[i])+' reels al día en esta pantalla':'<span class="tag bad">Sin reels al día</span>'):'—'}</span>
+        <span class="pctctl"><input type="range" min="0" max="100" step="1" value="${q.w}" data-j="${j}" data-i="${i}" ${cg.pat.length<=1?'disabled':''} aria-label="${artName(rotCamp,q.a)}: % de la carga ${j+1}"><b data-pct="${j}:${i}">${q.w}%</b></span>
         <button data-j="${j}" data-pdel="${i}" ${cg.pat.length<=1?'disabled':''} title="Quitar de la carga">×</button></div>`).join('')+
       `<button data-j="${j}" data-add="1" ${artesDe(rotCamp).length>=6?'disabled':''}>+ Agregar arte a la carga ${j+1}</button>${nd?'':'<span class="reel-meta" style="margin-left:10px">Sin reels en esta pantalla: la carga 1 tiene el 100%.</span>'}</div>`; }).join('');
   // Primeros reels de la campaña en los días 1 y 2
@@ -995,10 +1035,15 @@ $('#rotCamp').addEventListener('change',e=>{ rotCamp=+e.target.value; grpCamp=ro
 $('#rotPant').addEventListener('change',e=>{ foco=+e.target.value; renderRot(); renderCal(); });
 $('#rotModo').addEventListener('change',e=>{ rotContinuo=e.target.value==='continuo'; renderRot(); renderCal(); });
 $('#rotPat').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; const P=camps[rotCamp].cargas[+b.dataset.j].pat;
-  if(b.dataset.dw){ const q=P[+b.dataset.w]; q.w=Math.min(5,Math.max(1,q.w+ +b.dataset.dw)); }
-  else if(b.dataset.pdel) P.splice(+b.dataset.pdel,1);
-  else if(b.dataset.add){ const usadas=artesDe(rotCamp); if(usadas.length>=6) return; let a=0; while(usadas.includes(a)) a++; P.push({a,w:1}); }
+  if(b.dataset.pdel){ P.splice(+b.dataset.pdel,1); normaliza(P); }
+  else if(b.dataset.add){ const usadas=artesDe(rotCamp); if(usadas.length>=6) return; let a=0; while(usadas.includes(a)) a++; P.push({a,w:0}); setArtPct(P,P.length-1,Math.round(100/P.length)); }
+  else return;
   renderRot(); renderGrp(); renderCal(); });
+// Mientras se arrastra solo se actualizan los % de la carga; al soltar se recalcula todo.
+$('#rotPat').addEventListener('input',e=>{ const r=e.target; if(r.type!=='range') return; const j=+r.dataset.j, P=camps[rotCamp].cargas[j].pat;
+  setArtPct(P,+r.dataset.i,+r.value);
+  P.forEach((q,i)=>{ const el=$(`#rotPat input[data-j="${j}"][data-i="${i}"]`); if(el&&el!==r) el.value=q.w; const t=$(`#rotPat [data-pct="${j}:${i}"]`); if(t) t.textContent=q.w+'%'; }); });
+$('#rotPat').addEventListener('change',e=>{ if(e.target.type!=='range') return; renderRot(); renderCal(); });
 $('#verTabs').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; verArt=+b.dataset.va; renderRot(); });
 $('#verTable').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; const V=getVers(rotCamp,verArt), d=+b.dataset.vd;
   if(b.dataset.vclr) V[d]=[]; else if(V[d].length<4) V[d].push({t:b.dataset.vt,s:+b.dataset.vs}); renderRot(); });
@@ -1032,11 +1077,109 @@ $('#dReset').onclick=()=>renderDisp(false);
 renderDisp(false);
 
 /* =========================================================
-   7) Pestañas de cierres
+   7) Cierres: versionario, orden de montaje, matriz y Excel
+   Se construyen del estado compartido. Los reels por arte salen del % del
+   arte sobre los reels diarios de su carga (reinicio diario) × días.
    ========================================================= */
+const CIRCUITO='DIG GDL Norte', ANUNCIANTE='Anunciante X';
+const medios=m=>m.length?m.map(x=>(x.t==='vid'?'Video ':'Imagen ')+x.s+' s').join(' + '):'Sin medios';
+const estadoSlot=(m,d)=>{const u=usados(m); return u===d?'Completo':u<d?`Faltan ${d-u} s`:`Excede ${u-d} s`;};
+const pct1=v=>(Math.round(v*1000)/10).toLocaleString('es-MX')+'%';
+function periodoTxt(){ return fecha(0,{day:'numeric',month:'short'})+' – '+fecha(DIAS-1,{day:'numeric',month:'short',year:'numeric'}); }
+function cierreFilas(){ // detalle por pantalla × campaña × carga × arte
+  const out=[];
+  SCREENS.forEach((s,si)=>{ const tot=s.porDia*DIAS;
+    camps.forEach((C,c)=>{ const nd2=cargaDia(si,c), p1=c1Of(c,si);
+      C.cargas.forEach((cg,j)=>{ const nd=nd2[j]; if(!nd) return; const r=repartoEntero(cg.pat.map(q=>q.w/100),nd);
+        cg.pat.forEach((q,i)=>{ if(!r[i]) return; const m=getVers(c,q.a)[s.dur];
+          out.push({si,s,c,j,a:q.a,pCamp:C.pct/100,pCarga:(j?100-p1:p1)/100,pArte:q.w/100,reels:r[i]*DIAS,slot:r[i]*DIAS/tot,version:medios(m),estado:estadoSlot(m,s.dur)}); }); }); }); });
+  return out;
+}
+const llave=f=>f.c+':'+f.j+':'+f.a;
+function agrupaCircuito(F){ // una entrada por campaña · carga · arte en todo el circuito
+  const g=new Map();
+  F.forEach(f=>{ const k=llave(f); if(!g.has(k)) g.set(k,{c:f.c,j:f.j,a:f.a,pCamp:f.pCamp,pArte:f.pArte,cargas:new Set(),reels:0,vers:{}}); const e=g.get(k);
+    e.cargas.add(Math.round(f.pCarga*100)); e.reels+=f.reels; e.vers[f.s.dur]=f.version+(f.estado==='Completo'?'':' ('+f.estado.toLowerCase()+')'); });
+  return [...g.values()].sort((x,y)=>x.c-y.c||x.j-y.j||x.a-y.a);
+}
+const rangoCarga=e=>{const v=[...e.cargas].sort((a,b)=>a-b); return v.length===1?v[0]+'%':v[0]+'–'+v[v.length-1]+'% según pantalla';};
+const nombreArte=e=>`Campaña ${NAMES[e.c]} · carga ${e.j+1} · ${artName(e.c,e.a)}`;
+function renderCierres(){
+  const F=cierreFilas(), G=agrupaCircuito(F), totC=SCREENS.reduce((a,s)=>a+s.porDia*DIAS,0), nArt=G.length;
+  const resumen=`${nArt} ${nArt===1?'arte':'artes'} · ${camps.length} ${camps.length===1?'campaña':'campañas'} · 100%`;
+  $('#cVer').innerHTML=`<tr><th>Circuito</th><th>Anunciante</th><th>Periodo</th><th>Inventarios</th><th>Programación y artes</th></tr>
+    <tr><td>${CIRCUITO}</td><td>${ANUNCIANTE}</td><td>${periodoTxt()}</td><td>${SCREENS.length}</td><td><details class="cellgroup" open><summary>${resumen}</summary>${G.map(e=>
+      `<div class="artline"><b>${nombreArte(e)}</b>Campaña ${pct1(e.pCamp)} del slot · carga ${rangoCarga(e)} de la campaña · arte ${pct1(e.pArte)} de la carga · ${pct1(e.reels/totC)} del circuito<br>${DURS.map(d=>`${d} s: ${e.vers[d]||'—'}`).join(' · ')}</div>`).join('')}</details></td></tr>`;
+  $('#cOm').innerHTML='<tr><th>Clave</th><th>Ubicación</th><th>Slot</th><th>Horario</th><th>Campañas</th><th>Artes y versión</th><th>Reels del periodo</th></tr>'+SCREENS.map((s,si)=>{
+    const f=F.filter(x=>x.si===si), cs=[...new Set(f.map(x=>x.c))].map(c=>NAMES[c]).join(' + ');
+    const art=f.length===1?`<b>${nombreArte(f[0])}</b><br><span class="reel-meta">${f[0].version}</span>`:
+      `<details class="cellgroup"><summary>${f.length} artes</summary>${f.map(x=>`<div class="artline"><b>${nombreArte(x)}</b>${x.version} · ${x.estado.toLowerCase()} · ${pct1(x.slot)} del slot · ${fmt(x.reels)} reels</div>`).join('')}</details>`;
+    return `<tr><td class="mono">${s.k}</td><td>${s.u}</td><td>${s.dur} s</td><td>Todo el día</td><td>${cs}</td><td>${art}</td><td class="mono">${fmt(s.porDia*DIAS)}</td></tr>`; }).join('');
+  $('#cMx').innerHTML=`<tr><th>Clave</th><th>Slot</th>${camps.map((_,c)=>`<th>Campaña ${NAMES[c]}</th>`).join('')}<th>Ocupación del slot</th></tr>`+SCREENS.map((s,si)=>{
+    const f=F.filter(x=>x.si===si);
+    return `<tr><td class="mono">${s.k}</td><td>${s.dur} s</td>${camps.map((_,c)=>{const g=f.filter(x=>x.c===c); return `<td>${g.length?g.map(x=>artName(c,x.a)).join(', ')+` · <b>${pct1(g.reduce((a,x)=>a+x.slot,0))}</b>`:'—'}</td>`;}).join('')}<td class="mono">${pct1(f.reduce((a,x)=>a+x.slot,0))}</td></tr>`; }).join('');
+  renderXl();
+}
+/* ---- Libro de Excel: hojas con filas, niveles de agrupación y formatos ---- */
+let xlHoja=0; const xlCerradas=new Set();
+function libro(){
+  const F=cierreFilas(), G=agrupaCircuito(F), totC=SCREENS.reduce((a,s)=>a+s.porDia*DIAS,0), per=periodoTxt();
+  const P='pct', N='num';
+  const res={nombre:'Resumen por campaña',cols:['Campaña','% del slot','Inventarios','Reels del periodo','Cargas','Artes','Periodo'],fmt:[0,P,N,N,0,0,0],filas:[]};
+  camps.forEach((C,c)=>{ const f=F.filter(x=>x.c===c); res.filas.push({lv:0,v:['Campaña '+NAMES[c],C.pct/100,new Set(f.map(x=>x.si)).size,f.reduce((a,x)=>a+x.reels,0),new Set(f.map(x=>x.j)).size,new Set(f.map(x=>x.a)).size,per]}); });
+  const ver={nombre:'Versionario',cols:['Circuito','Periodo','Campaña','% del slot (campaña)','Carga','% de la campaña (carga)','Arte','% de la carga (arte)','% del circuito','Reels del periodo',...DURS.map(d=>'Versión '+d+' s')],fmt:[0,0,0,P,0,0,0,P,P,N,...DURS.map(()=>0)],filas:[]};
+  ver.filas.push({lv:0,v:[CIRCUITO,per,`${SCREENS.length} inventarios · ${G.length} artes · ${camps.length} campañas`,'','','','','',1,totC,...DURS.map(()=>'')]});
+  G.forEach(e=>ver.filas.push({lv:1,v:[CIRCUITO,per,'Campaña '+NAMES[e.c],e.pCamp,'Carga '+(e.j+1),rangoCarga(e),artName(e.c,e.a),e.pArte,e.reels/totC,e.reels,...DURS.map(d=>e.vers[d]||'—')]}));
+  const om={nombre:'Orden de montaje',cols:['Clave','Ubicación','Duración slot','Campaña','Carga','Arte','Versión (medios)','Estado del slot','% del slot','Reels del periodo'],fmt:[0,0,0,0,0,0,0,0,P,N],filas:[]};
+  SCREENS.forEach((s,si)=>{ const f=F.filter(x=>x.si===si);
+    om.filas.push({lv:0,v:[s.k,s.u,s.dur+' s',`${new Set(f.map(x=>x.c)).size} campañas · ${f.length} artes`,'','','','',f.reduce((a,x)=>a+x.slot,0),s.porDia*DIAS]});
+    f.forEach(x=>om.filas.push({lv:1,v:[s.k,s.u,s.dur+' s','Campaña '+NAMES[x.c],'Carga '+(x.j+1),artName(x.c,x.a),x.version,x.estado,x.slot,x.reels]})); });
+  const mx={nombre:'Matriz',cols:['Clave','Duración slot',...camps.map((_,c)=>'Campaña '+NAMES[c]),'Ocupación del slot'],fmt:[0,0,...camps.map(()=>0),P],filas:[]};
+  SCREENS.forEach((s,si)=>{ const f=F.filter(x=>x.si===si);
+    mx.filas.push({lv:0,v:[s.k,s.dur+' s',...camps.map((_,c)=>{const g=f.filter(x=>x.c===c); return g.length?g.map(x=>artName(c,x.a)).join(', ')+' · '+pct1(g.reduce((a,x)=>a+x.slot,0)):'—';}),f.reduce((a,x)=>a+x.slot,0)]}); });
+  return [res,ver,om,mx];
+}
+const celda=(v,f)=>v===''||v==null?'':f==='pct'&&typeof v==='number'?pct1(v):f==='num'&&typeof v==='number'?fmt(v):v;
+const colL=i=>String.fromCharCode(65+i);
+function renderXl(){
+  const L=libro(), h=L[xlHoja], tieneGrupos=h.filas.some(f=>f.lv);
+  $('#xlName').textContent=`programacion-${CIRCUITO.toLowerCase().replace(/\s+/g,'-')}.xlsx · hoja “${h.nombre}”`;
+  let n=1, oculto=false, g=-1;
+  let t=`<tr><th class="xl-rn"></th>${tieneGrupos?'<th class="xl-ol"></th>':''}${h.cols.map((_,i)=>`<th class="xl-cl">${colL(i)}</th>`).join('')}</tr>`;
+  t+=`<tr><td class="xl-rn">${n++}</td>${tieneGrupos?'<td class="xl-ol"></td>':''}${h.cols.map(c=>`<td class="xl-h">${c}</td>`).join('')}</tr>`;
+  h.filas.forEach((f,i)=>{
+    if(f.lv===0){ g=i; oculto=xlCerradas.has(xlHoja+':'+i); }
+    const hijos=f.lv===0&&h.filas[i+1]&&h.filas[i+1].lv===1;
+    if(f.lv===1&&oculto){ n++; return; }
+    t+=`<tr class="${f.lv?'xl-det':tieneGrupos?'xl-sum':''}"><td class="xl-rn">${n++}</td>${tieneGrupos?`<td class="xl-ol">${hijos?`<button data-grp="${i}" aria-label="${oculto?'Desplegar':'Plegar'} grupo">${oculto?'+':'−'}</button>`:f.lv?'<span class="xl-line"></span>':''}</td>`:''}${f.v.map((v,x)=>`<td class="${h.fmt[x]?'xl-n':''}">${celda(v,h.fmt[x])}</td>`).join('')}</tr>`;
+  });
+  $('#xlGrid').innerHTML=t;
+  $('#xlTabs').innerHTML=L.map((x,i)=>`<button data-xs="${i}" class="${i===xlHoja?'active':''}">${x.nombre}</button>`).join('');
+}
+$('#xlTabs').addEventListener('click',e=>{const b=e.target.closest('button'); if(!b) return; xlHoja=+b.dataset.xs; renderXl();});
+$('#xlGrid').addEventListener('click',e=>{const b=e.target.closest('[data-grp]'); if(!b) return; const k=xlHoja+':'+b.dataset.grp; xlCerradas.has(k)?xlCerradas.delete(k):xlCerradas.add(k); renderXl();});
+// Descarga real: SheetJS se carga solo al pedir el archivo.
+function cargaXLSX(){ return window.XLSX?Promise.resolve(window.XLSX):new Promise((ok,mal)=>{const s=document.createElement('script'); s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'; s.onload=()=>ok(window.XLSX); s.onerror=mal; document.head.appendChild(s);}); }
+$('#xlDown').addEventListener('click',async()=>{
+  const b=$('#xlDown'); b.disabled=true; $('#xlMsg').textContent='Generando el archivo…';
+  try{
+    const X=await cargaXLSX(), wb=X.utils.book_new();
+    libro().forEach(h=>{
+      const ws=X.utils.aoa_to_sheet([h.cols,...h.filas.map(f=>f.v)]);
+      h.filas.forEach((f,r)=>f.v.forEach((v,c)=>{ const a=X.utils.encode_cell({r:r+1,c}); if(ws[a]&&typeof v==='number') ws[a].z=h.fmt[c]==='pct'?'0.0%':'#,##0'; }));
+      ws['!rows']=[{},...h.filas.map(f=>f.lv?{level:1}:{})];
+      ws['!cols']=h.cols.map((c,i)=>({wch:Math.max(c.length,...h.filas.map(f=>String(celda(f.v[i],h.fmt[i])).length))+2}));
+      ws['!autofilter']={ref:X.utils.encode_range({s:{r:0,c:0},e:{r:h.filas.length,c:h.cols.length-1}})};
+      X.utils.book_append_sheet(wb,ws,h.nombre);
+    });
+    X.writeFile(wb,`programacion-${CIRCUITO.toLowerCase().replace(/\s+/g,'-')}.xlsx`);
+    $('#xlMsg').innerHTML='<span class="tag ok">Listo</span> Se descargó con la configuración que tienes ahora en la propuesta.';
+  }catch(err){ $('#xlMsg').innerHTML='<span class="tag bad">No se pudo generar</span> Revisa la conexión a internet e intenta de nuevo.'; }
+  b.disabled=false;
+});
 $$('#cTabs button').forEach(b=>b.onclick=()=>{
   $$('#cTabs button').forEach(x=>x.classList.remove('active'));b.classList.add('active');
-  $$('[data-pane]').forEach(p=>p.classList.toggle('hide',p.dataset.pane!==b.dataset.tab));
+  $$('#cierres [data-pane]').forEach(p=>p.classList.toggle('hide',p.dataset.pane!==b.dataset.tab));
 });
 /* =========================================================
    8) Cronograma (Gantt relativo, sin fechas)
@@ -1057,7 +1200,7 @@ const PLAN=[
   {stage:'Etapa 2 · Artes y cierres',c:'--c2',items:[
     ['2.1','Gestor de artes: asignación por slot, reel y grupo',4.5,6],
     ['2.2','Versiones por duración y validación por categoría',5,6.5],
-    ['2.3','Rotación de artes: patrón, pesos, reinicio diario o continuo',5,6.5],
+    ['2.3','Rotación de artes: % por arte, reinicio diario o continuo',5,6.5],
     ['2.4','Datos por arte: nombre, nota, estatus y datos digitales',5.5,6.5],
     ['2.5','Versionario con celda agrupada',6,7],
     ['2.6','Orden de montaje y matriz de programación',6,7.5],
