@@ -208,6 +208,49 @@ footer{padding:36px 0 52px;color:var(--muted);font-size:13px}
 footer .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:var(--mono);letter-spacing:.04em}
 footer img{height:22px;width:auto}
 .hide{display:none}
+/* calendario de reels */
+.cal-bar{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin:6px 0 14px}
+.crumbs{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.crumbs button{font-family:var(--mono);font-size:12px;padding:5px 10px}
+.crumbs>span{color:var(--muted);font-family:var(--mono)}
+.crumbs .nav{display:inline-flex;gap:4px;margin-left:6px}
+.cal-date{max-width:200px}
+.cal-scroll{overflow-x:auto;padding-bottom:4px}
+.cal-period{display:grid;grid-template-columns:96px repeat(24,minmax(22px,1fr));gap:2px;min-width:720px;font-family:var(--mono);font-size:10.5px}
+.cal-period .hh{color:var(--muted);padding-bottom:4px;white-space:nowrap}
+.cal-period .dd{color:var(--muted);background:none;border:0;padding:0 6px 0 0;font:inherit;text-align:left;white-space:nowrap;cursor:pointer}
+.cal-period .dd:hover{color:var(--rosa);background:none}
+.cal-cell{height:24px;border-radius:3px;overflow:hidden;display:flex;cursor:pointer;padding:0;border:0;background:var(--surface-2)}
+.cal-cell span,.stackv span{display:block}
+.cal-cell:hover{outline:2px solid #fff;outline-offset:-1px}
+.cal-day{display:grid;grid-template-columns:repeat(24,minmax(24px,1fr));gap:4px;min-width:720px}
+.cal-day .col{display:flex;flex-direction:column;gap:6px;cursor:pointer;background:none;border:0;padding:0}
+.cal-day .col:hover{background:none}
+.cal-day .col:hover .stackv{outline:2px solid #fff;outline-offset:-1px}
+.stackv{height:160px;border-radius:5px;overflow:hidden;display:flex;flex-direction:column;background:var(--surface-2)}
+.cal-day .lbl{font-family:var(--mono);font-size:10.5px;color:var(--muted);text-align:center}
+.cal-hour{display:grid;grid-template-columns:repeat(auto-fill,minmax(86px,1fr));gap:4px}
+.reel-t{border-radius:7px;padding:6px 8px;color:#0d0814;font-family:var(--mono);font-size:10.5px;line-height:1.35;border:0;text-align:left;cursor:default}
+.reel-t:hover{filter:brightness(1.08)}
+.reel-t b{display:block;font-family:var(--disp);font-size:16px;margin:2px 0}
+.cal-hour.manual .reel-t{cursor:pointer}
+.reel-t.exc{outline:2px dashed #fff;outline-offset:-4px}
+/* rotación de artes */
+.sub-h{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--rosa);font-weight:500;margin:24px 0 10px}
+.pat-row{display:grid;grid-template-columns:minmax(120px,auto) 1fr auto auto;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 12px;margin-bottom:8px}
+.pat-row .lab{display:flex;align-items:center;gap:8px;font-size:14px}
+.chip-a{display:inline-block;font-family:var(--mono);font-size:12px;font-weight:600;padding:2px 8px;border-radius:6px;color:#0d0814}
+.stepper{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.stepper b{color:var(--text);min-width:12px;text-align:center}
+.stepper button{padding:2px 10px}
+@media(max-width:640px){.pat-row{grid-template-columns:1fr auto auto}.pat-row .share{grid-column:1/-1;grid-row:2}}
+.rot-seq{display:grid;gap:8px;margin:14px 0}
+.rot-line{display:flex;gap:4px;flex-wrap:wrap;align-items:center;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.rot-line .dlab{width:78px}
+.rot-line .r{padding:3px 6px;border-radius:5px;color:#0d0814;font-weight:600}
+.media-chip{display:inline-block;font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:999px;background:var(--surface-2);border:1px solid var(--border);margin:2px 4px 2px 0;color:var(--text);white-space:nowrap}
+#verTable td{vertical-align:middle}
+#verTable .btn-row button{font-size:12px;padding:5px 9px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -329,31 +372,38 @@ footer img{height:22px;width:auto}
     <div class="table-scroll" style="margin-top:14px"><table id="grpTable"></table></div>
   </div>
 
-  <h3 style="margin-top:36px">Qué reels le tocan a cada campaña</h3>
-  <p class="reel-meta">Si una campaña tiene 30% de 60 reels, le tocan 18. Hay tres formas de elegir cuáles. Con franjas o reels específicos, la disponibilidad valida esos reels exactos, no solo el porcentaje.</p>
-  <div class="sim" id="simModo">
+  <h3 style="margin-top:36px">Qué reels le tocan a cada campaña, en calendario</h3>
+  <p class="reel-meta">Con un reel de 60 s y operación de 24 h, cada pantalla tiene <b>1,440 reels al día</b>: si una campaña tiene 30%, le tocan 432 diarios. Hay tres formas de elegir cuáles, y se revisan en tres niveles: el periodo completo, un día y una hora con cada reel y su horario exacto. Con franjas o reels específicos, la disponibilidad valida esos reels exactos, no solo el porcentaje.</p>
+  <div class="sim" id="simCal">
     <div class="sim-head">
       <div class="btn-row" id="modeBtns">
         <button data-mode="auto" class="active">Automático</button>
         <button data-mode="franjas">Por franjas</button>
         <button data-mode="manual">Manual</button>
       </div>
-      <span class="tag">Usa el reparto de la sección anterior</span>
+      <span class="tag">Usa el reparto de la reserva y la rotación del gestor de artes</span>
     </div>
     <p class="reel-meta" id="modeDesc" style="margin-top:0"></p>
-    <div class="reelgrid" id="reelGrid"></div>
-    <div class="grid-legend"><span>Reel 1 · inicio del día</span><span>Reel 60 · fin del día</span></div>
+    <div class="cal-bar">
+      <div class="crumbs" id="calCrumbs"></div>
+      <label class="field cal-date">Inicio del periodo<input type="date" id="calIni" value="2026-12-07"></label>
+    </div>
+    <div id="calView"></div>
+    <div class="legend" id="calLegend"></div>
     <div class="check" id="modeCheck"></div>
   </div>
+  <div class="callout"><b>Cómo se guarda la programación.</b> En este ejemplo, 6 pantallas × 1,440 reels al día × 14 días son 120,960 reels; un circuito de 20 pantallas pasa de 400 mil. El sistema no guarda qué va en cada uno: guarda la <b>regla</b> (reparto, modo automático o por franjas, patrón de rotación y si se reinicia cada día) y con ella calcula al momento qué campaña y qué arte le toca a cualquier reel. Aparte solo se guardan los reels que alguien cambia a mano, como <b>excepciones</b>. Así un cambio de reparto o de patrón se aplica de inmediato a todo el periodo, la disponibilidad se valida con la misma regla y el sistema no se vuelve lento con circuitos grandes.</div>
 </div></section>
 
 <!-- ================= ARTES ================= -->
 <section id="artes"><div class="wrap">
   <h2>Gestor de artes</h2>
-  <p class="section-intro">Se asignan uno o varios medios (imagen o video) por slot, por reel o por grupo. Por ejemplo, el arte A en los reels de la mañana y el arte B en los de la tarde, o un arte distinto para las pantallas de 10 s y las de 15 s.</p>
+  <p class="section-intro">Se asignan uno o varios medios (imagen o video) por slot, por reel o por grupo, y se pueden rotar. Por ejemplo, intercalar el arte A y el B en los reels de la campaña, o poner el A en la mañana y el B en la tarde. Cada arte tiene una versión para cada duración de pantalla del circuito.</p>
   <div class="grid g2">
     <div class="card"><h3>Validación de duración</h3><p>A las imágenes se les captura la duración y a los videos se les lee del archivo. La asignación no se cierra hasta que cada slot quede completo con su mezcla de medios.</p></div>
     <div class="card"><h3>Datos por arte</h3><p>Cada arte conserva su nombre, nota y estatus, y se le suman el slot, los reels o la franja asignados, la duración y si el slot está completo.</p></div>
+    <div class="card"><h3>Rotación de artes</h3><p>Un patrón por campaña (A1 → A2, o con pesos 2 : 1) que se repite sobre sus reels en orden de horario. Por defecto se reinicia cada día, para que el orden sea el mismo todos los días; también puede ser continuo. Se aplica masivo, por grupo o selectivo, y se combina con franjas.</p></div>
+    <div class="card"><h3>Versiones por duración</h3><p>Cada arte se define una vez con su versión para cada duración del circuito. En una acción masiva, el sistema muestra por categoría de duración si el contenido queda completo, si falta o si excede, y se corrige solo ese grupo.</p></div>
   </div>
 
   <div class="sim" id="simFill">
@@ -370,6 +420,25 @@ footer img{height:22px;width:auto}
     <div class="fillbar" id="fillbar"></div>
     <div id="fillStatus" class="check"></div>
     <div class="art-list" id="artList"></div>
+  </div>
+
+  <div class="sim" id="simRot">
+    <div class="sim-head"><h3>Rotación de artes y duraciones mixtas</h3><span class="tag">Interactivo</span></div>
+    <p class="reel-meta" style="margin-top:0">Usa el reparto de la reserva y el circuito de pantallas de 10, 15 y 20 s. Elige la campaña, arma su patrón de rotación y decide qué pasa al cambiar de día. Abajo, cada arte del patrón tiene una versión por duración.</p>
+    <div class="controls">
+      <label class="field">Campaña<select id="rotCamp"></select></label>
+      <label class="field">Al cambiar de día<select id="rotModo"><option value="diario">Reinicio diario: mismo orden cada día</option><option value="continuo">Continuo: sigue donde terminó</option></select></label>
+    </div>
+    <div class="sub-h">Patrón de rotación</div>
+    <div id="rotPat"></div>
+    <div class="btn-row"><button id="rotAdd">+ Agregar arte al patrón</button></div>
+    <p class="reel-meta">Secuencial: todos con peso 1 (A1, A2, A1, A2…). Ponderado: sube el peso de un arte (2 : 1 da A1, A1, A2…). Con reinicio diario el orden es idéntico cada día; con continuo, si los reels diarios de la campaña no son múltiplo del patrón, cada día arranca en un arte distinto.</p>
+    <div class="rot-seq" id="rotSeq"></div>
+    <div class="table-scroll"><table id="rotDays"></table></div>
+    <div class="sub-h">Versiones por duración</div>
+    <div class="sim-head" style="margin-bottom:10px"><div class="tabs" id="verTabs" style="margin:0"></div><button id="verMasiva">Asignación masiva: video 10 s a todo el circuito</button></div>
+    <div class="table-scroll"><table id="verTable"></table></div>
+    <div class="check" id="verStatus"></div>
   </div>
 </div></section>
 
@@ -452,7 +521,7 @@ footer img{height:22px;width:auto}
   <h2>Estructura comercial y puntos por definir</h2>
   <div class="grid g2" style="margin-bottom:16px">
     <div class="tl"><span class="tag">Inversión del desarrollo</span><div class="big" style="margin-top:10px">$28,000</div><p>Desarrollo e integración de todas las mejoras de inventario digital descritas en esta propuesta.</p></div>
-    <div class="tl"><span class="tag">Duración estimada</span><div class="big" style="margin-top:10px">1 a 2 meses</div><p>De trabajo y desarrollo, a partir de la aprobación del alcance.</p></div>
+    <div class="tl"><span class="tag">Duración estimada</span><div class="big" style="margin-top:10px">2 meses</div><p>De trabajo y desarrollo, a partir de la aprobación del alcance.</p></div>
   </div>
   <div class="grid g2">
     <div class="card"><h3>Tarifa</h3><p>Se cobra la tarifa pública integrada. El cliente decide cómo reparte los reels entre sus campañas, en % o en número. Si se requieren reglas o cálculos automáticos de tarifa, se integran según lo que defina el cliente.</p></div>
@@ -461,6 +530,7 @@ footer img{height:22px;width:auto}
         <li>Si la toma fotográfica se agrega como campo de la campaña.</li>
         <li>Qué pasa si los medios no llenan exactamente el slot: si es más corto, ¿se bloquea o se permite con aviso?; si es más largo, se rechaza.</li>
         <li>Si la cantidad (1, 2…) por anunciante en la programación actual equivale a spots dentro del loop.</li>
+        <li>Si el horario de operación cruza la medianoche, a qué día pertenecen los reels después de las 00:00.</li>
       </ul></div>
   </div>
 </div></section>
@@ -487,13 +557,13 @@ footer img{height:22px;width:auto}
   <p class="section-intro">El desarrollo se organiza en dos etapas. La primera construye la base de datos del inventario digital y las herramientas de reserva. La segunda, el gestor de artes y los cierres. El cronograma es relativo, en semanas a partir del arranque.</p>
 
   <div class="grid g2">
-    <div class="card"><span class="tag">Etapa 1</span><h3 style="margin-top:10px">Infraestructura y reserva</h3><p>Base de datos del inventario digital, cálculo de reels y disponibilidad, buscador de formatos con reparto multicampaña, herramientas de agrupación y visualización de lo reservado.</p></div>
-    <div class="card"><span class="tag">Etapa 2</span><h3 style="margin-top:10px">Artes y cierres</h3><p>Gestor de artes con validación de duración, versionario, orden de montaje, matriz de programación y exportación.</p></div>
+    <div class="card"><span class="tag">Etapa 1</span><h3 style="margin-top:10px">Infraestructura y reserva</h3><p>Base de datos del inventario digital, cálculo de reels y disponibilidad, buscador de formatos con reparto multicampaña, herramientas de agrupación, calendario de reels y visualización de lo reservado.</p></div>
+    <div class="card"><span class="tag">Etapa 2</span><h3 style="margin-top:10px">Artes y cierres</h3><p>Gestor de artes con rotación, versiones por duración y validación, versionario, orden de montaje, matriz de programación y exportación.</p></div>
   </div>
 
   <div class="sim">
     <div class="sim-head"><h3>Cronograma estimado</h3>
-      <div class="btn-row" id="ganttBtns"><button data-w="4">Escenario 1 mes</button><button data-w="8" class="active">Escenario 2 meses</button></div>
+      <span class="tag">8 semanas</span>
     </div>
     <div class="table-scroll" style="border:none"><div class="gantt" id="gantt"></div></div>
     <div class="legend">
@@ -510,7 +580,7 @@ footer img{height:22px;width:auto}
       <li>Que el inventario tenga completos sus datos de slots y duraciones.</li>
       <li>La disponibilidad del equipo del cliente para revisiones y pruebas en cada etapa.</li>
     </ul>
-    Con la aprobación entregamos el calendario definitivo, dentro del rango estimado de 1 a 2 meses.
+    Con la aprobación entregamos el calendario definitivo, dentro de los 2 meses estimados.
   </div>
 </div></section>
 
@@ -570,7 +640,9 @@ calcReel();
 /* =========================================================
    2) Reparto multicampaña (siempre 100%)
    ========================================================= */
-let camps=[{pct:50,lock:false},{pct:50,lock:false}];
+let ready=false; // los simuladores que dependen del reparto se pintan hasta que todo está declarado
+const nuevaCamp=(pct,pat)=>({pct,lock:false,pat:pat||[{a:0,w:1}],vers:{}}); // pat: patrón de rotación; vers: versiones por duración de cada arte
+let camps=[nuevaCamp(50,[{a:0,w:1},{a:1,w:1}]),nuevaCamp(50)];
 
 // Ajusta las campañas no bloqueadas (excepto idx) para que todo sume 100, de forma proporcional.
 function rebalance(idx){
@@ -610,51 +682,119 @@ function renderCamps(){
   const st=$('#stack'); st.innerHTML='';
   camps.forEach((c,i)=>{const d=document.createElement('div');d.style.flexBasis=c.pct+'%';d.style.background=css(COLORS[i]);d.textContent=c.pct>=8?NAMES[i]+' '+c.pct.toFixed(0)+'%':'';st.appendChild(d);});
   $('#counterTxt').textContent=camps.map((c,i)=>NAMES[i]+' '+fmt(reels[i])+'/'+fmt(total)).join(' · ');
-  bindCamps(); renderGrid();
+  bindCamps(); if(ready){renderCal();renderRot();}
 }
 function bindCamps(){
   $$('#campList input[type=range]').forEach(el=>el.addEventListener('input',e=>{const i=+e.target.dataset.i;camps[i].pct=+e.target.value;rebalance(i);renderCamps();}));
   $$('#campList [data-lock]').forEach(el=>el.addEventListener('change',e=>{camps[+e.target.dataset.lock].lock=e.target.checked;renderCamps();}));
-  $$('#campList [data-del]').forEach(el=>el.addEventListener('click',e=>{camps.splice(+e.target.dataset.del,1);rebalance(null);renderCamps();}));
+  $$('#campList [data-del]').forEach(el=>el.addEventListener('click',e=>{camps.splice(+e.target.dataset.del,1);overrides.clear();rebalance(null);renderCamps();}));
 }
 $('#addCamp').addEventListener('click',()=>{
   if(camps.length>=5) return;
-  camps.push({pct:100/(camps.length+1),lock:false}); rebalance(camps.length-1); renderCamps();
+  camps.push(nuevaCamp(100/(camps.length+1)));overrides.clear(); rebalance(camps.length-1); renderCamps();
 });
 $('#resetCamp').addEventListener('click',()=>{camps.forEach(c=>{c.pct=100/camps.length;c.lock=false;});renderCamps();});
 $('#pTotal').addEventListener('input',renderCamps);
 
 /* =========================================================
-   3) Qué reels le tocan a cada campaña (60 reels de muestra)
+   3) Calendario de reels: periodo → día → hora
+   Reel de 60 s y operación de 24 h: 1,440 reels por día y 60 por hora.
+   Se guarda la regla (reparto + modo + rotación) y solo las excepciones
+   manuales; cada reel se calcula al momento.
    ========================================================= */
-let mode='auto', manual=null;
+const CAL={seg:60,dias:14}; CAL.porDia=86400/CAL.seg; CAL.porHora=3600/CAL.seg;
+let mode='auto', calNivel='periodo', calDia=0, calHora=6, rotContinuo=false;
+const overrides=new Map(); // "día:reel" -> campaña (solo excepciones manuales)
 const MODE_TXT={
   auto:'Automático (por defecto): los reels de cada campaña se intercalan de forma pareja durante el día.',
   franjas:'Por franjas: cada campaña ocupa bloques de horario continuos (ej. mañana, tarde, noche).',
-  manual:'Manual: toca un reel para cambiarlo de campaña. El sistema avisa si no coincide con el reparto.'
+  manual:'Manual: parte del automático. Entra a una hora y toca un reel para cambiarlo de campaña; se guarda solo ese cambio y el sistema avisa si el día deja de cumplir el reparto.'
 };
-function gridTargets(){ return splitReels(60); } // reparto aplicado a 60 reels
-function buildAuto(t){ // intercalado proporcional (método de crédito)
-  const out=[], credit=t.map(()=>0);
-  for(let k=0;k<60;k++){ t.forEach((n,i)=>credit[i]+=n/60); let best=0; credit.forEach((c,i)=>{if(c>credit[best]) best=i;}); out.push(best); credit[best]-=1; }
+function buildAuto(t,n){ // intercalado proporcional (método de crédito)
+  const out=new Array(n), credit=t.map(()=>0);
+  for(let k=0;k<n;k++){ t.forEach((v,i)=>credit[i]+=v/n); let best=0; credit.forEach((c,i)=>{if(c>credit[best]) best=i;}); out[k]=best; credit[best]-=1; }
   return out;
 }
 function buildFranjas(t){const out=[];t.forEach((n,i)=>{for(let k=0;k<n;k++) out.push(i);});return out;}
-function renderGrid(){
-  const t=gridTargets();
-  let cells = mode==='auto'?buildAuto(t): mode==='franjas'?buildFranjas(t): (manual && manual.length===60 && Math.max(...manual)<camps.length ? manual : (manual=buildAuto(t)));
-  const g=$('#reelGrid'); g.innerHTML=''; g.classList.toggle('manual',mode==='manual');
-  cells.forEach((ci,k)=>{const d=document.createElement('div');d.className='r';d.style.background=css(COLORS[ci]);d.title='Reel '+(k+1)+' · Campaña '+NAMES[ci];d.textContent=NAMES[ci];
-    if(mode==='manual') d.onclick=()=>{manual[k]=(manual[k]+1)%camps.length;renderGrid();};
-    g.appendChild(d);});
-  $('#modeDesc').textContent=MODE_TXT[mode];
-  const counts=camps.map((_,i)=>cells.filter(x=>x===i).length);
-  const ok=counts.every((c,i)=>c===t[i]);
-  $('#modeCheck').innerHTML=camps.map((_,i)=>`Campaña ${NAMES[i]}: <b>${counts[i]}</b> de ${t[i]}`).join(' · ')+
-    ' — '+(ok?'<span class="tag ok">Cumple el reparto</span>':'<span class="tag bad">No coincide con el reparto</span>');
+let baseKey='', baseCells=null;
+function baseDay(){ const t=splitReels(CAL.porDia), key=(mode==='franjas'?'f':'a')+t.join(',');
+  if(key!==baseKey){ baseKey=key; baseCells= mode==='franjas'?buildFranjas(t):buildAuto(t,CAL.porDia); } return baseCells; }
+function dayCells(d){ const b=baseDay(); if(mode!=='manual'||!overrides.size) return b; let out=null;
+  overrides.forEach((c,key)=>{const [dd,k]=key.split(':').map(Number); if(dd===d&&c<camps.length){ if(!out) out=b.slice(); out[k]=c; }}); return out||b; }
+function countIn(cells,a,b){ const r=camps.map(()=>0); for(let k=a;k<b;k++) r[cells[k]]++; return r; }
+function rotSeq(c){ const s=[]; camps[c].pat.forEach(p=>{for(let i=0;i<p.w;i++) s.push(p.a);}); return s.length?s:[0]; }
+function dayArts(d){ // arte que le toca a cada reel del día d según la rotación de su campaña
+  const cells=dayCells(d), cnt=camps.map(()=>0), seqs=camps.map((_,c)=>rotSeq(c));
+  if(rotContinuo) for(let x=0;x<d;x++){ const cx=dayCells(x); for(let k=0;k<cx.length;k++) cnt[cx[k]]++; }
+  return cells.map(c=>seqs[c][cnt[c]++%seqs[c].length]);
 }
-$$('#modeBtns button').forEach(b=>b.addEventListener('click',()=>{$$('#modeBtns button').forEach(x=>x.classList.remove('active'));b.classList.add('active');mode=b.dataset.mode;if(mode==='manual') manual=null;renderGrid();}));
-renderCamps();
+const artCol=(c,a)=>a?`color-mix(in srgb, ${css(COLORS[c])} ${Math.max(35,100-a*25)}%, #ffffff)`:css(COLORS[c]);
+const artName=(c,a)=>NAMES[c]+(a+1);
+const two=v=>String(v).padStart(2,'0');
+const hh=h=>two(h)+':00';
+const fmtT=s=>[Math.floor(s/3600)%24,Math.floor(s/60)%60,s%60].map(two).join(':');
+function fecha(d,opt){ const v=$('#calIni').value||'2026-12-07', f=new Date(v+'T12:00:00'); f.setDate(f.getDate()+d);
+  return f.toLocaleDateString('es-MX',opt||{weekday:'short',day:'numeric',month:'short'}); }
+const barras=n=>n.map((x,i)=>x?`<span style="flex:${x};background:${css(COLORS[i])}"></span>`:'').join('');
+const resumen=n=>n.map((x,i)=>NAMES[i]+' '+x).join(' · ')+' reels';
+function renderCal(){
+  const v=$('#calView'), t=splitReels(CAL.porDia);
+  $('#modeDesc').textContent=MODE_TXT[mode];
+  let c=`<button data-nv="periodo" class="${calNivel==='periodo'?'active':''}">Periodo · ${CAL.dias} días</button>`;
+  if(calNivel!=='periodo') c+=`<span>›</span><button data-nv="dia" class="${calNivel==='dia'?'active':''}">${fecha(calDia)}</button>`;
+  if(calNivel==='hora') c+=`<span>›</span><button class="active">${hh(calHora)}–${hh(calHora+1)}</button>`;
+  if(calNivel!=='periodo') c+=`<span class="nav"><button data-mv="-1" aria-label="Anterior">‹</button><button data-mv="1" aria-label="Siguiente">›</button></span>`;
+  $('#calCrumbs').innerHTML=c;
+  if(calNivel==='periodo'){
+    let h='<div class="cal-period"><div></div>'+Array.from({length:24},(_,i)=>`<div class="hh">${i%3?'':two(i)}</div>`).join('');
+    for(let d=0;d<CAL.dias;d++){ const cells=dayCells(d);
+      h+=`<button class="dd" data-d="${d}" title="Ver el día">${fecha(d)}</button>`;
+      for(let r=0;r<24;r++){ const n=countIn(cells,r*CAL.porHora,(r+1)*CAL.porHora);
+        h+=`<button class="cal-cell" data-d="${d}" data-h="${r}" title="${fecha(d)} · ${hh(r)}–${hh(r+1)} · ${resumen(n)}">${barras(n)}</button>`; } }
+    v.innerHTML=`<div class="cal-scroll">${h}</div></div>`;
+  } else if(calNivel==='dia'){
+    const cells=dayCells(calDia); let h='<div class="cal-day">';
+    for(let r=0;r<24;r++){ const n=countIn(cells,r*CAL.porHora,(r+1)*CAL.porHora);
+      h+=`<button class="col" data-h="${r}" title="${hh(r)}–${hh(r+1)} · ${resumen(n)}"><span class="stackv">${barras(n)}</span><span class="lbl">${two(r)}</span></button>`; }
+    v.innerHTML=`<div class="cal-scroll">${h}</div></div>`;
+  } else {
+    const cells=dayCells(calDia), arts=dayArts(calDia), k0=calHora*CAL.porHora, largo=fecha(calDia,{weekday:'long',day:'numeric',month:'long'});
+    let h=`<div class="cal-hour${mode==='manual'?' manual':''}">`;
+    for(let k=k0;k<k0+CAL.porHora;k++){ const ci=cells[k], a=arts[k], exc=mode==='manual'&&overrides.has(calDia+':'+k);
+      h+=`<button class="reel-t${exc?' exc':''}" data-k="${k}" style="background:${artCol(ci,a)}" title="Reel ${fmt(k+1)} · ${largo} · ${fmtT(k*CAL.seg)}–${fmtT((k+1)*CAL.seg)} · Campaña ${NAMES[ci]} · Arte ${a+1}${exc?' · excepción manual':''}">Reel ${fmt(k+1)}<b>${artName(ci,a)}</b>${fmtT(k*CAL.seg)}</button>`; }
+    v.innerHTML=h+'</div>';
+  }
+  $('#calLegend').innerHTML=camps.map((_,i)=>`<span><i class="dot" style="background:${css(COLORS[i])}"></i>Campaña ${NAMES[i]}</span>`).join('')+
+    (calNivel==='hora'?'<span>A1, A2… es el arte que le toca a cada reel por la rotación.</span>':'<span>Toca un día o una hora para acercarte.</span>');
+  let counts,target,et;
+  if(calNivel==='periodo'){ counts=camps.map(()=>0); for(let d=0;d<CAL.dias;d++) countIn(dayCells(d),0,CAL.porDia).forEach((x,i)=>counts[i]+=x); target=t.map(x=>x*CAL.dias); et='Periodo'; }
+  else { counts=countIn(dayCells(calDia),0,CAL.porDia); target=t; et=fecha(calDia); }
+  const ok=counts.every((x,i)=>x===target[i]);
+  $('#modeCheck').innerHTML=`${et}: `+camps.map((_,i)=>`Campaña ${NAMES[i]} <b>${fmt(counts[i])}</b> de ${fmt(target[i])}`).join(' · ')+' — '+
+    (ok?'<span class="tag ok">Cumple el reparto</span>':'<span class="tag bad">No coincide con el reparto</span>')+
+    (mode==='manual'?` · Excepciones guardadas: <b>${overrides.size}</b> reels; el resto se calcula con la regla.`:'');
+}
+$('#calView').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  if(b.classList.contains('dd')){calDia=+b.dataset.d;calNivel='dia';}
+  else if(b.classList.contains('cal-cell')){calDia=+b.dataset.d;calHora=+b.dataset.h;calNivel='hora';}
+  else if(b.classList.contains('col')){calHora=+b.dataset.h;calNivel='hora';}
+  else if(b.classList.contains('reel-t')){ if(mode!=='manual') return;
+    const k=+b.dataset.k, key=calDia+':'+k, nx=(dayCells(calDia)[k]+1)%camps.length;
+    if(nx===baseDay()[k]) overrides.delete(key); else overrides.set(key,nx); renderRot(); }
+  else return;
+  renderCal();
+});
+$('#calCrumbs').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.nv) calNivel=b.dataset.nv;
+  if(b.dataset.mv){ const m=+b.dataset.mv;
+    if(calNivel==='dia') calDia=(calDia+m+CAL.dias)%CAL.dias;
+    else { calHora+=m; if(calHora<0){calHora=23;calDia=(calDia-1+CAL.dias)%CAL.dias;} if(calHora>23){calHora=0;calDia=(calDia+1)%CAL.dias;} } }
+  renderCal();
+});
+$('#calIni').addEventListener('input',()=>{renderCal();renderRot();});
+$$('#modeBtns button').forEach(b=>b.addEventListener('click',()=>{$$('#modeBtns button').forEach(x=>x.classList.remove('active'));b.classList.add('active');mode=b.dataset.mode;renderCal();renderRot();}));
 
 /* =========================================================
    4) Agrupación por duración (circuito de ejemplo)
@@ -708,6 +848,64 @@ $('#fSlot').addEventListener('input',renderFill);
 renderFill();
 
 /* =========================================================
+   5b) Rotación de artes y versiones por duración
+   ========================================================= */
+let rotCamp=0, verArt=0;
+const DURS=[...new Set(SCREENS.map(s=>s.dur))].sort((a,b)=>a-b);
+function getVers(c,a){ // versión de cada arte por duración de pantalla
+  const V=camps[c].vers;
+  if(!V[a]) V[a]=(c===0&&a===0)?{10:[{t:'vid',s:10}],15:[{t:'vid',s:10}],20:[{t:'vid',s:10},{t:'img',s:15}]}:Object.fromEntries(DURS.map(d=>[d,[{t:'vid',s:d}]]));
+  DURS.forEach(d=>{if(!V[a][d]) V[a][d]=[];}); return V[a];
+}
+const usados=m=>m.reduce((x,y)=>x+y.s,0);
+function renderRot(){
+  if(rotCamp>=camps.length) rotCamp=0;
+  $('#rotCamp').innerHTML=camps.map((c,i)=>`<option value="${i}" ${i===rotCamp?'selected':''}>Campaña ${NAMES[i]} · ${c.pct.toFixed(0)}%</option>`).join('');
+  $('#rotModo').value=rotContinuo?'continuo':'diario';
+  const P=camps[rotCamp].pat, W=P.reduce((x,p)=>x+p.w,0);
+  $('#rotPat').innerHTML=P.map((p,i)=>`<div class="pat-row"><span class="lab"><span class="chip-a" style="background:${artCol(rotCamp,p.a)}">${artName(rotCamp,p.a)}</span>Arte ${p.a+1}</span>
+    <span class="reel-meta share">${Math.round(p.w/W*100)}% de los reels de la campaña</span>
+    <span class="stepper">Peso <button data-w="${i}" data-dw="-1" ${p.w<=1?'disabled':''} aria-label="Menos peso">−</button><b>${p.w}</b><button data-w="${i}" data-dw="1" ${p.w>=5?'disabled':''} aria-label="Más peso">+</button></span>
+    <button data-pdel="${i}" ${P.length<=1?'disabled':''} title="Quitar del patrón">×</button></div>`).join('');
+  $('#rotAdd').disabled=P.length>=4;
+  // Primeros reels de la campaña en los días 1 y 2
+  $('#rotSeq').innerHTML=[0,1].map(d=>{ const cells=dayCells(d), arts=dayArts(d), out=[];
+    for(let k=0;k<cells.length&&out.length<14;k++) if(cells[k]===rotCamp) out.push(`<span class="r" style="background:${artCol(rotCamp,arts[k])}" title="${fmtT(k*CAL.seg)}">${artName(rotCamp,arts[k])}</span>`);
+    return `<div class="rot-line"><span class="dlab">${fecha(d)}</span>${out.join('')}<span>…</span></div>`; }).join('');
+  // Conteo por arte: días 1 a 3 y periodo
+  const arts=[...new Set(P.map(p=>p.a))], tot=arts.map(()=>0); let totN=0, rows='';
+  for(let d=0;d<CAL.dias;d++){ const cells=dayCells(d), da=dayArts(d), cnt=arts.map(()=>0); let n=0, first=-1;
+    for(let k=0;k<cells.length;k++) if(cells[k]===rotCamp){ n++; if(first<0) first=da[k]; cnt[arts.indexOf(da[k])]++; }
+    cnt.forEach((x,i)=>tot[i]+=x); totN+=n;
+    if(d<3) rows+=`<tr><td>${fecha(d)}</td><td class="mono">${fmt(n)}</td><td>${first<0?'—':`<span class="chip-a" style="background:${artCol(rotCamp,first)}">${artName(rotCamp,first)}</span>`}</td>${cnt.map(x=>`<td class="mono">${fmt(x)}</td>`).join('')}</tr>`; }
+  $('#rotDays').innerHTML=`<tr><th>Día</th><th>Reels de la campaña</th><th>Empieza con</th>${arts.map(a=>`<th>${artName(rotCamp,a)}</th>`).join('')}</tr>${rows}`+
+    `<tr><td class="reel-meta">…</td><td></td><td></td>${arts.map(()=>'<td></td>').join('')}</tr><tr><td><b>Periodo · ${CAL.dias} días</b></td><td class="mono"><b>${fmt(totN)}</b></td><td></td>${tot.map(x=>`<td class="mono"><b>${fmt(x)}</b></td>`).join('')}</tr>`;
+  // Versiones por duración del arte elegido
+  if(!arts.includes(verArt)) verArt=arts[0];
+  $('#verTabs').innerHTML=arts.map(a=>`<button data-va="${a}" class="${a===verArt?'active':''}">${artName(rotCamp,a)} · Arte ${a+1}</button>`).join('');
+  const V=getVers(rotCamp,verArt);
+  $('#verTable').innerHTML='<tr><th>Categoría</th><th>Pantallas</th><th>Contenido</th><th>Total</th><th>Estado</th><th>Ajustar solo este grupo</th></tr>'+DURS.map(d=>{
+    const m=V[d], u=usados(m), n=SCREENS.filter(s=>s.dur===d).length;
+    const st=u===d?'<span class="tag ok">Completo</span>':u<d?`<span class="tag warn">Faltan ${d-u} s</span>`:`<span class="tag bad">Excede ${u-d} s</span>`;
+    return `<tr><td class="mono">${d} s</td><td class="mono">${n}</td><td>${m.length?m.map(x=>`<span class="media-chip">${x.t==='vid'?'Video':'Imagen'} ${x.s} s</span>`).join(''):'<span class="reel-meta">Sin medios</span>'}</td><td class="mono">${u} s</td><td>${st}</td>
+      <td><div class="btn-row"><button data-vd="${d}" data-vt="img" data-vs="5">+ Imagen 5 s</button><button data-vd="${d}" data-vt="vid" data-vs="${d}">+ Video ${d} s</button><button data-vd="${d}" data-vclr="1">Vaciar</button></div></td></tr>`; }).join('');
+  const pend=[]; arts.forEach(a=>{const VV=getVers(rotCamp,a); DURS.forEach(d=>{if(usados(VV[d])!==d) pend.push(`${artName(rotCamp,a)} en ${d} s`);});});
+  $('#verStatus').innerHTML=pend.length?`<span class="tag bad">No se puede cerrar</span> Falta ajustar: ${pend.join(' · ')}.`:
+    '<span class="tag ok">Todo completo</span> Cada arte del patrón llena el slot en todas las duraciones del circuito. Se puede cerrar la asignación.';
+}
+$('#rotCamp').addEventListener('change',e=>{rotCamp=+e.target.value;renderRot();});
+$('#rotModo').addEventListener('change',e=>{rotContinuo=e.target.value==='continuo';renderRot();renderCal();});
+$('#rotPat').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; const P=camps[rotCamp].pat;
+  if(b.dataset.dw){ const p=P[+b.dataset.w]; p.w=Math.min(5,Math.max(1,p.w+ +b.dataset.dw)); }
+  else if(b.dataset.pdel) P.splice(+b.dataset.pdel,1);
+  renderRot(); renderCal(); });
+$('#rotAdd').onclick=()=>{ const P=camps[rotCamp].pat; if(P.length>=4) return; let a=0; while(P.some(p=>p.a===a)) a++; P.push({a,w:1}); renderRot(); renderCal(); };
+$('#verTabs').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; verArt=+b.dataset.va; renderRot(); });
+$('#verTable').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; const V=getVers(rotCamp,verArt), d=+b.dataset.vd;
+  if(b.dataset.vclr) V[d]=[]; else if(V[d].length<4) V[d].push({t:b.dataset.vt,s:+b.dataset.vs}); renderRot(); });
+$('#verMasiva').onclick=()=>{ const V=getVers(rotCamp,verArt); DURS.forEach(d=>V[d]=[{t:'vid',s:10}]); renderRot(); };
+
+/* =========================================================
    6) Desplazamiento parcial
    ========================================================= */
 const D0=[
@@ -743,7 +941,7 @@ $$('#cTabs button').forEach(b=>b.onclick=()=>{
 });
 /* =========================================================
    8) Cronograma (Gantt relativo, sin fechas)
-   Inicio y fin en semanas sobre una base de 8; el escenario de 1 mes comprime a la mitad.
+   Inicio y fin en semanas, sobre un estimado de 8 semanas (2 meses).
    ========================================================= */
 const PLAN=[
   {stage:'Etapa 1 · Infraestructura y reserva',c:'--c1',items:[
@@ -753,21 +951,22 @@ const PLAN=[
     ['1.4','Buscador de formatos: condiciones y disponibilidad filtrada',2,4],
     ['1.5','Multicampaña: reparto 100%, candado y contador',2.5,4],
     ['1.6','Agrupación, acciones masivas y selección de reels',3,5],
-    ['1.7','Visualización de ocupación y de lo reservado',3.5,5],
+    ['1.7','Calendario de reels (periodo, día y hora) y visualización de lo reservado',3.5,5],
     ['1.8','Multirreserva y desplazamiento parcial',4,5],
     ['1.9','Pruebas de la etapa 1',4.5,5,'mile'],
   ]},
   {stage:'Etapa 2 · Artes y cierres',c:'--c2',items:[
     ['2.1','Gestor de artes: asignación por slot, reel y grupo',4.5,6],
-    ['2.2','Validación de duración de medios',5,6],
-    ['2.3','Datos por arte: nombre, nota, estatus y datos digitales',5.5,6.5],
-    ['2.4','Versionario con celda agrupada',6,7],
-    ['2.5','Orden de montaje y matriz de programación',6,7.5],
-    ['2.6','Exportación',7,8],
-    ['2.7','Pruebas integrales y liberación',7.5,8,'mile'],
+    ['2.2','Versiones por duración y validación por categoría',5,6.5],
+    ['2.3','Rotación de artes: patrón, pesos, reinicio diario o continuo',5,6.5],
+    ['2.4','Datos por arte: nombre, nota, estatus y datos digitales',5.5,6.5],
+    ['2.5','Versionario con celda agrupada',6,7],
+    ['2.6','Orden de montaje y matriz de programación',6,7.5],
+    ['2.7','Exportación',7,8],
+    ['2.8','Pruebas integrales y liberación',7.5,8,'mile'],
   ]},
 ];
-let weeks=8;
+const weeks=8;
 function renderGantt(){
   const k=weeks/8, cols=`repeat(${weeks},1fr)`;
   const wk=()=>Array.from({length:weeks},()=>'<div class="wk"></div>').join('');
@@ -782,8 +981,8 @@ function renderGantt(){
   });
   $('#gantt').innerHTML=h;
 }
-$$('#ganttBtns button').forEach(b=>b.onclick=()=>{$$('#ganttBtns button').forEach(x=>x.classList.remove('active'));b.classList.add('active');weeks=+b.dataset.w;renderGantt();});
 renderGantt();
+ready=true; renderCamps();
 </script>
 </body>
 </html>
