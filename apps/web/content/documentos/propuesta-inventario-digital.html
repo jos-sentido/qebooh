@@ -209,7 +209,7 @@ footer .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family
 footer img{height:22px;width:auto}
 .hide{display:none}
 .libre{display:flex;align-items:center;gap:8px}
-.libre-bar{display:inline-block;width:70px;height:8px;border-radius:4px;background:var(--surface-2);overflow:hidden}
+button.mini{font-size:12px;padding:5px 10px;white-space:nowrap}tr.cond-sec td{background:var(--surface-2);padding-top:10px;padding-bottom:10px;border-top:1px solid var(--border)}.libre-bar{display:inline-block;width:70px;height:8px;border-radius:4px;background:var(--surface-2);overflow:hidden}
 .libre-bar span{display:block;height:100%;background:var(--ok)}
 .pasos-art .step{flex-basis:180px}
 .art-ctx{display:flex;align-items:center;gap:8px 10px;flex-wrap:wrap;position:sticky;top:52px;z-index:5;background:rgba(23,15,34,.95);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid #3d2862;border-radius:10px;padding:10px 14px;margin-bottom:6px;font-size:14px}
@@ -422,7 +422,7 @@ input[readonly]{color:var(--lila);background:var(--surface)}
 
   <div class="sim" id="simCond">
     <div class="sim-head"><h3>Reserva de una campaña: disponibilidad</h3><span class="tag">Interactivo</span></div>
-    <p class="reel-meta" style="margin-top:0">Se reserva una campaña a la vez. La disponibilidad solo muestra lo que esa campaña puede reservar y, para cada inventario, cuánto tiene libre en el periodo. Lo libre al 100% se toma completo. Lo que ocupa otra propuesta del mismo anunciante se puede compartir (multirreserva) y solo esas pantallas pasan a la multicampaña. Lo vendido es fijo: una propuesta solo puede usar lo que la campaña vendida no ocupa. Lo que configures aquí es lo que usan todas las secciones siguientes.</p>
+    <p class="reel-meta" style="margin-top:0">Se reserva una campaña a la vez. La disponibilidad solo muestra lo que esa campaña puede reservar y, para cada inventario, cuánto tiene libre en el periodo. Lo libre al 100% se toma completo. Lo que ocupa otra propuesta del mismo anunciante se puede compartir (multirreserva) y solo esas pantallas pasan a la multicampaña. Lo vendido es fijo: una propuesta solo puede usar lo que la campaña vendida no ocupa. La tabla tiene dos listas: arriba, lo que ya está en la reserva de la campaña (el ejemplo viene precargado) con su botón <b>Quitar</b>; abajo, lo que todavía se puede agregar con <b>+ Agregar</b>. Si quitas una pantalla vuelve a la lista de abajo. Lo que configures aquí es lo que usan todas las secciones siguientes.</p>
     <div class="field-l">Campañas del anunciante</div>
     <div class="btn-row" id="condCamps" style="margin-bottom:12px"></div>
     <div class="art-ctx" id="condCtx" style="position:static"></div>
@@ -430,7 +430,7 @@ input[readonly]{color:var(--lila);background:var(--surface)}
       <label class="field">Frecuencia deseada al compartir: <b id="condFreqTxt"></b><input type="range" id="condFreq" min="5" max="95" step="5"></label>
       <label class="field">Duración del slot<select id="condDur"></select></label>
     </div>
-    <div class="btn-row" style="margin-bottom:10px"><button id="condLibres">Elegir las 100% libres</button><button id="condCompartir">Sumar las que se pueden compartir</button><button id="condNinguna">Quitar todas</button></div>
+    <div class="btn-row" style="margin-bottom:10px"><span class="reel-meta" style="align-self:center;margin-right:4px">Acciones rápidas:</span><button id="condLibres">+ Agregar todas las 100% libres</button><button id="condCompartir">+ Agregar las compartidas</button><button id="condNinguna">Vaciar la reserva</button></div>
     <div class="table-scroll"><table id="condTabla"></table></div>
     <p class="reel-meta" id="condOcultas"></p>
     <div class="check" id="condResumen"></div>
@@ -782,7 +782,7 @@ const DIAS=14;
 let foco=0, sigId=1;
 // cargas[j].pat: artes de la carga y su % (w, suman 100). cpDef: % de la campaña por carga (suman 100);
 // cp[clave]: el mismo reparto pero propio de una pantalla (acciones por grupo o selectivas).
-const nuevaCamp=(freq,pant,cargas,cpDef)=>({id:sigId++,vend:false,freq,dur:'all',pant:new Set(pant||[]),cargas:cargas||[{pat:[{a:0,w:100}]}],cpDef:cpDef||[100],cp:{},vers:{}});
+const nuevaCamp=(freq,pant,cargas,cpDef)=>({id:sigId++,vend:false,freq,dur:'all',pant:new Set(pant||[]),prev:new Set(pant||[]),cargas:cargas||[{pat:[{a:0,w:100}]}],cpDef:cpDef||[100],cp:{},vers:{}});
 let camps=[
   nuevaCamp(50,['151001A','151004A','161005A','171813A','181022A','11810A'],[{pat:[{a:0,w:50},{a:1,w:50}]},{pat:[{a:2,w:100}]}],[60,40]),
   nuevaCamp(30,['151001A','151004A','161005A','151016A']),
@@ -838,7 +838,9 @@ const dursDe=c=>[...new Set(pantDe(c).map(i=>SCREENS[i].dur))].sort((a,b)=>a-b);
 // Disponibilidad de una pantalla del inventario para la campaña c.
 // Lo libre de una pantalla para la campaña c: lo que no está vendido ni con candado por las demás.
 function libreDe(c,s){ const otros=campsEn(s.k).filter(x=>x!==c); if(!otros.length) return 100;
-  const Rb=repartoDe(otros.map(x=>camps[x].id).sort((a,b)=>a-b)); return Math.max(0,100-otros.reduce((a,x)=>a+(fijo(Rb,camps[x].id)?Rb.pct[camps[x].id]:0),0)); }
+  /* Si esta campaña ya estuvo en la pantalla y se quitó, su espacio sigue apartado: lo vendido conserva su %. */
+  const Rc=camps[c].prev.has(s.k)?REP[[...otros.map(x=>camps[x].id),camps[c].id].sort((a,b)=>a-b).join(',')]:null;
+  const Rb=Rc||repartoDe(otros.map(x=>camps[x].id).sort((a,b)=>a-b)); return Math.max(0,100-otros.reduce((a,x)=>a+(fijo(Rb,camps[x].id)?Rb.pct[camps[x].id]:0),0)); }
 function disponibilidad(c,s){
   if(s.otro) return {ok:false,tag:'bad',txt:'Ocupada por '+s.otro};
   const C=camps[c]; if(C.vend) return {ok:C.pant.has(s.k),tag:'',txt:'Vendida'};
@@ -874,7 +876,7 @@ function reajusta(id){ Object.keys(REP).forEach(k=>{ const ids=k.split(',').map(
 
 repartoDe([camps[0].id,camps[1].id]); camps[0].vend=true;
 // Vuelve a pintar todo lo que depende del estado.
-function renderTodo(){ syncCircuito(); overrides.clear(); renderCond(); renderRep(); if(ready){ renderGrpBtns(); renderGrp(); renderCal(); renderRot(); renderCierres(); } }
+function renderTodo(){ camps.forEach(x=>x.pant.forEach(k=>x.prev.add(k))); syncCircuito(); overrides.clear(); renderCond(); renderRep(); if(ready){ renderGrpBtns(); renderGrp(); renderCal(); renderRot(); renderCierres(); } }
 
 /* ---- Reserva de una campaña: disponibilidad ----
    Se reserva una campaña a la vez. La disponibilidad solo muestra lo que esa
@@ -897,14 +899,21 @@ function renderCond(){
   INV.forEach(s=>{ const d=disponibilidad(c,s); if(d.ok||C.pant.has(s.k)) vis.push(s); else if(s.otro) oc.otro++; else if(d.tag==='warn') oc.dur++; else oc.cand++; });
   const otrosEn=s=>campsEn(s.k).filter(x=>x!==c);
   vis.sort((a,b)=>(otrosEn(a).length>0)-(otrosEn(b).length>0));
-  $('#condTabla').innerHTML=`<tr><th></th><th>Clave</th><th>Ubicación</th><th>Slot</th><th>Libre en el periodo</th><th>Ocupado por</th><th>Si se reserva</th></tr>`+vis.map(s=>{
+  const fila=s=>{
     const sel=C.pant.has(s.k), ot=otrosEn(s), tot=reelsPer(s), libre=C.vend?0:Math.round(libreDe(c,s));
-    const Rb=ot.length?repartoDe(ot.map(x=>camps[x].id).sort((a,b)=>a-b)):null;
+    const Rb=ot.length?((C.prev.has(s.k)&&REP[[...ot.map(x=>camps[x].id),C.id].sort((a,b)=>a-b).join(',')])||repartoDe(ot.map(x=>camps[x].id).sort((a,b)=>a-b))):null;
     const ocup=ot.length?ot.map(x=>`<span class="dot" style="background:${css(COLORS[x])};width:9px;height:9px;margin-right:5px;vertical-align:0"></span>${nombreCamp(x)} ${Math.round(Rb.pct[camps[x].id])}% <span class="tag ${camps[x].vend?'ok':'warn'}">${camps[x].vend?'vendida':'propuesta'}</span>`).join('<br>'):'<span class="reel-meta">—</span>';
-    let efecto; if(C.vend) efecto=`<span class="tag ok">Vendida · ${Math.round(pctSlot(SCREENS.findIndex(x=>x.k===s.k),c))}%</span>`; else if(!ot.length) efecto=`<span class="tag ok">Toma el 100%</span>`;
-    else { const R=repartoDe([...ot.map(x=>camps[x].id),C.id].sort((a,b)=>a-b)); efecto=`<span class="tag">Se comparte</span> <span class="reel-meta">entra con ${Math.round(R.pct[C.id])}%; ${ot.map(x=>`${NAMES[x]} ${camps[x].vend?'se queda fija en':'queda en'} ${Math.round(R.pct[camps[x].id])}%`).join(', ')}</span>`; }
-    return `<tr style="${sel?'background:var(--accent-soft)':''}"><td><input type="checkbox" data-ck="${s.k}" ${sel?'checked':''} ${C.vend?'disabled':''} aria-label="Reservar ${s.k}"></td><td class="mono">${s.k}</td><td>${s.u}</td><td>${s.dur} s</td>
-      <td><div class="libre"><span class="libre-bar"><span style="width:${libre}%"></span></span><b>${libre}%</b></div><span class="reel-meta">${fmt(Math.round(libre/100*tot))} de ${fmt(tot)} reels libres</span></td><td>${ocup}</td><td>${efecto}</td></tr>`; }).join('');
+    let efecto; if(C.vend) efecto=`<span class="tag ok">Vendida · ${Math.round(pctSlot(SCREENS.findIndex(x=>x.k===s.k),c))}%</span>`; else if(!ot.length) efecto=`<span class="tag ok">${sel?'Tiene':'Tomaría'} el 100%</span>`;
+    else { const R=repartoDe([...ot.map(x=>camps[x].id),C.id].sort((a,b)=>a-b)); efecto=`<span class="tag">Compartida</span> <span class="reel-meta">${NAMES[c]} ${sel?'entra':'entraría'} con ${Math.round(R.pct[C.id])}%; ${ot.map(x=>`${NAMES[x]} ${camps[x].vend?'se queda fija en':'queda en'} ${Math.round(R.pct[camps[x].id])}%`).join(', ')}</span>`; }
+    const acc=C.vend?'':sel?`<button class="mini" data-quita="${s.k}">Quitar</button>`:`<button class="mini primary" data-agrega="${s.k}">+ Agregar</button>`;
+    return `<tr><td class="mono">${s.k}</td><td>${s.u}</td><td>${s.dur} s</td>
+      <td><div class="libre"><span class="libre-bar"><span style="width:${libre}%"></span></span><b>${libre}%</b></div><span class="reel-meta">${fmt(Math.round(libre/100*tot))} de ${fmt(tot)} reels libres</span></td><td>${ocup}</td><td>${efecto}</td><td style="text-align:right">${acc}</td></tr>`; };
+  const enRes=vis.filter(s=>C.pant.has(s.k)), disp=vis.filter(s=>!C.pant.has(s.k));
+  const sec=(t,d)=>`<tr class="cond-sec"><td colspan="7"><b>${t}</b> <span class="reel-meta">${d}</span></td></tr>`;
+  $('#condTabla').innerHTML=`<tr><th>Clave</th><th>Ubicación</th><th>Slot</th><th>Libre en el periodo</th><th>Ocupado por</th><th>En la reserva</th><th></th></tr>`+
+    sec(`En la reserva de la ${nombreCamp(c)} · ${enRes.length}`,C.vend?'fija: ya es campaña vendida':enRes.length?'ya apartadas para esta campaña; quítalas si no van':'todavía no tiene pantallas: agrégalas de la lista de abajo')+
+    (enRes.length?enRes.map(fila).join(''):`<tr><td colspan="7" class="reel-meta">Sin pantallas.</td></tr>`)+
+    (C.vend?'':sec(`Disponibles para agregar · ${disp.length}`,disp.length?'pantallas que esta campaña todavía puede reservar':'ya agregaste todo lo que se puede reservar')+disp.map(fila).join(''));
   const ocultas=C.vend?[]:[oc.otro?`${oc.otro} de otros anunciantes`:'',oc.dur?`${oc.dur} de otra duración`:'',oc.cand?`${oc.cand} ocupadas al 100% por campañas vendidas`:''].filter(Boolean);
   $('#condOcultas').textContent=ocultas.length?`No se muestran ${ocultas.join(', ')}: no se pueden reservar para esta campaña.`:'';
   const comp=[...C.pant].filter(k=>campsEn(k).length>1).length;
@@ -919,7 +928,7 @@ $('#condFreq').addEventListener('input',e=>{ $('#condFreqTxt').textContent=e.tar
 $('#condFreq').addEventListener('change',e=>{ const C=camps[condSel]; C.freq=+e.target.value; reajusta(C.id); renderTodo(); });
 $('#condCtx').addEventListener('click',e=>{ if(e.target.id!=='condVender') return; camps[condSel].vend=true; renderTodo(); });
 $('#condDur').addEventListener('change',e=>{ const C=camps[condSel]; C.dur=e.target.value; if(C.dur!=='all') [...C.pant].forEach(k=>{ if(INV.find(s=>s.k===k).dur!==+C.dur) C.pant.delete(k); }); renderTodo(); });
-$('#condTabla').addEventListener('change',e=>{ const k=e.target.dataset.ck; if(!k) return; const C=camps[condSel]; e.target.checked?C.pant.add(k):C.pant.delete(k); renderTodo(); });
+$('#condTabla').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; const C=camps[condSel]; if(C.vend) return; if(b.dataset.agrega) C.pant.add(b.dataset.agrega); else if(b.dataset.quita) C.pant.delete(b.dataset.quita); else return; renderTodo(); });
 $('#condLibres').addEventListener('click',()=>{ const C=camps[condSel]; INV.forEach(s=>{ if(disponibilidad(condSel,s).ok&&!campsEn(s.k).filter(x=>x!==condSel).length) C.pant.add(s.k); }); renderTodo(); });
 $('#condCompartir').addEventListener('click',()=>{ const C=camps[condSel]; INV.forEach(s=>{ if(disponibilidad(condSel,s).ok&&campsEn(s.k).filter(x=>x!==condSel).length) C.pant.add(s.k); }); renderTodo(); });
 $('#condNinguna').addEventListener('click',()=>{ camps[condSel].pant.clear(); renderTodo(); });
