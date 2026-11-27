@@ -234,6 +234,7 @@ tr.row-sum td{font-weight:700;background:var(--accent-soft)}
 .xl-grid .xl-h{background:#1f6b45;color:#fff;font-weight:600}
 .xl-grid tr.xl-sum td:not(.xl-rn):not(.xl-ol){font-weight:700;background:#e4f1ea}
 .xl-grid tr.xl-det td:nth-child(3){padding-left:20px}
+.xl-grid td{white-space:pre-line}
 .xl-grid .xl-n{text-align:right;font-variant-numeric:tabular-nums}
 .xl-tabs{display:flex;gap:2px;padding:6px 8px 0;background:#e9ecef;overflow-x:auto}
 .xl-tabs button{font-size:12px;padding:6px 12px;border-radius:6px 6px 0 0;background:#d8dde2;color:#333;border:1px solid #c5ccd3;border-bottom:0;white-space:nowrap}
@@ -1112,9 +1113,9 @@ const compuesta=(txt,sum,items)=>({txt,sum,items});
 function celdaArtes(k){ return compuesta(k.arts.map(x=>artName(k.c,x.a)).join(', '),`${k.arts.length} ${k.arts.length===1?'arte':'artes'}`,
   k.arts.map(x=>({b:artName(k.c,x.a),s:`${pct1(x.pct)} de los reels de la campaña · ${x.rota==='—'?'sin rotación':'rota con '+x.rota.toLowerCase()}<br>${DURS.map((d,i)=>`${d} s: ${x.vers[i]}`).join(' · ')}`}))); }
 function celdaReels(k){ const grupos=DURS.map(d=>{const idx=SCREENS.map((_,i)=>i).filter(i=>SCREENS[i].dur===d); return {d,n:idx.length,r:campDia(idx[0],k.c)};});
-  const rs=grupos.map(g=>g.r); return compuesta(enLista(grupos.map((g,i)=>`${fmt(g.r)} en ${i?'las':'pantallas'} de ${g.d} s`))+'.',`${fmt(Math.min(...rs))} a ${fmt(Math.max(...rs))} al día`,grupos.map(g=>({b:`Pantallas de ${g.d} s · ${g.n}`,s:`${fmt(g.r)} reels al día cada una`}))); }
+  const rs=grupos.map(g=>g.r); return compuesta(grupos.map(g=>`${fmt(g.r)} en pantallas de ${g.d} s`).join('\n'),`${fmt(Math.min(...rs))} a ${fmt(Math.max(...rs))} al día`,grupos.map(g=>({b:`Pantallas de ${g.d} s · ${g.n}`,s:`${fmt(g.r)} reels al día cada una`}))); }
 function celdaAvisos(k){ const av=[]; k.arts.forEach(x=>x.est.forEach((e,i)=>{ if(e!=='Completo') av.push({b:`${artName(k.c,x.a)} · pantallas de ${DURS[i]} s`,s:`${x.vers[i].replace(/ \(.*\)$/,'')}: ${e}`,txt:`En pantallas de ${DURS[i]} s, ${e.startsWith('faltan')?'al '+artName(k.c,x.a).toLowerCase()+' le '+e:'el '+artName(k.c,x.a).toLowerCase()+' se '+e.replace('excede','excede por')} (lleva ${mediosTxt(getVers(k.c,x.a)[DURS[i]])}).`}); }));
-  return av.length?compuesta(av.map(a=>a.txt).join(' '),`${av.length} ${av.length===1?'aviso':'avisos'} de versiones`,av):''; }
+  return av.length?compuesta(av.map(a=>a.txt).join('\n'),`${av.length} ${av.length===1?'aviso':'avisos'} de versiones`,av):''; }
 // Una hoja = filas con tipo: h encabezado, s resumen, d dato, m dato del encabezado de la hoja, b separador.
 function libro(){
   const K=datosCierre(), per=periodoTxt(), P='pct', N='num';
@@ -1190,10 +1191,10 @@ function libroXLSX(X){
     h.filas.forEach((r,ri)=>(r.fmt||[]).forEach((f,c)=>{ const a=X.utils.encode_cell({r:ri,c}); if(f&&ws[a]&&typeof r.v[c]==='number') ws[a].z=f==='pct'?'0.0%':'#,##0'; }));
     const lineas=v=>String(v??'').split('\n');
     h.filas.forEach((r,ri)=>{ for(let c=0;c<ancho;c++){ const a=X.utils.encode_cell({r:ri,c}); if(!ws[a]) continue;
-      ws[a].s={alignment:{vertical:'top'},font:{name:'Calibri',sz:11,bold:r.t==='h'||r.t==='s'||(r.t==='m'&&c===0),color:r.t==='h'?{rgb:'FFFFFF'}:undefined},
+      ws[a].s={alignment:{vertical:'top',wrapText:true},font:{name:'Calibri',sz:11,bold:r.t==='h'||r.t==='s'||(r.t==='m'&&c===0),color:r.t==='h'?{rgb:'FFFFFF'}:undefined},
         fill:r.t==='h'?{patternType:'solid',fgColor:{rgb:'1F6B45'}}:r.t==='s'?{patternType:'solid',fgColor:{rgb:'E4F1EA'}}:undefined}; } });
     ws['!rows']=h.filas.map(r=>{ const n=Math.max(1,...r.v.map(x=>lineas(celda(x)).length)); const o=r.lv?{level:1}:{}; if(n>1) o.hpt=n*15+3; return o; });
-    ws['!cols']=Array.from({length:ancho},(_,i)=>({wch:Math.min(110,Math.max(6,...h.filas.flatMap(r=>lineas(celda(r.v[i],(r.fmt||[])[i])).map(l=>l.length)))+2)}));
+    ws['!cols']=Array.from({length:ancho},(_,i)=>({wch:Math.min(90,Math.max(6,...h.filas.flatMap(r=>lineas(celda(r.v[i],(r.fmt||[])[i])).map(l=>l.length)))+2)}));
     if(h.filtro) ws['!autofilter']={ref:X.utils.encode_range({s:{r:0,c:0},e:{r:h.filas.length-1,c:h.filas[0].v.length-1}})};
     X.utils.book_append_sheet(wb,ws,h.nombre);
   });
