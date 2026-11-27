@@ -208,6 +208,8 @@ footer{padding:36px 0 52px;color:var(--muted);font-size:13px}
 footer .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:var(--mono);letter-spacing:.04em}
 footer img{height:22px;width:auto}
 .hide{display:none}
+#cOm td,#cPg td{white-space:nowrap}
+#cOm details.cellgroup,#cPg details.cellgroup{white-space:normal;min-width:240px}
 .prog-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin:10px 0 14px}
 .prog-meta div{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 12px}
 .prog-meta span{display:block;font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
@@ -537,7 +539,7 @@ input[readonly]{color:var(--lila);background:var(--surface)}
       </div>
       <span class="tag">Responde a todo lo configurado arriba</span>
     </div>
-    <div data-pane="om"><p class="reel-meta">Una fila por campaña, agrupadas por cliente. La columna “Programación” dice qué hoja PROG tiene su detalle.</p><div id="cOm"></div></div>
+    <div data-pane="om"><p class="reel-meta">Una fila por campaña, agrupadas por cliente. Las celdas con varios datos (artes, reels por pantalla, observaciones) se despliegan; en el Excel se escriben separadas por comas. La columna “Programación” dice qué hoja PROG tiene su detalle.</p><div id="cOm"></div></div>
     <div data-pane="pg" class="hide"><p class="reel-meta">Una fila por pantalla. Por cada campaña, su versión (los artes que lleva en esa pantalla) y qué parte del slot ocupa. El archivo real suma los datos del mueble: tipo, sentido, coordenadas, NSE, estatus y código único.</p><div id="cPg"></div></div>
     <div data-pane="prog" class="hide"><p class="reel-meta">Una hoja por campaña, como las PROG de hoy: encabezado, sus artes y la lista numerada de pantallas con los reels al día de cada arte.</p><div class="tabs" id="cProgTabs"></div><div id="cProg"></div></div>
     <div data-pane="xl" class="hide">
@@ -1098,22 +1100,30 @@ function datosCierre(){
   return camps.map((C,c)=>{ const f=F.filter(x=>x.c===c), reels=f.reduce((a,x)=>a+x.reels,0);
     const arts=artesDe(c).filter(a=>f.some(x=>x.a===a)).map(a=>{ const r=f.filter(x=>x.a===a).reduce((s,x)=>s+x.reels,0), j=cargaDeArte(c,a);
       const rota=camps[c].cargas[j].pat.map(q=>q.a).filter(x=>x!==a&&f.some(y=>y.a===x)).map(x=>artName(c,x)).join(', ')||'—';
-      return {a,pct:reels?r/reels:0,rota,vers:DURS.map(d=>{const m=getVers(c,a)[d], e=estadoSlot(m,d); return medios(m)+(e==='Completo'?'':' ('+e+')');})}; });
+      return {a,pct:reels?r/reels:0,rota,est:DURS.map(d=>estadoSlot(getVers(c,a)[d],d)),vers:DURS.map(d=>{const m=getVers(c,a)[d], e=estadoSlot(m,d); return medios(m)+(e==='Completo'?'':' ('+e+')');})}; });
     const porDur=DURS.map(d=>{const i=SCREENS.findIndex(s=>s.dur===d); return `${fmt(campDia(i,c))} (${d} s)`;}).join(' · ');
     return {c,C,f,arts,porDur,prog:progDe(c)}; });
 }
+// Celda compuesta: txt para Excel; sum + items para la celda desplegable del sistema.
+const compuesta=(txt,sum,items)=>({txt,sum,items});
+function celdaArtes(k){ return compuesta(k.arts.map(x=>artName(k.c,x.a)).join(', '),`${k.arts.length} ${k.arts.length===1?'arte':'artes'}`,
+  k.arts.map(x=>({b:artName(k.c,x.a),s:`${pct1(x.pct)} de los reels de la campaña · ${x.rota==='—'?'sin rotación':'rota con '+x.rota.toLowerCase()}<br>${DURS.map((d,i)=>`${d} s: ${x.vers[i]}`).join(' · ')}`}))); }
+function celdaReels(k){ const grupos=DURS.map(d=>{const idx=SCREENS.map((_,i)=>i).filter(i=>SCREENS[i].dur===d); return {d,n:idx.length,r:campDia(idx[0],k.c)};});
+  const rs=grupos.map(g=>g.r); return compuesta(k.porDur,`${fmt(Math.min(...rs))} a ${fmt(Math.max(...rs))} al día`,grupos.map(g=>({b:`Pantallas de ${g.d} s · ${g.n}`,s:`${fmt(g.r)} reels al día cada una`}))); }
+function celdaAvisos(k){ const av=[]; k.arts.forEach(x=>x.est.forEach((e,i)=>{ if(e!=='Completo') av.push({b:`${artName(k.c,x.a)} · pantallas de ${DURS[i]} s`,s:`${x.vers[i].replace(/ \(.*\)$/,'')}: ${e}`}); }));
+  return av.length?compuesta(av.map(a=>a.b+': '+a.s).join('; '),`${av.length} ${av.length===1?'aviso':'avisos'} de versiones`,av):''; }
 // Una hoja = filas con tipo: h encabezado, s resumen, d dato, m dato del encabezado de la hoja, b separador.
 function libro(){
   const K=datosCierre(), per=periodoTxt(), P='pct', N='num';
   const om={nombre:'ORDEN DE MONTAJE',filtro:true,filas:[
     {t:'h',v:['Cliente','Campaña','Artes','Pantallas','Horario','Periodo','% del slot','Reels al día por pantalla','Programación','Observaciones','Toma fotográfica','Asesor comercial']},
     {t:'s',v:[ANUNCIANTE,`${camps.length} ${camps.length===1?'campaña':'campañas'}`]}]};
-  K.forEach(k=>om.filas.push({t:'d',lv:1,v:[ANUNCIANTE,'Campaña '+NAMES[k.c],k.arts.map(x=>artName(k.c,x.a)).join(', '),new Set(k.f.map(x=>x.si)).size,'Todo el día',per,k.C.pct/100,k.porDur,k.prog,'','',''],fmt:[0,0,0,N,0,0,P]}));
+  K.forEach(k=>om.filas.push({t:'d',lv:1,v:[ANUNCIANTE,'Campaña '+NAMES[k.c],celdaArtes(k),new Set(k.f.map(x=>x.si)).size,'Todo el día',per,k.C.pct/100,celdaReels(k),k.prog,celdaAvisos(k),'',''],fmt:[0,0,0,N,0,0,P]}));
   const pg={nombre:'PROGRAMACIÓN GENERAL',filtro:true,filas:[
     {t:'h',v:['Clave','Ubicación','Slot','Reels al día',...camps.flatMap((_,c)=>[`Campaña ${NAMES[c]} · versión`,`Campaña ${NAMES[c]} · % del slot`]),'Campañas','Ocupación del slot']}]};
   SCREENS.forEach((s,si)=>{ const cols=[], fmtC=[0,0,0,N]; let n=0, occ=0;
     K.forEach(k=>{ const g=k.f.filter(x=>x.si===si), sl=g.reduce((a,x)=>a+x.slot,0); if(g.length) n++; occ+=sl;
-      cols.push(g.length?g.map(x=>artName(k.c,x.a)).join(' / '):'—', g.length?sl:''); fmtC.push(0,P); });
+      cols.push(g.length?compuesta(g.map(x=>artName(k.c,x.a)).join(' / '),`${g.length} ${g.length===1?'arte':'artes'}`,g.map(x=>({b:artName(k.c,x.a),s:`${fmt(x.dia)} reels al día · ${medios(getVers(k.c,x.a)[s.dur])}`}))):'—', g.length?sl:''); fmtC.push(0,P); });
     fmtC.push(N,P); pg.filas.push({t:'d',v:[s.k,s.u,s.dur+' s',s.porDia,...cols,n,occ],fmt:fmtC}); });
   const progs=K.map(k=>{ const h={nombre:k.prog,campana:'Campaña '+NAMES[k.c],filas:[
       {t:'m',v:['Cliente',ANUNCIANTE]},{t:'m',v:['Campaña','Campaña '+NAMES[k.c]]},{t:'m',v:['Horario','Todo el día']},{t:'m',v:['Periodo',per]},
@@ -1126,7 +1136,7 @@ function libro(){
     return h; });
   return [om,pg,...progs];
 }
-const celda=(v,f)=>v===''||v==null?'':f==='pct'&&typeof v==='number'?pct1(v):f==='num'&&typeof v==='number'?fmt(v):v;
+const celda=(v,f)=>v&&typeof v==='object'?v.txt:v===''||v==null?'':f==='pct'&&typeof v==='number'?pct1(v):f==='num'&&typeof v==='number'?fmt(v):v;
 // Vista del sistema: la misma hoja en tablas de la propuesta.
 function htmlHoja(h){
   let out='', meta='', tabla='';
@@ -1135,7 +1145,7 @@ function htmlHoja(h){
     if(r.t==='m') meta+=`<div><span>${r.v[0]}</span><b>${celda(r.v[1],fm[1])}</b></div>`;
     else if(r.t==='b'){ cierra(); }
     else if(r.t==='h'){ if(meta){ out+=`<div class="prog-meta">${meta}</div>`; meta=''; } cierra(); tabla+=`<tr>${r.v.map(c=>`<th>${c}</th>`).join('')}</tr>`; }
-    else tabla+=`<tr${r.t==='s'?' class="row-sum"':''}>${r.v.map((c,i)=>`<td class="${fm[i]?'mono':''}"${r.t==='s'&&i===r.v.length-1?` colspan="${h.filas[0].v.length-r.v.length+1}"`:''}>${celda(c,fm[i])||(r.t==='s'?'':'—')}</td>`).join('')}</tr>`;
+    else tabla+=`<tr${r.t==='s'?' class="row-sum"':''}>${r.v.map((c,i)=>c&&typeof c==='object'?`<td>${c.items.length===1?`<b>${c.items[0].b}</b><br><span class="reel-meta">${c.items[0].s}</span>`:`<details class="cellgroup"><summary>${c.sum}</summary>${c.items.map(x=>`<div class="artline"><b>${x.b}</b>${x.s}</div>`).join('')}</details>`}</td>`:`<td class="${fm[i]?'mono':''}"${r.t==='s'&&i===r.v.length-1?` colspan="${h.filas[0].v.length-r.v.length+1}"`:''}>${celda(c,fm[i])||(r.t==='s'?'':'—')}</td>`).join('')}</tr>`;
   });
   cierra(); return out;
 }
@@ -1173,7 +1183,7 @@ function cargaXLSX(){ return window.XLSX?Promise.resolve(window.XLSX):new Promis
 function libroXLSX(X){
   const wb=X.utils.book_new();
   libro().forEach(h=>{
-    const ws=X.utils.aoa_to_sheet(h.filas.map(r=>r.v)), ancho=Math.max(...h.filas.map(r=>r.v.length));
+    const ws=X.utils.aoa_to_sheet(h.filas.map(r=>r.v.map(x=>x&&typeof x==='object'?x.txt:x))), ancho=Math.max(...h.filas.map(r=>r.v.length));
     h.filas.forEach((r,ri)=>(r.fmt||[]).forEach((f,c)=>{ const a=X.utils.encode_cell({r:ri,c}); if(f&&ws[a]&&typeof r.v[c]==='number') ws[a].z=f==='pct'?'0.0%':'#,##0'; }));
     ws['!rows']=h.filas.map(r=>r.lv?{level:1}:{});
     ws['!cols']=Array.from({length:ancho},(_,i)=>({wch:Math.min(48,Math.max(6,...h.filas.map(r=>String(celda(r.v[i],(r.fmt||[])[i])??'').length))+2)}));
