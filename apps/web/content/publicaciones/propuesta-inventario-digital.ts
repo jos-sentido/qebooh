@@ -10,7 +10,8 @@ import type { Publicacion } from "../tipos";
  * embebidos, mismos tokens que el reporte de tiempos de operación). No hace
  * llamadas de red.
  *
- * Lleva montos (inversión del desarrollo e incremento de la iguala): el enlace
+ * Lleva el monto del incremento de la iguala de QEBI (la tarifa del desarrollo
+ * digital queda por definir al acordar el alcance): el enlace
  * es abierto, así que sólo se comparte con el cliente.
  */
 export const propuestaInventarioDigital: Publicacion = {
