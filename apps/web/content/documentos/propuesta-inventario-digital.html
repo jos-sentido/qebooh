@@ -208,6 +208,18 @@ footer{padding:36px 0 52px;color:var(--muted);font-size:13px}
 footer .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:var(--mono);letter-spacing:.04em}
 footer img{height:22px;width:auto}
 .hide{display:none}
+.pasos-art .step{flex-basis:180px}
+.art-ctx{display:flex;align-items:center;gap:8px 10px;flex-wrap:wrap;position:sticky;top:52px;z-index:5;background:rgba(23,15,34,.95);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid #3d2862;border-radius:10px;padding:10px 14px;margin-bottom:6px;font-size:14px}
+.art-ctx .sep{color:var(--muted)}
+#artCargas button{display:inline-flex;align-items:center;text-align:left}
+.pat-row.sel{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.chip-btn{font-family:var(--mono);font-size:12px;font-weight:600;padding:3px 10px;border-radius:6px;color:#0d0814;border:0;cursor:pointer}
+.chip-btn:hover{filter:brightness(1.1)}
+.pat-row .lab{gap:10px}
+.dur-card{border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:10px;background:rgba(13,8,20,.35)}
+.dur-h{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap}
+.fillbar .seg.vid{background:#b9a6ff}
+.fillbar .seg.img{background:#dc9cf6}
 .rep-grupo{border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:12px;background:rgba(13,8,20,.35)}
 .rep-h{display:flex;gap:6px 14px;flex-wrap:wrap;align-items:baseline;margin-bottom:6px}
 .rep-solo{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border:1px dashed var(--border);border-radius:12px;padding:10px 14px;margin-bottom:10px;font-size:14px}
@@ -327,7 +339,7 @@ input[readonly]{color:var(--lila);background:var(--surface)}
 
 <nav class="toc"><div class="wrap">
   <a href="#hoy">Hoy</a><a href="#flujo">Flujo</a><a href="#reels">Cálculo de reels</a><a href="#reserva">Reserva y reparto</a>
-  <a href="#grupos">Agrupación</a><a href="#artes">Gestor de artes</a><a href="#desplazamiento">Desplazamientos</a>
+  <a href="#desplazamiento">Vendido y desplazamientos</a><a href="#grupos">Cargas</a><a href="#artes">Gestor de artes</a>
   <a href="#cierres">Cierres</a><a href="#comercial">Inversión</a><a href="#qebi">QEBI</a><a href="#plan">Plan de trabajo</a><a href="#pasos">Siguientes pasos</a>
 </div></nav>
 
@@ -427,13 +439,32 @@ input[readonly]{color:var(--lila);background:var(--surface)}
   </div>
 </div></section>
 
+<!-- ================= DESPLAZAMIENTO ================= -->
+<section id="desplazamiento"><div class="wrap">
+  <h2>Reservado, vendido y desplazamientos</h2>
+  <p class="section-intro">Lo anterior ocurre mientras el inventario está en propuestas. Cuando una propuesta pasa a campaña, el inventario queda vendido y las demás propuestas que lo tenían se desplazan, completas o en parte. Con las campañas ya vendidas sigue la gestión de sus cargas y sus artes.</p>
+  <div class="grid g2">
+    <div class="card"><span class="tag warn">Reservado</span><p>El inventario está en una propuesta. No hay límite: por la multirreserva se puede compartir entre propuestas.</p></div>
+    <div class="card"><span class="tag ok">Vendido</span><p>El inventario está en una campaña. La primera propuesta que pasa a campaña desplaza a las demás y, en digital, se lleva también sus slots y reels.</p></div>
+  </div>
+  <div class="callout"><b>Nueva dimensión: desplazamiento parcial.</b> Si la campaña ganadora no ocupa todo el slot, otra propuesta del mismo anunciante conserva lo que quepa. Solo se desplaza lo que choca, y la propuesta queda en <i>Ajuste Inventario</i> para sustituirlo. Las propuestas de otros anunciantes en ese slot se desplazan completas.</div>
+
+  <div class="sim" id="simDisp">
+    <div class="sim-head"><h3>Ejemplo: tres propuestas comparten el mismo slot</h3>
+      <div class="btn-row"><button class="primary" id="dGo">Convertir P1 a campaña</button><button id="dReset">Reiniciar</button></div>
+    </div>
+    <div id="dLanes"></div>
+    <div class="check" id="dMsg"></div>
+  </div>
+</div></section>
+
 <!-- ================= AGRUPACIÓN ================= -->
 <section id="grupos"><div class="wrap">
   <h2>Herramientas de gestión de reels</h2>
-  <p class="section-intro">El reparto entre campañas viene de la reserva. Aquí se decide cómo se usan los reels de cada campaña para cargar artes, en las <b>cargas</b> que se necesiten: por ejemplo, de los reels de la campaña A, 60% para rotar el arte 1 y el arte 2 (carga 1) y el 40% restante para un video (carga 2). Se pueden agregar o quitar cargas y siempre suman 100%. Las mismas herramientas están en la reserva y en el gestor de artes, con tres alcances: <b>masivas</b> (todo el circuito), <b>por grupo</b> o <b>selectivas</b> (un solo inventario).</p>
+  <p class="section-intro">El reparto entre campañas viene de la reserva. Aquí solo se decide en cuántos bloques de contenido, o <b>cargas</b>, se dividen los reels de cada campaña y qué % le toca a cada una; qué archivos lleva cada carga se define después, en el gestor de artes. Por ejemplo: por ejemplo, de los reels de la campaña A, 60% para rotar el arte 1 y el arte 2 (carga 1) y el 40% restante para un video (carga 2). Se pueden agregar o quitar cargas y siempre suman 100%. Las acciones tienen tres alcances: <b>masivas</b> (todo el circuito), <b>por grupo</b> o <b>selectivas</b> (un solo inventario).</p>
 
   <div class="sim" id="simGrupos">
-    <div class="sim-head"><h3>Circuito con pantallas de distinta duración</h3><span class="tag">Interactivo</span></div>
+    <div class="sim-head"><h3>Cargas de cada campaña: cómo se reparten sus reels</h3><span class="tag">Interactivo</span></div>
     <p class="reel-meta" style="margin-top:0">Elige la campaña y a qué pantallas aplicar la acción, y reparte sus reels entre sus cargas: al mover una, las demás se ajustan en proporción. El % es la unidad del circuito y los reels se calculan por inventario, porque el mismo porcentaje equivale a distinto número de reels en cada pantalla. Cálculo sobre 24 h y 14 días. Lo que definas aquí se ve en el calendario y en el gestor de artes.</p>
     <div class="field-l">Campaña</div>
     <div class="btn-row" id="grpCamps" style="margin-bottom:14px"></div>
@@ -471,65 +502,40 @@ input[readonly]{color:var(--lila);background:var(--surface)}
 <!-- ================= ARTES ================= -->
 <section id="artes"><div class="wrap">
   <h2>Gestor de artes</h2>
-  <p class="section-intro">Se asignan uno o varios medios (imagen o video) por slot, por reel o por grupo, y se pueden rotar. Por ejemplo, intercalar el arte A y el B en los reels de la campaña, o poner el A en la mañana y el B en la tarde. Cada arte tiene una versión para cada duración de pantalla del circuito.</p>
-  <div class="grid g2">
-    <div class="card"><h3>Validación de duración</h3><p>A las imágenes se les captura la duración y a los videos se les lee del archivo. La asignación no se cierra hasta que cada slot quede completo con su mezcla de medios.</p></div>
-    <div class="card"><h3>Datos por arte</h3><p>Cada arte conserva su nombre, nota y estatus, y se le suman el slot, los reels o la franja asignados, la duración y si el slot está completo.</p></div>
-    <div class="card"><h3>Rotación de artes</h3><p>En cada carga de la campaña, cada arte lleva un % (por ejemplo, arte 1 60% y arte 2 40%) y se intercalan de forma pareja sobre sus reels en orden de horario. Por defecto se reinicia cada día, para que el orden sea el mismo todos los días; también puede ser continuo. Se aplica masivo, por grupo o selectivo, y se combina con franjas.</p></div>
-    <div class="card"><h3>Versiones por duración</h3><p>Cada arte se define una vez con su versión para cada duración del circuito. En una acción masiva, el sistema muestra por categoría de duración si el contenido queda completo, si falta o si excede, y se corrige solo ese grupo.</p></div>
+  <p class="section-intro">Con las cargas ya definidas, aquí se carga el contenido. Se trabaja de lo general a lo específico y siempre a la vista de qué campaña y qué carga estás llenando.</p>
+  <div class="flow pasos-art">
+    <div class="step"><div class="num">1</div><h3>Campaña y carga</h3><p>Eliges dónde vas a cargar. El % de cada carga viene de la gestión de reels.</p></div>
+    <div class="step"><div class="num">2</div><h3>Artes de la carga</h3><p>Qué artes rotan en esa carga y qué % de sus reels lleva cada uno.</p></div>
+    <div class="step"><div class="num">3</div><h3>Archivos por duración</h3><p>Para cada arte, los archivos que llenan el slot en cada duración de pantalla.</p></div>
+    <div class="step"><div class="num">4</div><h3>Resultado</h3><p>Cómo queda la rotación en un bloque de pantallas, día por día.</p></div>
   </div>
 
-  <div class="sim" id="simFill">
-    <div class="sim-head"><h3>Llenado de un slot</h3><span class="tag">Interactivo</span></div>
-    <div class="controls">
-      <label class="field">Duración del slot (s)<input type="number" id="fSlot" value="15" min="1" max="120"></label>
-    </div>
-    <div class="btn-row">
-      <button data-add="img" data-sec="5">+ Imagen 5 s</button>
-      <button data-add="vid" data-sec="10">+ Video 10 s</button>
-      <button data-add="vid" data-sec="7">+ Video 7 s</button>
-      <button id="fClear">Vaciar</button>
-    </div>
-    <div class="fillbar" id="fillbar"></div>
-    <div id="fillStatus" class="check"></div>
-    <div class="art-list" id="artList"></div>
-  </div>
+  <div class="sim" id="simArtes">
+    <div class="sim-head"><h3>Carga de artes</h3><span class="tag">Responde a la reserva y a las cargas</span></div>
+    <div class="art-ctx" id="artCtx"></div>
 
-  <div class="sim" id="simRot">
-    <div class="sim-head"><h3>Rotación de artes y duraciones mixtas</h3><span class="tag">Interactivo</span></div>
-    <p class="reel-meta" style="margin-top:0">Responde a todo lo anterior: las campañas de la reserva, las cargas de la gestión de reels y la pantalla del calendario. Elige la campaña, define qué artes rotan en cada carga y qué pasa al cambiar de día. Abajo, cada arte tiene una versión por duración de pantalla.</p>
+    <div class="sub-h">1 · Campaña y carga</div>
+    <div class="btn-row" id="artCamps" style="margin-bottom:8px"></div>
+    <div class="btn-row" id="artCargas"></div>
+
+    <div class="sub-h">2 · <span id="artPaso2">Artes de la carga</span></div>
+    <div id="rotPat"></div>
+    <p class="reel-meta">Cada arte tiene un % de su carga y entre todos suman 100%: al mover uno, los demás se ajustan en proporción. Los artes se intercalan de forma pareja según su %.</p>
+
+    <div class="sub-h">3 · <span id="artPaso3">Archivos por duración</span></div>
+    <div class="sim-head" style="margin-bottom:10px"><div class="tabs" id="verTabs" style="margin:0"></div><button id="verMasiva">Asignación masiva</button></div>
+    <p class="reel-meta" style="margin-top:0">A las imágenes se les captura la duración y a los videos se les lee del archivo. Cada duración se llena por separado, y la asignación no se cierra hasta que todos los slots queden completos. Cada archivo conserva su nombre, nota y estatus.</p>
+    <div id="verDur"></div>
+    <div class="check" id="verStatus"></div>
+
+    <div class="sub-h">4 · Resultado</div>
     <div class="controls">
-      <label class="field">Campaña<select id="rotCamp"></select></label>
       <label class="field">Bloque de pantallas<select id="rotPant"></select></label>
       <label class="field">Al cambiar de día<select id="rotModo"><option value="diario">Reinicio diario: mismo orden cada día</option><option value="continuo">Continuo: sigue donde terminó</option></select></label>
     </div>
-    <div class="sub-h">Artes de cada carga</div>
-    <div id="rotPat"></div>
-        <p class="reel-meta">Cada arte tiene un % de su carga y entre todos suman 100%: al mover uno, los demás se ajustan en proporción. Los artes se intercalan de forma pareja según su %. Con reinicio diario, cada día cumple el % exacto y arranca con el mismo orden; con continuo, el orden sigue donde terminó el día anterior y el % se cumple sobre el periodo. Abajo, los primeros reels de la campaña en esta pantalla:</p>
+    <p class="reel-meta" style="margin-top:0">Con reinicio diario, cada día cumple el % exacto y arranca con el mismo orden; con continuo, el orden sigue donde terminó el día anterior y el % se cumple sobre el periodo. Primeros reels de la campaña en este bloque:</p>
     <div class="rot-seq" id="rotSeq"></div>
     <div class="table-scroll"><table id="rotDays"></table></div>
-    <div class="sub-h">Versiones por duración · <span id="verCamp">Campaña A</span></div>
-    <div class="sim-head" style="margin-bottom:10px"><div class="tabs" id="verTabs" style="margin:0"></div><button id="verMasiva">Asignación masiva</button></div>
-    <div class="table-scroll"><table id="verTable"></table></div>
-    <div class="check" id="verStatus"></div>
-  </div>
-</div></section>
-
-<!-- ================= DESPLAZAMIENTO ================= -->
-<section id="desplazamiento"><div class="wrap">
-  <h2>Reservado, vendido y desplazamientos</h2>
-  <div class="grid g2">
-    <div class="card"><span class="tag warn">Reservado</span><p>El inventario está en una propuesta. No hay límite: por la multirreserva se puede compartir entre propuestas.</p></div>
-    <div class="card"><span class="tag ok">Vendido</span><p>El inventario está en una campaña. La primera propuesta que pasa a campaña desplaza a las demás y, en digital, se lleva también sus slots y reels.</p></div>
-  </div>
-  <div class="callout"><b>Nueva dimensión: desplazamiento parcial.</b> Si la campaña ganadora no ocupa todo el slot, otra propuesta del mismo anunciante conserva lo que quepa. Solo se desplaza lo que choca, y la propuesta queda en <i>Ajuste Inventario</i> para sustituirlo. Las propuestas de otros anunciantes en ese slot se desplazan completas.</div>
-
-  <div class="sim" id="simDisp">
-    <div class="sim-head"><h3>Ejemplo: tres propuestas comparten el mismo slot</h3>
-      <div class="btn-row"><button class="primary" id="dGo">Convertir P1 a campaña</button><button id="dReset">Reiniciar</button></div>
-    </div>
-    <div id="dLanes"></div>
-    <div class="check" id="dMsg"></div>
   </div>
 </div></section>
 
@@ -1074,33 +1080,11 @@ $('#calIni').addEventListener('input',()=>{renderCal();renderRot();});
 $$('#modeBtns button').forEach(b=>b.addEventListener('click',()=>{$$('#modeBtns button').forEach(x=>x.classList.remove('active'));b.classList.add('active');mode=b.dataset.mode;renderCal();renderRot();}));
 
 /* =========================================================
-   5) Llenado de slot en el gestor de artes
+   5) Gestor de artes: campaña y carga → artes → archivos por duración → resultado
+   Lee la campaña, sus cargas y sus pantallas del estado compartido.
    ========================================================= */
-let media=[{t:'vid',s:10},{t:'img',s:5}];
-const ART_COLORS=['--c1','--c2','--c3','--c4','--c5'];
-function renderFill(){
-  const slot=Math.max(1,+$('#fSlot').value||1), used=media.reduce((a,m)=>a+m.s,0), scale=Math.max(slot,used);
-  const bar=$('#fillbar'); bar.innerHTML='';
-  media.forEach((m,i)=>{const d=document.createElement('div');d.className='seg';d.style.width=(m.s/scale*100)+'%';d.style.background=css(ART_COLORS[i%5]);d.textContent=(m.t==='vid'?'Video ':'Imagen ')+m.s+' s';bar.appendChild(d);});
-  const lim=document.createElement('div');lim.className='limit';lim.style.left=(slot/scale*100)+'%';lim.title='Fin del slot';bar.appendChild(lim);
-  let st= used===slot?'<span class="tag ok">Slot completo</span> Se puede cerrar la asignación.':
-          used<slot?`<span class="tag warn">Incompleto</span> Faltan ${slot-used} s para llenar el slot.`:
-          `<span class="tag bad">Excede</span> Sobran ${used-slot} s: el medio no cabe en el slot.`;
-  $('#fillStatus').innerHTML=`${used} s de ${slot} s · `+st;
-  $('#artList').innerHTML=media.map((m,i)=>`<div class="art"><span class="dot" style="background:${css(ART_COLORS[i%5])}"></span><span><b>Arte ${i+1}</b> · ${m.t==='vid'?'video (duración leída del archivo)':'imagen (duración capturada)'} · ${m.s} s</span><span class="tag">Nota</span><span class="tag ${i%2?'warn':'ok'}">${i%2?'En revisión':'Aprobado'}</span></div>`).join('');
-}
-$$('#simFill [data-add]').forEach(b=>b.onclick=()=>{if(media.length<6){media.push({t:b.dataset.add,s:+b.dataset.sec});renderFill();}});
-$('#fClear').onclick=()=>{media=[];renderFill();};
-$('#fSlot').addEventListener('input',renderFill);
-renderFill();
-
-/* =========================================================
-   5b) Rotación de artes por carga y versiones por duración
-   Lee la campaña y la pantalla del estado compartido; el % de cada carga
-   viene de la gestión de reels.
-   ========================================================= */
-let rotCamp=0, verArt=0;
-function getVers(c,a){ // versión de cada arte por duración de pantalla
+let rotCamp=0, rotCarga=0, verArt=0;
+function getVers(c,a){ // archivos de cada arte por duración de pantalla
   const V=camps[c].vers;
   if(!V[a]) V[a]=(c===0&&a===0)?{10:[{t:'vid',s:10}],15:[{t:'vid',s:10}],20:[{t:'vid',s:10},{t:'img',s:15}]}:Object.fromEntries(DUR_INV.map(d=>[d,[{t:'vid',s:d}]]));
   DUR_INV.forEach(d=>{if(!V[a][d]) V[a][d]=[];}); return V[a];
@@ -1108,57 +1092,66 @@ function getVers(c,a){ // versión de cada arte por duración de pantalla
 const usados=m=>m.reduce((x,y)=>x+y.s,0);
 const artesDe=c=>[...new Set(camps[c].cargas.flatMap(cg=>cg.pat.map(p=>p.a)))].sort((x,y)=>x-y);
 const cargaDeArte=(c,a)=>camps[c].cargas.findIndex(cg=>cg.pat.some(p=>p.a===a));
+const artCompleto=(c,a)=>dursDe(c).every(d=>usados(getVers(c,a)[d])===d);
 function renderRot(){
   if(ready) setTimeout(renderCierres,0); // los cierres dependen de todo lo anterior
   if(rotCamp>=camps.length) rotCamp=0;
-  if(!pantDe(rotCamp).length){ $('#rotPat').innerHTML='<p class="reel-meta">Esta campaña no tiene pantallas: elígelas en la disponibilidad de la reserva.</p>'; ['#rotSeq','#rotDays','#verTabs','#verTable','#verStatus'].forEach(x=>$(x).innerHTML=''); return; }
+  const C=camps[rotCamp], cn=NAMES[rotCamp];
+  if(rotCarga>=C.cargas.length) rotCarga=0;
+  $('#artCamps').innerHTML=camps.map((x,i)=>`<button data-ac="${i}" class="${i===rotCamp?'active':''}"><i class="dot" style="background:${css(COLORS[i])};width:10px;height:10px;margin-right:6px;vertical-align:-1px"></i>${nombreCamp(i)} · ${pantDe(i).length} pantallas</button>`).join('');
+  if(!pantDe(rotCamp).length){ $('#artCtx').innerHTML=`<span>${nombreCamp(rotCamp)}</span><span class="reel-meta">sin pantallas: elígelas en la disponibilidad de la reserva</span>`;
+    ['#artCargas','#rotPat','#rotSeq','#rotDays','#verTabs','#verDur','#verStatus'].forEach(x=>$(x).innerHTML=''); return; }
   if(!enCamp(rotCamp,SCREENS[foco])) foco=pantDe(rotCamp)[0];
-  const C=camps[rotCamp], cp=cpOf(rotCamp,foco), S0=SCREENS[foco], cn=NAMES[rotCamp];
-  $('#rotCamp').innerHTML=camps.map((c,i)=>`<option value="${i}" ${i===rotCamp?'selected':''}>Campaña ${NAMES[i]} · ${pantDe(i).length} pantallas</option>`).join('');
+  const cp=cpOf(rotCamp,foco), ndC=cargaDia(foco,rotCamp), j=rotCarga, cg=C.cargas[j], S0=SCREENS[foco];
+  $('#artCargas').innerHTML=C.cargas.map((g,x)=>`<button data-acg="${x}" class="${x===j?'active':''}"><span class="chip-a" style="background:${cargaCol(rotCamp,x)};margin-right:8px">Carga ${x+1}</span>${cp[x]}% de sus reels · ${cargaTxt(rotCamp,x)}</button>`).join('');
+  const arts=cg.pat.map(q=>q.a); if(!arts.includes(verArt)) verArt=arts[0];
+  // Siempre a la vista: dónde se está cargando.
+  $('#artCtx').innerHTML=`<span class="dot" style="background:${css(COLORS[rotCamp])}"></span><b>${nombreCamp(rotCamp)}</b><span class="sep">›</span><span class="chip-a" style="background:${cargaCol(rotCamp,j)}">Carga ${j+1}</span><span>${cp[j]}% de sus reels</span><span class="sep">›</span><b>${artName(rotCamp,verArt)}</b><span class="reel-meta">· ${pantDe(rotCamp).length} pantallas de ${dursDe(rotCamp).join(', ')} s</span>`;
+  // 2 · Artes de la carga
+  $('#artPaso2').textContent=`Artes de la carga ${j+1}`;
+  const nd=ndC[j], diarios=repartoEntero(cg.pat.map(q=>q.w/100),nd);
+  $('#rotPat').innerHTML=cg.pat.map((q,i)=>`<div class="pat-row${q.a===verArt?' sel':''}"><span class="lab"><button class="chip-btn" data-va="${q.a}" style="background:${cargaCol(rotCamp,j)}" title="Ver sus archivos">${artName(rotCamp,q.a)}</button><span class="tag ${artCompleto(rotCamp,q.a)?'ok':'warn'}">${artCompleto(rotCamp,q.a)?'Archivos completos':'Archivos pendientes'}</span></span>
+      <span class="reel-meta share">${nd?(diarios[i]?'≈ '+fmt(diarios[i])+' reels al día en '+S0.k:'<span class="tag bad">Sin reels al día</span>'):'—'}</span>
+      <span class="pctctl"><input type="range" min="0" max="100" step="1" value="${q.w}" data-j="${j}" data-i="${i}" ${cg.pat.length<=1?'disabled':''} aria-label="${artName(rotCamp,q.a)}: % de la carga ${j+1}"><b data-pct="${j}:${i}">${q.w}%</b></span>
+      <button data-j="${j}" data-pdel="${i}" ${cg.pat.length<=1?'disabled':''} title="Quitar de la carga">×</button></div>`).join('')+
+    `<button data-j="${j}" data-add="1" ${artesDe(rotCamp).length>=6?'disabled':''}>+ Agregar arte a la carga ${j+1}</button>`;
+  // 3 · Archivos del arte por duración (llenado del slot)
+  $('#artPaso3').textContent=`Archivos del ${artName(rotCamp,verArt).toLowerCase()} por duración`;
+  $('#verTabs').innerHTML=arts.map(a=>`<button data-va="${a}" class="${a===verArt?'active':''}">${artName(rotCamp,a)}</button>`).join('');
+  $('#verMasiva').textContent=`Asignación masiva: video de 10 s en todas sus pantallas`;
+  const V=getVers(rotCamp,verArt);
+  $('#verDur').innerHTML=dursDe(rotCamp).map(d=>{ const m=V[d], u=usados(m), n=pantDe(rotCamp).filter(i=>SCREENS[i].dur===d).length, esc=Math.max(d,u);
+    const st=u===d?'<span class="tag ok">Slot completo</span>':u<d?`<span class="tag warn">Faltan ${d-u} s</span>`:`<span class="tag bad">Excede ${u-d} s</span>`;
+    return `<div class="dur-card"><div class="dur-h"><b>Slot de ${d} s</b><span class="reel-meta">${n} ${n===1?'pantalla':'pantallas'}</span>${st}<span class="reel-meta">${u} s de ${d} s</span></div>
+      <div class="fillbar">${m.map(x=>`<div class="seg ${x.t}" style="width:${x.s/esc*100}%">${x.t==='vid'?'Video':'Imagen'} ${x.s} s</div>`).join('')}<div class="limit" style="left:${d/esc*100}%" title="Fin del slot"></div></div>
+      <div class="btn-row"><button data-vd="${d}" data-vt="img" data-vs="5">+ Imagen 5 s</button><button data-vd="${d}" data-vt="vid" data-vs="${d}">+ Video ${d} s</button><button data-vd="${d}" data-vt="vid" data-vs="7">+ Video 7 s</button><button data-vd="${d}" data-vclr="1">Vaciar</button></div></div>`; }).join('');
+  const pend=[]; artesDe(rotCamp).forEach(a=>{const VV=getVers(rotCamp,a); dursDe(rotCamp).forEach(d=>{if(usados(VV[d])!==d) pend.push(`${artName(rotCamp,a)} (carga ${cargaDeArte(rotCamp,a)+1}) en ${d} s`);});});
+  $('#verStatus').innerHTML=pend.length?`<span class="tag bad">No se puede cerrar</span> ${nombreCamp(rotCamp)}, falta ajustar: ${pend.join(' · ')}.`:
+    `<span class="tag ok">Todo completo</span> Todos los artes de la ${nombreCamp(rotCamp).toLowerCase()} llenan el slot en todas sus duraciones. Se puede cerrar la asignación.`;
+  // 4 · Resultado en un bloque
   { const BS=bloques(i=>enCamp(rotCamp,SCREENS[i])), bf=bloqueDe(foco,BS); $('#rotPant').innerHTML=BS.map(b=>`<option value="${b[0]}" ${b===bf?'selected':''}>${bloqueTxt(b)}</option>`).join(''); }
   $('#rotModo').value=rotContinuo?'continuo':'diario';
-  const ndC=cargaDia(foco,rotCamp);
-  $('#rotPat').innerHTML=C.cargas.map((cg,j)=>{ const pc=cp[j], nd=ndC[j], diarios=repartoEntero(cg.pat.map(q=>q.w/100),nd);
-    return `<div class="carga"><div class="carga-h"><span class="chip-a" style="background:${cargaCol(rotCamp,j)}">Campaña ${cn} · carga ${j+1}</span><span><b>${pc}%</b> de los reels de la campaña en ${S0.k}: ${fmt(nd)} al día</span><span class="reel-meta">El % se ajusta en Herramientas de gestión de reels.</span></div>`+
-      cg.pat.map((q,i)=>`<div class="pat-row"><span class="lab"><span class="chip-a" style="background:${cargaCol(rotCamp,j)}">${artName(rotCamp,q.a)}</span></span>
-        <span class="reel-meta share">${nd?(diarios[i]?'≈ '+fmt(diarios[i])+' reels al día en esta pantalla':'<span class="tag bad">Sin reels al día</span>'):'—'}</span>
-        <span class="pctctl"><input type="range" min="0" max="100" step="1" value="${q.w}" data-j="${j}" data-i="${i}" ${cg.pat.length<=1?'disabled':''} aria-label="${artName(rotCamp,q.a)}: % de la carga ${j+1}"><b data-pct="${j}:${i}">${q.w}%</b></span>
-        <button data-j="${j}" data-pdel="${i}" ${cg.pat.length<=1?'disabled':''} title="Quitar de la carga">×</button></div>`).join('')+
-      `<button data-j="${j}" data-add="1" ${artesDe(rotCamp).length>=6?'disabled':''}>+ Agregar arte a la carga ${j+1}</button>${nd?'':'<span class="reel-meta" style="margin-left:10px">Sin reels en esta pantalla: esta carga tiene 0%.</span>'}</div>`; }).join('');
-  // Primeros reels de la campaña en los días 1 y 2
   const days=computeDays();
   $('#rotSeq').innerHTML=[0,1].map(d=>{ const day=days[d], out=[];
     for(let k=0;k<day.cells.length&&out.length<12;k++) if(day.cells[k]===rotCamp) out.push(`<span class="r" style="background:${cargaCol(rotCamp,day.carga[k])}" title="${fmtT(k*S0.reel)} · carga ${day.carga[k]+1}">${artName(rotCamp,day.art[k])}</span>`);
     return `<div class="rot-line"><span class="dlab">${fecha(d)}</span>${out.join('')}<span>…</span></div>`; }).join('');
-  // Conteo por arte: días 1 a 3 y periodo
-  const arts=artesDe(rotCamp), tot=arts.map(()=>0); let totN=0, rows='';
-  days.forEach((day,d)=>{ const cnt=arts.map(()=>0); let n=0, first=-1;
-    day.cells.forEach((ci,k)=>{ if(ci!==rotCamp) return; n++; if(first<0) first=k; cnt[arts.indexOf(day.art[k])]++; });
+  const all=artesDe(rotCamp), tot=all.map(()=>0); let totN=0, rows='';
+  days.forEach((day,d)=>{ const cnt=all.map(()=>0); let n=0, first=-1;
+    day.cells.forEach((ci,k)=>{ if(ci!==rotCamp) return; n++; if(first<0) first=k; cnt[all.indexOf(day.art[k])]++; });
     cnt.forEach((x,i)=>tot[i]+=x); totN+=n;
     if(d<3) rows+=`<tr><td>${fecha(d)}</td><td class="mono">${fmt(n)}</td><td>${first<0?'—':`<span class="chip-a" style="background:${cargaCol(rotCamp,day.carga[first])}">${artName(rotCamp,day.art[first])}</span>`}</td>${cnt.map(x=>`<td class="mono">${fmt(x)}</td>`).join('')}</tr>`; });
-  $('#rotDays').innerHTML=`<tr><th>Día · ${S0.k}</th><th>Reels de la campaña ${cn}</th><th>Empieza con</th>${arts.map(a=>`<th>${artName(rotCamp,a)} · carga ${cargaDeArte(rotCamp,a)+1}</th>`).join('')}</tr>${rows}`+
-    `<tr><td class="reel-meta">…</td><td></td><td></td>${arts.map(()=>'<td></td>').join('')}</tr><tr><td><b>Periodo · ${DIAS} días</b></td><td class="mono"><b>${fmt(totN)}</b></td><td></td>${tot.map(x=>`<td class="mono"><b>${fmt(x)}</b></td>`).join('')}</tr>`;
-  // Versiones por duración del arte elegido
-  if(!arts.includes(verArt)) verArt=arts[0];
-  $('#verCamp').textContent='Campaña '+cn;
-  $('#verTabs').innerHTML=arts.map(a=>`<button data-va="${a}" class="${a===verArt?'active':''}">${artName(rotCamp,a)}</button>`).join('');
-  const V=getVers(rotCamp,verArt);
-  $('#verMasiva').textContent=`Asignación masiva: video 10 s en todo el circuito para el ${artName(rotCamp,verArt).toLowerCase()}`;
-  $('#verTable').innerHTML='<tr><th>Categoría</th><th>Pantallas</th><th>Contenido</th><th>Total</th><th>Estado</th><th>Ajustar solo este grupo</th></tr>'+dursDe(rotCamp).map(d=>{
-    const m=V[d], u=usados(m), n=pantDe(rotCamp).filter(i=>SCREENS[i].dur===d).length;
-    const st=u===d?'<span class="tag ok">Completo</span>':u<d?`<span class="tag warn">Faltan ${d-u} s</span>`:`<span class="tag bad">Excede ${u-d} s</span>`;
-    return `<tr><td class="mono">${d} s</td><td class="mono">${n}</td><td>${m.length?m.map(x=>`<span class="media-chip">${x.t==='vid'?'Video':'Imagen'} ${x.s} s</span>`).join(''):'<span class="reel-meta">Sin medios</span>'}</td><td class="mono">${u} s</td><td>${st}</td>
-      <td><div class="btn-row"><button data-vd="${d}" data-vt="img" data-vs="5">+ Imagen 5 s</button><button data-vd="${d}" data-vt="vid" data-vs="${d}">+ Video ${d} s</button><button data-vd="${d}" data-vclr="1">Vaciar</button></div></td></tr>`; }).join('');
-  const pend=[]; arts.forEach(a=>{const VV=getVers(rotCamp,a); dursDe(rotCamp).forEach(d=>{if(usados(VV[d])!==d) pend.push(`${artName(rotCamp,a)} en ${d} s`);});});
-  $('#verStatus').innerHTML=pend.length?`<span class="tag bad">No se puede cerrar</span> Campaña ${cn}, falta ajustar: ${pend.join(' · ')}.`:
-    `<span class="tag ok">Todo completo</span> Cada arte de la campaña ${cn} llena el slot en todas las duraciones del circuito. Se puede cerrar la asignación.`;
+  $('#rotDays').innerHTML=`<tr><th>Día · ${S0.k}</th><th>Reels de la campaña ${cn}</th><th>Empieza con</th>${all.map(a=>`<th>${artName(rotCamp,a)} · carga ${cargaDeArte(rotCamp,a)+1}</th>`).join('')}</tr>${rows}`+
+    `<tr><td class="reel-meta">…</td><td></td><td></td>${all.map(()=>'<td></td>').join('')}</tr><tr><td><b>Periodo · ${DIAS} días</b></td><td class="mono"><b>${fmt(totN)}</b></td><td></td>${tot.map(x=>`<td class="mono"><b>${fmt(x)}</b></td>`).join('')}</tr>`;
 }
-$('#rotCamp').addEventListener('change',e=>{ rotCamp=+e.target.value; grpCamp=rotCamp; renderRot(); renderGrp(); });
+$('#artCamps').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; rotCamp=+b.dataset.ac; grpCamp=rotCamp; rotCarga=0; renderRot(); renderGrpBtns(); renderGrp(); });
+$('#artCargas').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; rotCarga=+b.dataset.acg; renderRot(); });
 $('#rotPant').addEventListener('change',e=>{ foco=+e.target.value; renderRot(); renderCal(); });
 $('#rotModo').addEventListener('change',e=>{ rotContinuo=e.target.value==='continuo'; renderRot(); renderCal(); });
-$('#rotPat').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; const P=camps[rotCamp].cargas[+b.dataset.j].pat;
+$('#rotPat').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.va){ verArt=+b.dataset.va; renderRot(); return; }
+  const P=camps[rotCamp].cargas[+b.dataset.j].pat;
   if(b.dataset.pdel){ P.splice(+b.dataset.pdel,1); normaliza(P); }
-  else if(b.dataset.add){ const usadas=artesDe(rotCamp); if(usadas.length>=6) return; let a=0; while(usadas.includes(a)) a++; P.push({a,w:0}); setArtPct(P,P.length-1,Math.round(100/P.length)); }
+  else if(b.dataset.add){ const usadas=artesDe(rotCamp); if(usadas.length>=6) return; let a=0; while(usadas.includes(a)) a++; P.push({a,w:0}); setArtPct(P,P.length-1,Math.round(100/P.length)); verArt=a; }
   else return;
   renderRot(); renderGrp(); renderCal(); });
 // Mientras se arrastra solo se actualizan los % de la carga; al soltar se recalcula todo.
@@ -1167,7 +1160,7 @@ $('#rotPat').addEventListener('input',e=>{ const r=e.target; if(r.type!=='range'
   P.forEach((q,i)=>{ const el=$(`#rotPat input[data-j="${j}"][data-i="${i}"]`); if(el&&el!==r) el.value=q.w; const t=$(`#rotPat [data-pct="${j}:${i}"]`); if(t) t.textContent=q.w+'%'; }); });
 $('#rotPat').addEventListener('change',e=>{ if(e.target.type!=='range') return; renderRot(); renderCal(); });
 $('#verTabs').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; verArt=+b.dataset.va; renderRot(); });
-$('#verTable').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; const V=getVers(rotCamp,verArt), d=+b.dataset.vd;
+$('#verDur').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; const V=getVers(rotCamp,verArt), d=+b.dataset.vd;
   if(b.dataset.vclr) V[d]=[]; else if(V[d].length<4) V[d].push({t:b.dataset.vt,s:+b.dataset.vs}); renderRot(); });
 $('#verMasiva').onclick=()=>{ const V=getVers(rotCamp,verArt); dursDe(rotCamp).forEach(d=>V[d]=[{t:'vid',s:10}]); renderRot(); };
 
