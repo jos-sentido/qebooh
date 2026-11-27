@@ -208,6 +208,9 @@ footer{padding:36px 0 52px;color:var(--muted);font-size:13px}
 footer .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:var(--mono);letter-spacing:.04em}
 footer img{height:22px;width:auto}
 .hide{display:none}
+.libre{display:flex;align-items:center;gap:8px}
+.libre-bar{display:inline-block;width:70px;height:8px;border-radius:4px;background:var(--surface-2);overflow:hidden}
+.libre-bar span{display:block;height:100%;background:var(--ok)}
 .pasos-art .step{flex-basis:180px}
 .art-ctx{display:flex;align-items:center;gap:8px 10px;flex-wrap:wrap;position:sticky;top:52px;z-index:5;background:rgba(23,15,34,.95);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid #3d2862;border-radius:10px;padding:10px 14px;margin-bottom:6px;font-size:14px}
 .art-ctx .sep{color:var(--muted)}
@@ -418,22 +421,23 @@ input[readonly]{color:var(--lila);background:var(--surface)}
   </div>
 
   <div class="sim" id="simCond">
-    <div class="sim-head"><h3>Condiciones y disponibilidad por campaña</h3><span class="tag">Interactivo</span></div>
-    <p class="reel-meta" style="margin-top:0">Cada campaña define sus condiciones y elige sus pantallas. La disponibilidad muestra cuáles cumplen: libres, o ya usadas por otra campaña del mismo anunciante, que se comparten y reconfiguran su reparto. No se pueden elegir las de otro anunciante, las de otra duración ni las que no tienen espacio por un candado. Lo que configures aquí es lo que usan todas las secciones siguientes.</p>
-    <div class="field-l">Campaña</div>
-    <div class="btn-row" id="condCamps" style="margin-bottom:14px"></div>
-    <div class="controls">
+    <div class="sim-head"><h3>Reserva de una campaña: disponibilidad</h3><span class="tag">Interactivo</span></div>
+    <p class="reel-meta" style="margin-top:0">Se reserva una campaña a la vez. La disponibilidad solo muestra lo que esa campaña puede reservar y, para cada inventario, cuánto tiene libre en el periodo. Lo libre al 100% se toma completo; lo que ya ocupa otra campaña del mismo anunciante se puede compartir, y solo esas pantallas pasan a la multicampaña. Lo que configures aquí es lo que usan todas las secciones siguientes.</p>
+    <div class="field-l">Campañas del anunciante</div>
+    <div class="btn-row" id="condCamps" style="margin-bottom:12px"></div>
+    <div class="art-ctx" id="condCtx" style="position:static"></div>
+    <div class="controls" style="margin-top:12px">
       <label class="field">Frecuencia deseada al compartir: <b id="condFreqTxt"></b><input type="range" id="condFreq" min="5" max="95" step="5"></label>
       <label class="field">Duración del slot<select id="condDur"></select></label>
-      <label class="field">Periodo<input type="text" id="condPer" readonly></label>
     </div>
-    <div class="btn-row" style="margin-bottom:10px"><button id="condTodas">Elegir todas las disponibles</button><button id="condNinguna">Quitar todas</button></div>
+    <div class="btn-row" style="margin-bottom:10px"><button id="condLibres">Elegir las 100% libres</button><button id="condCompartir">Sumar las que se pueden compartir</button><button id="condNinguna">Quitar todas</button></div>
     <div class="table-scroll"><table id="condTabla"></table></div>
+    <p class="reel-meta" id="condOcultas"></p>
     <div class="check" id="condResumen"></div>
   </div>
 
   <div class="sim" id="simReparto">
-    <div class="sim-head"><h3>Multicampaña: reparto del slot en las pantallas que se comparten</h3><span class="tag">Interactivo</span></div>
+    <div class="sim-head"><h3>Multicampaña: reparto en las pantallas compartidas</h3><span class="tag">Interactivo</span></div>
     <p class="reel-meta" style="margin-top:0">El slot siempre queda al 100%. Las pantallas con las mismas campañas forman un grupo y tienen el mismo reparto; una campaña sola en una pantalla ocupa el 100%. Cuando una campaña nueva se suma, entra con su frecuencia deseada y las anteriores se reconfiguran en proporción. Al mover una campaña, las demás del grupo se ajustan, salvo las que tengan candado. Los % se convierten a reels enteros por día.</p>
     <div id="repList"></div>
   </div>
@@ -856,47 +860,67 @@ function olvidaRepartos(id){ Object.keys(REP).forEach(k=>{ const ids=k.split(','
 // Vuelve a pintar todo lo que depende del estado.
 function renderTodo(){ syncCircuito(); overrides.clear(); renderCond(); renderRep(); if(ready){ renderGrpBtns(); renderGrp(); renderCal(); renderRot(); renderCierres(); } }
 
-/* ---- Condiciones y disponibilidad por campaña ---- */
-let condSel=0;
+/* ---- Reserva de una campaña: disponibilidad ----
+   Se reserva una campaña a la vez. La disponibilidad solo muestra lo que esa
+   campaña puede reservar: lo libre al 100% y lo que ya ocupan otras campañas
+   del mismo anunciante, que se puede compartir. Lo de otros anunciantes, otra
+   duración o sin espacio por candado no se muestra. */
+let condSel=1;
+const reelsPer=s=>s.porDia*DIAS;
 function renderCond(){
-  if(condSel>=camps.length) condSel=0;
+  if(condSel>=camps.length) condSel=camps.length-1;
   const c=condSel, C=camps[c];
-  $('#condCamps').innerHTML=camps.map((x,i)=>`<button data-cc="${i}" class="${i===c?'active':''}"><i class="dot" style="background:${css(COLORS[i])};width:10px;height:10px;margin-right:6px;vertical-align:-1px"></i>${nombreCamp(i)} · ${x.pant.size} pantallas</button>`).join('')+
-    `<button id="condAdd" ${camps.length>=5?'disabled':''}>+ Agregar campaña</button>`+(camps.length>1?`<button id="condDel" title="Quitar la campaña ${NAMES[c]}">Quitar campaña ${NAMES[c]}</button>`:'');
+  $('#condCamps').innerHTML=camps.map((x,i)=>`<button data-cc="${i}" class="${i===c?'active':''}"><i class="dot" style="background:${css(COLORS[i])};width:10px;height:10px;margin-right:6px;vertical-align:-1px"></i>${nombreCamp(i)} · ${x.pant.size} ${x.pant.size===1?'pantalla':'pantallas'}</button>`).join('')+
+    `<button id="condAdd" ${camps.length>=5?'disabled':''}>+ Reservar nueva campaña</button>`+(camps.length>1?`<button id="condDel">Quitar campaña ${NAMES[c]}</button>`:'');
+  $('#condCtx').innerHTML=`<span class="dot" style="background:${css(COLORS[c])}"></span><span>Estás reservando la</span><b>${nombreCamp(c)}</b><span class="sep">·</span><span>${periodoTxt()}</span><span class="sep">·</span><span>${C.dur==='all'?'cualquier duración':'pantallas de '+C.dur+' s'}</span><span class="sep">·</span><span>al compartir entra con ${C.freq}%</span>`;
   $('#condFreq').value=C.freq; $('#condFreqTxt').textContent=C.freq+'%';
-  $('#condDur').innerHTML=[['all','Cualquier duración'],...[...new Set(INV.map(s=>s.dur))].map(d=>[String(d),d+' s'])].map(([v,l])=>`<option value="${v}" ${String(C.dur)===v?'selected':''}>${l}</option>`).join('');
-  $('#condPer').value=periodoTxt();
-  $('#condTabla').innerHTML=`<tr><th></th><th>Clave</th><th>Ubicación</th><th>Slot</th><th>Ocupación actual</th><th>Disponibilidad para la campaña ${NAMES[c]}</th></tr>`+INV.map(s=>{ const d=disponibilidad(c,s), sel=C.pant.has(s.k);
-    return `<tr style="${sel?'background:var(--accent-soft)':d.ok?'':'opacity:.55'}"><td><input type="checkbox" data-ck="${s.k}" ${sel?'checked':''} ${d.ok||sel?'':'disabled'} aria-label="Elegir ${s.k}"></td><td class="mono">${s.k}</td><td>${s.u}</td><td>${s.dur} s</td><td>${ocupacionTxt(s)}</td><td><span class="tag ${d.tag}">${d.txt}</span></td></tr>`; }).join('');
+  $('#condDur').innerHTML=[['all','Cualquier duración'],...DUR_INV.map(d=>[String(d),d+' s'])].map(([v,l])=>`<option value="${v}" ${String(C.dur)===v?'selected':''}>${l}</option>`).join('');
+  // Solo lo reservable para esta campaña; lo libre al 100% primero.
+  const vis=[], oc={otro:0,dur:0,cand:0};
+  INV.forEach(s=>{ const d=disponibilidad(c,s); if(d.ok||C.pant.has(s.k)) vis.push(s); else if(s.otro) oc.otro++; else if(d.tag==='warn') oc.dur++; else oc.cand++; });
+  const otrosEn=s=>campsEn(s.k).filter(x=>x!==c);
+  vis.sort((a,b)=>(otrosEn(a).length>0)-(otrosEn(b).length>0));
+  $('#condTabla').innerHTML=`<tr><th></th><th>Clave</th><th>Ubicación</th><th>Slot</th><th>Libre en el periodo</th><th>Ocupado por</th><th>Si se reserva</th></tr>`+vis.map(s=>{
+    const sel=C.pant.has(s.k), ot=otrosEn(s), tot=reelsPer(s), libre=ot.length?0:100;
+    const Rb=ot.length?repartoDe(ot.map(x=>camps[x].id).sort((a,b)=>a-b)):null;
+    const ocup=ot.length?ot.map(x=>`<span class="dot" style="background:${css(COLORS[x])};width:9px;height:9px;margin-right:5px;vertical-align:0"></span>${nombreCamp(x)} ${Math.round(Rb.pct[camps[x].id])}%`).join('<br>'):'<span class="reel-meta">—</span>';
+    let efecto; if(!ot.length) efecto=`<span class="tag ok">Toma el 100%</span>`;
+    else { const R=repartoDe([...ot.map(x=>camps[x].id),C.id].sort((a,b)=>a-b)); efecto=`<span class="tag">Se comparte</span> <span class="reel-meta">entra con ${Math.round(R.pct[C.id])}%; ${ot.map(x=>`${NAMES[x]} queda en ${Math.round(R.pct[camps[x].id])}%`).join(', ')}</span>`; }
+    return `<tr style="${sel?'background:var(--accent-soft)':''}"><td><input type="checkbox" data-ck="${s.k}" ${sel?'checked':''} aria-label="Reservar ${s.k}"></td><td class="mono">${s.k}</td><td>${s.u}</td><td>${s.dur} s</td>
+      <td><div class="libre"><span class="libre-bar"><span style="width:${libre}%"></span></span><b>${libre}%</b></div><span class="reel-meta">${fmt(libre?tot:0)} de ${fmt(tot)} reels</span></td><td>${ocup}</td><td>${efecto}</td></tr>`; }).join('');
+  const ocultas=[oc.otro?`${oc.otro} de otros anunciantes`:'',oc.dur?`${oc.dur} de otra duración`:'',oc.cand?`${oc.cand} sin espacio por candado`:''].filter(Boolean);
+  $('#condOcultas').textContent=ocultas.length?`No se muestran ${ocultas.join(', ')}: no se pueden reservar para esta campaña.`:'';
   const comp=[...C.pant].filter(k=>campsEn(k).length>1).length;
-  $('#condResumen').innerHTML=`<b>${nombreCamp(c)}</b>: ${C.pant.size} pantallas elegidas · ${comp} compartidas con otras campañas · ${C.pant.size-comp} solo suyas.`;
+  $('#condResumen').innerHTML=`<b>${nombreCamp(c)}</b>: ${C.pant.size} pantallas reservadas · ${C.pant.size-comp} al 100% · ${comp} compartidas${comp?' (su reparto se gestiona abajo, en la multicampaña)':''}.`;
 }
 $('#condCamps').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return;
   if(b.id==='condAdd'){ if(camps.length>=5) return; camps.push(nuevaCamp(30)); condSel=camps.length-1; }
-  else if(b.id==='condDel'){ const id=camps[condSel].id; olvidaRepartos(id); camps.splice(condSel,1); condSel=0; }
+  else if(b.id==='condDel'){ const id=camps[condSel].id; olvidaRepartos(id); camps.splice(condSel,1); condSel=camps.length-1; }
   else condSel=+b.dataset.cc;
   renderTodo(); });
 $('#condFreq').addEventListener('input',e=>{ $('#condFreqTxt').textContent=e.target.value+'%'; });
 $('#condFreq').addEventListener('change',e=>{ const C=camps[condSel]; C.freq=+e.target.value; olvidaRepartos(C.id); renderTodo(); });
 $('#condDur').addEventListener('change',e=>{ const C=camps[condSel]; C.dur=e.target.value; if(C.dur!=='all') [...C.pant].forEach(k=>{ if(INV.find(s=>s.k===k).dur!==+C.dur) C.pant.delete(k); }); renderTodo(); });
 $('#condTabla').addEventListener('change',e=>{ const k=e.target.dataset.ck; if(!k) return; const C=camps[condSel]; e.target.checked?C.pant.add(k):C.pant.delete(k); renderTodo(); });
-$('#condTodas').addEventListener('click',()=>{ const C=camps[condSel]; INV.forEach(s=>{ if(disponibilidad(condSel,s).ok) C.pant.add(s.k); }); renderTodo(); });
+$('#condLibres').addEventListener('click',()=>{ const C=camps[condSel]; INV.forEach(s=>{ if(disponibilidad(condSel,s).ok&&!campsEn(s.k).filter(x=>x!==condSel).length) C.pant.add(s.k); }); renderTodo(); });
+$('#condCompartir').addEventListener('click',()=>{ const C=camps[condSel]; INV.forEach(s=>{ if(disponibilidad(condSel,s).ok&&campsEn(s.k).filter(x=>x!==condSel).length) C.pant.add(s.k); }); renderTodo(); });
 $('#condNinguna').addEventListener('click',()=>{ camps[condSel].pant.clear(); renderTodo(); });
 
 /* ---- Multicampaña: un reparto por grupo de pantallas con las mismas campañas ---- */
 function gruposRep(){ const g=new Map(); SCREENS.forEach(s=>{ const ids=idsEn(s.k), key=ids.join(','); if(!g.has(key)) g.set(key,{ids,pant:[]}); g.get(key).pant.push(s); }); return [...g.values()].sort((a,b)=>b.ids.length-a.ids.length); }
 function renderRep(){
-  const G=gruposRep();
+  const G0=gruposRep(), G=G0.filter(g=>g.ids.length>1), solos=G0.filter(g=>g.ids.length===1);
   $('#repList').innerHTML=G.length?G.map(g=>{ const R=repartoDe(g.ids), cs=g.ids.map(idxDe), s0=g.pant[0], r=repartoEntero(g.ids.map(id=>R.pct[id]/100),s0.porDia);
     const titulo=cs.map(nombreCamp).join(' + '), lista=g.pant.map(s=>s.k).join(', ');
-    if(g.ids.length===1) return `<div class="rep-solo"><i class="dot" style="background:${css(COLORS[cs[0]])}"></i><span><b>Solo la campaña ${NAMES[cs[0]]}</b> · ${g.pant.length} ${g.pant.length===1?'pantalla':'pantallas'} (${lista})</span><span class="tag ok">100% del slot</span></div>`;
+    if(false) return `<div class="rep-solo"><i class="dot" style="background:${css(COLORS[cs[0]])}"></i><span><b>Solo la campaña ${NAMES[cs[0]]}</b> · ${g.pant.length} ${g.pant.length===1?'pantalla':'pantallas'} (${lista})</span><span class="tag ok">100% del slot</span></div>`;
     return `<div class="rep-grupo"><div class="rep-h"><b>${titulo}</b><span class="reel-meta">Comparten ${g.pant.length} ${g.pant.length===1?'pantalla':'pantallas'}: ${lista}</span></div>`+
       cs.map((c,x)=>{ const id=g.ids[x]; return `<div class="camp-row"><span class="dot" style="background:${css(COLORS[c])}"></span><b style="font-size:13px">${nombreCamp(c)}</b>
         <input type="range" min="0" max="100" step="1" value="${Math.round(R.pct[id])}" data-gk="${g.ids.join(',')}" data-id="${id}" ${R.lock[id]?'disabled':''} aria-label="${nombreCamp(c)} en este grupo">
         <span class="lockwrap"><label style="font-size:13px"><input type="checkbox" data-lk="${g.ids.join(',')}" data-id="${id}" ${R.lock[id]?'checked':''}> Candado</label></span>
         <span class="pct" data-pp="${g.ids.join(',')}:${id}">${R.pct[id].toFixed(1)}%</span><span class="reels" data-pr="${g.ids.join(',')}:${id}">${fmt(r[x])} al día (${s0.dur} s)</span><span></span></div>`; }).join('')+
       `<div class="stack" data-st="${g.ids.join(',')}">${cs.map((c,x)=>{const p=R.pct[g.ids[x]]; return `<div style="flex-basis:${p}%;background:${css(COLORS[c])}">${p>=22?nombreCamp(c)+' · '+Math.round(p)+'%':p>=8?NAMES[c]+' '+Math.round(p)+'%':''}</div>`;}).join('')}</div></div>`; }).join('')
-    :'<p class="reel-meta">Ninguna campaña tiene pantallas todavía: elígelas en la disponibilidad.</p>';
+    :'<p class="reel-meta">Ninguna pantalla se comparte: cada campaña tiene sus pantallas al 100%.</p>';
+  if(solos.length) $('#repList').innerHTML+=`<div class="rep-solo"><span><b>Sin compartir · 100% del slot</b>: ${solos.map(g=>`${nombreCamp(idxDe(g.ids[0]))} en ${g.pant.length} ${g.pant.length===1?'pantalla':'pantallas'} (${g.pant.map(s=>s.k).join(', ')})`).join(' · ')}</span></div>`;
 }
 // Mientras se arrastra se actualiza el grupo; al soltar se recalcula todo lo demás.
 $('#repList').addEventListener('input',e=>{ const r=e.target; if(r.type!=='range') return; const key=r.dataset.gk, ids=key.split(',').map(Number), R=REP[key], id=+r.dataset.id;
