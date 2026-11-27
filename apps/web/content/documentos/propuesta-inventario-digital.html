@@ -208,6 +208,20 @@ footer{padding:36px 0 52px;color:var(--muted);font-size:13px}
 footer .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:var(--mono);letter-spacing:.04em}
 footer img{height:22px;width:auto}
 .hide{display:none}
+/* QEBI: módulos que ya incluye */
+.bi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.bi-mod{position:relative;overflow:hidden;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow)}
+.bi-mod::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--grad)}
+.bi-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.bi-ico{width:64px;height:40px}
+.bi-mod h3{margin:0 0 4px}
+.bi-sub{color:var(--muted);font-size:14px;margin:0 0 10px}
+.bi-list{list-style:none;padding:0;margin:0;display:grid;gap:7px;font-size:14px}
+.bi-list li{position:relative;padding-left:18px;color:var(--text)}
+.bi-list li::before{content:"";position:absolute;left:2px;top:.55em;width:7px;height:7px;border-radius:2px;background:var(--grad);transform:rotate(45deg)}
+.bi-trans{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.bi-chip{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--lila);background:var(--accent-soft);border:1px solid #3d2862;border-radius:999px;padding:6px 12px}
+.bi-chip .live{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok)}
 input[readonly]{color:var(--lila);background:var(--surface)}
 /* calendario de reels */
 .cal-bar{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin:6px 0 14px}
@@ -548,7 +562,37 @@ input[readonly]{color:var(--lila);background:var(--surface)}
 <!-- ================= QEBI ================= -->
 <section id="qebi"><div class="wrap">
   <h2>QEBI — inteligencia de negocio</h2>
-  <p class="section-intro">QEBI ya está construido y el cliente ya tiene acceso. Así se propone su activación formal:</p>
+  <p class="section-intro">QEBI ya está construido y el cliente ya tiene acceso. Esto es lo que incluye hoy, en cuatro módulos:</p>
+  <div class="bi-grid">
+    <article class="bi-mod">
+      <div class="bi-top"><svg class="bi-ico" viewBox="0 0 64 40" aria-hidden="true"><rect x="4" y="14" width="8" height="12" rx="2" fill="var(--c1)"/><rect x="16" y="8" width="8" height="18" rx="2" fill="var(--c1)"/><rect x="28" y="26" width="8" height="10" rx="2" fill="var(--bad)"/><rect x="40" y="4" width="8" height="22" rx="2" fill="var(--c1)"/><rect x="52" y="26" width="8" height="6" rx="2" fill="var(--bad)"/><path d="M2 26H62" stroke="var(--muted)" stroke-width="1.5"/></svg><span class="tag warn">En validación</span></div>
+      <h3>Variaciones e impacto</h3><p class="bi-sub">Qué cambió en las campañas ya cerradas y cuánto movió la inversión.</p>
+      <ul class="bi-list"><li>Historial de ediciones: quién cambió caras, tarifa o periodo, y su impacto</li><li>Indicadores: ediciones, variación neta, impacto promedio, alzas y bajas</li><li>Variación de inversión por mes</li><li>Variación por cliente, asesor, plaza, formato y tipo de movimiento</li></ul>
+    </article>
+    <article class="bi-mod">
+      <div class="bi-top"><svg class="bi-ico" viewBox="0 0 64 40" aria-hidden="true"><path d="M4 6H60L46 18H18Z" fill="var(--c4)"/><path d="M18 20H46L38 28H26Z" fill="var(--c2)"/><path d="M26 30H38L35 36H29Z" fill="var(--c1)"/></svg><span class="tag ok">Disponible</span></div>
+      <h3>Embudo</h3><p class="bi-sub">De la solicitud a la campaña, con conversión y monto vendido.</p>
+      <ul class="bi-list"><li>Solicitudes → propuestas → campañas y conversión global</li><li>Monto vendido y avance contra el objetivo</li><li>Ciclo de venta y su tendencia; autorizaciones de Dirección</li><li>Tarifa promedio por cara y total de caras</li><li>Detalle de campañas activas y finalizadas</li><li>Top clientes, ranking de asesores, monto por plaza, tradicional vs digital y tipo de mueble</li></ul>
+    </article>
+    <article class="bi-mod">
+      <div class="bi-top"><svg class="bi-ico" viewBox="0 0 64 40" aria-hidden="true"><circle cx="20" cy="20" r="14" stroke="var(--surface-2)" fill="none" stroke-width="3" stroke-linecap="round" stroke-width="6"/><circle cx="20" cy="20" r="14" stroke="var(--c3)" fill="none" stroke-width="3" stroke-linecap="round" stroke-width="6" stroke-dasharray="62 88" transform="rotate(-90 20 20)"/><path d="M42 12H60M42 20H56M42 28H52" stroke="var(--muted)" fill="none" stroke-width="3" stroke-linecap="round"/></svg><span class="tag ok">Disponible</span></div>
+      <h3>Objetivos</h3><p class="bi-sub">Metas de venta y su avance real.</p>
+      <ul class="bi-list"><li>Objetivo anual, real acumulado, avance y brecha</li><li>Objetivo mensual, que se puede regenerar según la estacionalidad</li><li>Reparto por asesor en %, en monto o según sus ventas</li></ul>
+    </article>
+    <article class="bi-mod">
+      <div class="bi-top"><svg class="bi-ico" viewBox="0 0 64 40" aria-hidden="true"><rect x="6" y="20" width="7" height="16" rx="2" fill="var(--c3)"/><rect x="19" y="14" width="7" height="22" rx="2" fill="var(--c3)"/><rect x="32" y="18" width="7" height="18" rx="2" fill="var(--c3)"/><rect x="45" y="8" width="7" height="28" rx="2" fill="var(--c3)"/><path d="M4 22L17 12L30 16L43 6L60 4" stroke="var(--c4)" fill="none" stroke-width="3" stroke-linecap="round"/></svg><span class="tag ">Beta</span></div>
+      <h3>BI · Resumen de ventas</h3><p class="bi-sub">La foto general de ventas contra presupuesto y contra el año anterior.</p>
+      <ul class="bi-list"><li>Ventas contra presupuesto</li><li>Promedio de venta semanal y ventas por semana</li><li>Indicadores acumulados y mensuales contra presupuesto y contra el año anterior</li><li>Ventas por catorcena y por mes comparadas con el año anterior</li></ul>
+    </article>
+  </div>
+  <div class="bi-trans">
+    <span class="bi-chip"><i class="live"></i>Datos en vivo</span>
+    <span class="bi-chip">Filtros por tipo de venta, formato, tradicional o digital, asesor, cliente, año y mes</span>
+    <span class="bi-chip">Cada gráfica con su vista de tabla</span>
+    <span class="bi-chip">Gestor de usuarios</span>
+    <span class="bi-chip">Tema claro y oscuro</span>
+  </div>
+  <p class="section-intro" style="margin-top:34px">Así se propone su activación formal:</p>
   <div class="timeline">
     <div class="tl"><span class="tag">Hoy</span><h3 style="margin-top:10px">Construido y con acceso</h3><p>El cliente ya usa QEBI.</p></div>
     <div class="tl"><span class="tag">Antes de renovar</span><h3 style="margin-top:10px">Mejoras continuas</h3><p>Si se aprueba el sistema, seguimos haciendo mejoras en QEBI.</p></div>
